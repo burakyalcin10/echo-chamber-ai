@@ -56,6 +56,7 @@ Kullanıcı:
 | TEST-01 | Backend smoke testleri | Health, graph, cover, match ve compare guard testleri eklendi |
 | EMB-05 | Embedding/UMAP script smoke run | Processed covers, UMAP reducer ve bounds lokal olarak üretildi |
 | API-06 | `/api/match` gerçek embedding modu | Processed data varken cosine similarity ve projected user position dönüyor |
+| TEST-02 | Script dry-run kontrolleri | Skor ve embedding scriptleri dry-run/subprocess testleriyle doğrulanıyor |
 
 ### Ready
 
@@ -64,7 +65,6 @@ Kullanıcı:
 | DATA-02 | Nihai cover veri seti | P1 | Yaklaşık 50 cover ve temel metadata tamamlanır |
 | RAG-01 | Tarihsel belge klasörü | P0 | En az 5 tarihsel doküman hazırlanır |
 | AI-06 | Gerçek provider ile ilk skor batch'i | P0 | API key ile 3-5 cover skorlanır ve cache davranışı görülür |
-| TEST-02 | Script dry-run kontrolleri | P1 | Skor ve embedding scriptleri hata durumlarında anlaşılır çıktı verir |
 
 ### Next
 
