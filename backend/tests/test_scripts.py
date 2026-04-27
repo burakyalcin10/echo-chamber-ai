@@ -6,6 +6,19 @@ from pathlib import Path
 BACKEND_DIR = Path(__file__).resolve().parents[1]
 
 
+def test_validate_covers_script_accepts_current_dataset():
+    result = subprocess.run(
+        [sys.executable, "scripts/00_validate_covers.py"],
+        cwd=BACKEND_DIR,
+        text=True,
+        capture_output=True,
+        check=False,
+    )
+
+    assert result.returncode == 0
+    assert "Validated" in result.stdout
+
+
 def test_score_script_dry_run_lists_pending_covers():
     result = subprocess.run(
         [sys.executable, "scripts/02_score_covers.py", "--dry-run", "--limit", "2"],

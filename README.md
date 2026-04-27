@@ -53,6 +53,12 @@ curl http://localhost:8000/api/cover/dylan_1973
 
 Run these from `backend/`.
 
+0. Validate the cover metadata:
+
+```bash
+python scripts/00_validate_covers.py
+```
+
 1. Score the cover metadata with the configured provider:
 
 ```bash
@@ -102,6 +108,7 @@ python -m pytest -q
 Fast script checks without API/model calls:
 
 ```bash
+python scripts/00_validate_covers.py
 python scripts/02_score_covers.py --dry-run --limit 5
 python scripts/03_embed_and_umap.py --dry-run
 ```
