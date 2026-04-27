@@ -49,6 +49,49 @@ curl http://localhost:8000/api/graph
 curl http://localhost:8000/api/cover/dylan_1973
 ```
 
+## Backend Pipeline
+
+Run these from `backend/`.
+
+1. Score the cover metadata with the configured provider:
+
+```bash
+python scripts/02_score_covers.py
+```
+
+2. Build semantic embeddings and 3D UMAP positions:
+
+```bash
+python scripts/03_embed_and_umap.py
+```
+
+3. After historical documents are added under `backend/data/historical_docs/`, build the local RAG index:
+
+```bash
+python scripts/04_build_rag.py
+```
+
+Then restart the API.
+
+## API Overview
+
+Base URL:
+
+```text
+http://localhost:8000
+```
+
+Endpoints:
+
+- `GET /health`
+- `GET /api/graph`
+- `GET /api/cover/{cover_id}`
+- `POST /api/compare`
+- `POST /api/voice`
+- `POST /api/match`
+
+LLM-backed endpoints require either `GEMINI_API_KEY` or `OPENAI_API_KEY`.
+
 ## AI Techniques
 
 Planned techniques:
@@ -57,6 +100,22 @@ Planned techniques:
 - Embedding-based semantic matching between user farewells and cover interpretations.
 - UMAP dimensionality reduction for the 3D galaxy layout.
 - RAG over historical documents for era voice generation.
+
+## RAG Source Work
+
+The source prep guide is here:
+
+```text
+docs/RAG_PREP_GUIDE.md
+```
+
+Minimum documents:
+
+- `1973_world_events.txt`
+- `vietnam_and_returning_soldiers.txt`
+- `pat_garrett_film_context.txt`
+- `counterculture_and_dylan_1970s.txt`
+- `dylan_nobel_and_songwriting.txt`
 
 ## Repository Name
 
