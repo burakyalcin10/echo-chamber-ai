@@ -54,6 +54,8 @@ Kullanıcı:
 | DOC-01 | README omurgası | Kurulum, pipeline, API ve RAG notları belgelendi |
 | API-06A | `/api/match` demo-safe fallback | API key yokken lokal bridge text ve keyword fallback ile çalışıyor |
 | TEST-01 | Backend smoke testleri | Health, graph, cover, match ve compare guard testleri eklendi |
+| EMB-05 | Embedding/UMAP script smoke run | Processed covers, UMAP reducer ve bounds lokal olarak üretildi |
+| API-06 | `/api/match` gerçek embedding modu | Processed data varken cosine similarity ve projected user position dönüyor |
 
 ### Ready
 
@@ -62,8 +64,6 @@ Kullanıcı:
 | DATA-02 | Nihai cover veri seti | P1 | Yaklaşık 50 cover ve temel metadata tamamlanır |
 | RAG-01 | Tarihsel belge klasörü | P0 | En az 5 tarihsel doküman hazırlanır |
 | AI-06 | Gerçek provider ile ilk skor batch'i | P0 | API key ile 3-5 cover skorlanır ve cache davranışı görülür |
-| EMB-05 | Embedding/UMAP script smoke run | P0 | `covers_with_embeddings.json`, reducer ve bounds dosyaları oluşur |
-| API-06 | `/api/match` gerçek embedding modu | P1 | Processed data varsa cosine similarity ve user position kullanılır |
 | TEST-02 | Script dry-run kontrolleri | P1 | Skor ve embedding scriptleri hata durumlarında anlaşılır çıktı verir |
 
 ### Next
