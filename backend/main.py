@@ -1,5 +1,6 @@
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
+from collections.abc import Callable
 
 from config import get_settings
 from schemas.api import CompareRequest, MatchRequest, VoiceRequest
@@ -67,10 +68,15 @@ Historical context: {cover_b['historical_pulse']}
 Write 2-3 paragraphs examining the meaning shift between these two covers.
 Be specific, poetic, and historically grounded. Language: English.
 """.strip()
-    analysis = get_llm_client().generate_text(prompt, temperature=0.75)
+    analysis, analysis_source = _generate_or_fallback(
+        prompt,
+        fallback=lambda: _fallback_compare_text(cover_a, cover_b),
+        temperature=0.75,
+    )
 
     return {
         "analysis": analysis,
+        "analysis_source": analysis_source,
         "shift_direction": _shift_direction(cover_a, cover_b),
         "key_year_a": cover_a["year"],
         "key_year_b": cover_b["year"],
@@ -99,9 +105,14 @@ Write a 150-word first-person interior monologue as if you are the era itself sp
 through this recording. Use sensory details. Reference real historical events.
 Be poetic but grounded. Do not explain; evoke.
 """.strip()
-    monologue = get_llm_client().generate_text(prompt, temperature=0.8)
+    monologue, monologue_source = _generate_or_fallback(
+        prompt,
+        fallback=lambda: _fallback_voice_text(cover, historical_context),
+        temperature=0.8,
+    )
     return {
         "monologue": monologue,
+        "monologue_source": monologue_source,
         "year": cover["year"],
         "artist": cover["artist"],
         "rag_sources_used": sources,
@@ -129,17 +140,11 @@ Historical context: {detail['historical_pulse']}
 Write 3 sentences connecting their personal farewell to this cover and its era.
 Be empathetic, literary, and specific. Do not be generic.
 """.strip()
-    llm = get_llm_client()
-    if llm.is_configured():
-        try:
-            bridge_text = llm.generate_text(prompt, temperature=0.7)
-            bridge_source = "llm"
-        except HTTPException:
-            bridge_text = _fallback_bridge_text(detail)
-            bridge_source = "local_fallback"
-    else:
-        bridge_text = _fallback_bridge_text(detail)
-        bridge_source = "local_fallback"
+    bridge_text, bridge_source = _generate_or_fallback(
+        prompt,
+        fallback=lambda: _fallback_bridge_text(detail),
+        temperature=0.7,
+    )
 
     return {
         "matched_cover": {
@@ -163,6 +168,44 @@ def _shift_direction(cover_a: dict, cover_b: dict) -> str:
     strongest_a = max(scores_a, key=scores_a.get)
     strongest_b = max(scores_b, key=scores_b.get)
     return f"{strongest_a}->{strongest_b}"
+
+
+def _generate_or_fallback(prompt: str, *, fallback: Callable[[], str], temperature: float) -> tuple[str, str]:
+    llm = get_llm_client()
+    if not llm.is_configured():
+        return fallback(), "local_fallback"
+    try:
+        return llm.generate_text(prompt, temperature=temperature), "llm"
+    except HTTPException:
+        return fallback(), "local_fallback"
+
+
+def _fallback_compare_text(cover_a: dict, cover_b: dict) -> str:
+    direction = _shift_direction(cover_a, cover_b).replace("->", " to ")
+    meaning_a = _ensure_sentence(cover_a["meaning_shift"].lower())
+    meaning_b = _ensure_sentence(cover_b["meaning_shift"].lower())
+    pulse_a = _ensure_sentence(cover_a["historical_pulse"])
+    pulse_b = _ensure_sentence(cover_b["historical_pulse"])
+    return (
+        f"Between {cover_a['artist']} in {cover_a['year']} and {cover_b['artist']} in {cover_b['year']}, "
+        f"the first recording carries {meaning_a} The later one turns toward {meaning_b} "
+        f"The emotional vector bends {direction}, carrying the farewell out of one historical pressure "
+        "and into another.\n\n"
+        f"The first version is rooted in this pulse: {pulse_a} "
+        f"The later version answers with its own weather: {pulse_b} "
+        "This local analysis keeps the comparison panel usable until a Gemini or OpenAI key is configured."
+    )
+
+
+def _fallback_voice_text(cover: dict, historical_context: str) -> str:
+    meaning = _ensure_sentence(cover["meaning_shift"].lower())
+    context = _ensure_sentence(historical_context.strip() or cover["historical_pulse"])
+    return (
+        f"I am {cover['year']}, speaking through {cover['artist']}'s version of the song. "
+        f"I carry {meaning} "
+        f"Around me: {context} "
+        "The door is not only an ending; it is the place where a culture hears what it can no longer carry."
+    )
 
 
 def _fallback_bridge_text(cover: dict) -> str:

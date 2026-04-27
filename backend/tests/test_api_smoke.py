@@ -53,3 +53,23 @@ def test_compare_rejects_same_cover_before_llm_call():
     response = client.post("/api/compare", json={"cover_id_a": "dylan_1973", "cover_id_b": "dylan_1973"})
 
     assert response.status_code == 400
+
+
+def test_compare_works_without_llm_key():
+    response = client.post("/api/compare", json={"cover_id_a": "dylan_1973", "cover_id_b": "gnr_1990"})
+
+    assert response.status_code == 200
+    body = response.json()
+    assert body["analysis"]
+    assert body["analysis_source"] in {"local_fallback", "llm"}
+    assert body["shift_direction"]
+
+
+def test_voice_works_without_llm_key():
+    response = client.post("/api/voice", json={"cover_id": "dylan_1973"})
+
+    assert response.status_code == 200
+    body = response.json()
+    assert body["monologue"]
+    assert body["monologue_source"] in {"local_fallback", "llm"}
+    assert body["artist"] == "Bob Dylan"
