@@ -31,6 +31,7 @@ jobs:
 
       - name: Run fast script dry-runs
         run: |
+          python scripts/01_build_covers.py
           python scripts/02_score_covers.py --dry-run --limit 5
           python scripts/03_embed_and_umap.py --dry-run
           python scripts/04_build_rag.py --dry-run

@@ -57,6 +57,7 @@ Run these from `backend/`.
 
 ```bash
 python scripts/00_validate_covers.py
+python scripts/01_build_covers.py
 ```
 
 1. Score the cover metadata with the configured provider:
@@ -111,6 +112,7 @@ Fast script checks without API/model calls:
 
 ```bash
 python scripts/00_validate_covers.py
+python scripts/01_build_covers.py
 python scripts/02_score_covers.py --dry-run --limit 5
 python scripts/03_embed_and_umap.py --dry-run
 python scripts/04_build_rag.py --dry-run

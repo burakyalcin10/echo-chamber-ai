@@ -19,6 +19,21 @@ def test_validate_covers_script_accepts_current_dataset():
     assert "Validated" in result.stdout
 
 
+def test_build_covers_dry_run_reports_target_gap():
+    result = subprocess.run(
+        [sys.executable, "scripts/01_build_covers.py"],
+        cwd=BACKEND_DIR,
+        text=True,
+        capture_output=True,
+        check=False,
+    )
+
+    assert result.returncode == 0
+    assert "Merged covers: 26" in result.stdout
+    assert "Remaining gap: 24" in result.stdout
+    assert "Dry-run only" in result.stdout
+
+
 def test_validate_rag_docs_reports_missing_documents():
     result = subprocess.run(
         [sys.executable, "scripts/00_validate_rag_docs.py"],
