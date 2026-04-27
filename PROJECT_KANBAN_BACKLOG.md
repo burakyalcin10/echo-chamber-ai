@@ -62,6 +62,8 @@ Kullanıcı:
 | FE-CONTRACT-01 | Frontend API sözleşmesi | `docs/API_CONTRACT.md` içinde endpoint request/response alanları sabitlendi |
 | DATA-03 | Veri doğrulama helper'ı | `00_validate_covers.py` cover şeması, skor aralıkları ve tek-orijinal kuralını test ediyor |
 | BE-03 | Health debug metrikleri | `/health` raw/processed cover sayılarını döndürüyor |
+| RAG-04 | RAG doküman validation workflow | `00_validate_rag_docs.py` format, kaynak ve minimum uzunluk kontrolü yapıyor |
+| RAG-05 | RAG index dry-run | `04_build_rag.py --dry-run` doküman/chunk kontrolünü model yüklemeden yapıyor |
 
 ### Ready
 
