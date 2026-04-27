@@ -34,30 +34,43 @@ Kullanıcı:
 | DISC-01 | Ödev PDF'i incelendi | Zorunlu şartlar, teslimler ve rubrik çıkarıldı |
 | DISC-02 | Backend handoff incelendi | FastAPI, LLM, RAG, embedding, UMAP akışı netleşti |
 | DISC-03 | Frontend handoff incelendi | API kontratı ve 3D galaksi beklentileri netleşti |
+| REPO-01 | Git repo kuruldu | `main` branch ve ilk commit geçmişi oluşturuldu |
+| REPO-02 | GitHub push yapıldı | Public repo: `burakyalcin10/echo-chamber-ai` |
+| ARCH-01 | Repo yapısı oluşturuldu | `backend/`, `docs/`, veri ve script klasörleri oluştu |
+| BE-01 | FastAPI iskeleti | `/health`, CORS ve temel app çalışıyor |
+| DATA-01 | İlk cover veri seti | 26 kayıtlık çekirdek `covers.json` eklendi |
+| API-01 | `/api/graph` | Frontend galaksi payload'u dönüyor |
+| API-02 | `/api/cover/{id}` | Cover detay payload'u dönüyor |
+| AI-01 | Gemini/OpenAI provider wrapper | Anthropic bağımlılığı çıkarıldı, provider seçimi `.env` ile yapılıyor |
+| AI-02 | `02_score_covers.py` temel akışı | Gemini/OpenAI structured JSON skorlama scripti eklendi |
+| AI-03 | LLM cache/idempotency | Skor cache'i, incremental çalışma ve ücretli çağrı tekrarı azaltma eklendi |
+| AI-04 | JSON schema validation | LLM JSON parse, alan doğrulama, retry ve key-yok hata akışı eklendi |
+| EMB-01 | Embedding metni oluşturucu | Cover bağlamı ve duygu skorlarından embedding metni üretiliyor |
+| EMB-02 | SentenceTransformers embedding scripti | `03_embed_and_umap.py` içinde embedding üretimi eklendi |
+| EMB-03 | UMAP 3D reducer scripti | Normalize 3D pozisyon üretimi eklendi |
+| EMB-04 | Reducer pickle kaydı | UMAP reducer ve bounds kaydı eklendi |
+| RAG-02 | Yerel RAG index scripti | `04_build_rag.py` ile historical docs chunk/index akışı eklendi |
+| RAG-03 | RAG query helper | `/api/voice` için local semantic retrieval helper eklendi |
+| DOC-01 | README omurgası | Kurulum, pipeline, API ve RAG notları belgelendi |
 
 ### Ready
 
 | ID | İş | Öncelik | Kabul kriteri |
 |---|---|---|---|
-| ARCH-01 | Repo yapısını oluştur | P0 | `backend/`, `frontend/`, `docs/` veya kök doküman yapısı oluşur |
-| BE-01 | FastAPI iskeleti | P0 | `/health` ve CORS çalışan backend |
-| DATA-01 | İlk cover veri seti | P0 | En az 25 güvenilir cover JSON'a girilir |
 | DATA-02 | Nihai cover veri seti | P1 | Yaklaşık 50 cover ve temel metadata tamamlanır |
-| AI-01 | LLM duygu skorlama scripti | P0 | Her cover için `llm_analysis` alanı üretir |
-| AI-02 | Embedding + UMAP pipeline | P0 | 3D pozisyonlar ve vektörler kaydedilir |
 | RAG-01 | Tarihsel belge klasörü | P0 | En az 5 tarihsel doküman hazırlanır |
-| API-01 | `/api/graph` | P0 | Frontend galaksiyi render edebilecek veri alır |
-| API-02 | `/api/cover/{id}` | P0 | Cover detay paneli için tüm alanlar döner |
-| DOC-01 | README omurgası | P0 | Kurulum, mimari, AI teknikleri ve API listelenir |
+| AI-06 | Gerçek provider ile ilk skor batch'i | P0 | API key ile 3-5 cover skorlanır ve cache davranışı görülür |
+| EMB-05 | Embedding/UMAP script smoke run | P0 | `covers_with_embeddings.json`, reducer ve bounds dosyaları oluşur |
+| API-06 | `/api/match` gerçek embedding modu | P1 | Processed data varsa cosine similarity ve user position kullanılır |
+| TEST-01 | Backend smoke testleri | P1 | Health, graph, cover, compare/match happy path test edilir |
 
 ### Next
 
 | ID | İş | Öncelik | Bağımlılık |
 |---|---|---|---|
-| API-03 | `/api/compare` | P1 | `AI-01`, cover verisi |
-| API-04 | `/api/voice` | P1 | `RAG-02`, Gemini/OpenAI API |
-| API-05 | `/api/match` | P1 | `AI-02`, UMAP reducer |
-| TEST-01 | Backend smoke testleri | P1 | API endpointleri |
+| API-03 | `/api/compare` kalite iyileştirmesi | P1 | Gerçek `llm_analysis` çıktıları |
+| API-04 | `/api/voice` RAG kaynaklı test | P1 | `RAG-01`, `04_build_rag.py` |
+| API-05 | `/api/match` response polish | P1 | `EMB-05` |
 | FE-CONTRACT-01 | Frontend mock veri sözleşmesi | P1 | `API-01`, `API-02` |
 | MAN-01 | Manifesto taslağı | P1 | Konsept ve teknik kararlar |
 
