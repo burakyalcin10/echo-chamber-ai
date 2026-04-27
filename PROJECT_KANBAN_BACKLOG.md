@@ -71,6 +71,8 @@ Kullanıcı:
 | DATA-02 | Nihai cover veri seti | 50 cover doğrulanmış metadata ile `covers.json` içinde tamamlandı |
 | RAG-01 | Tarihsel belge klasörü | 5 core starter RAG dokümanı eklendi ve validator'dan geçti |
 | RAG-06 | RAG index smoke | 5 dokümandan 15 chunk üretilip lokal `rag_index.json` build edildi |
+| DOC-05 | Backend runbook | `docs/BACKEND_RUNBOOK.md` kurulum, test, pipeline ve demo komutlarını topluyor |
+| BE-04 | Backend demo-ready kapanış | API key olmadan tüm endpointler demo-safe, validation/test/CI yeşil |
 
 ### Ready
 
