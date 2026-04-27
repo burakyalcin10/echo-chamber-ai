@@ -21,8 +21,9 @@ Response:
   "llm_configured": false,
   "raw_covers_exists": true,
   "processed_covers_exists": true,
-  "raw_cover_count": 26,
-  "processed_cover_count": 26
+  "raw_cover_count": 50,
+  "processed_cover_count": 50,
+  "processed_data_stale": false
 }
 ```
 

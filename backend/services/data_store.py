@@ -25,11 +25,24 @@ def _read_json(path: Path) -> list[dict[str, Any]]:
 def load_covers(prefer_processed: bool = True) -> list[dict[str, Any]]:
     settings = get_settings()
     if prefer_processed and settings.processed_covers_path.exists():
-        covers = _read_json(settings.processed_covers_path)
+        processed = _read_json(settings.processed_covers_path)
+        raw = _read_json(settings.raw_covers_path)
+        covers = processed if len(processed) == len(raw) else raw
     else:
         covers = _read_json(settings.raw_covers_path)
 
     return [_with_fallback_position(cover, index, len(covers)) for index, cover in enumerate(covers)]
+
+
+def cover_counts() -> dict[str, int | bool]:
+    settings = get_settings()
+    raw_count = len(_read_json(settings.raw_covers_path)) if settings.raw_covers_path.exists() else 0
+    processed_count = len(_read_json(settings.processed_covers_path)) if settings.processed_covers_path.exists() else 0
+    return {
+        "raw_cover_count": raw_count,
+        "processed_cover_count": processed_count,
+        "processed_data_stale": bool(processed_count and processed_count != raw_count),
+    }
 
 
 def get_cover_or_404(cover_id: str) -> dict[str, Any]:

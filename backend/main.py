@@ -14,7 +14,7 @@ from schemas.api import (
     VoiceRequest,
     VoiceResponse,
 )
-from services.data_store import cover_detail_payload, get_cover_or_404, graph_cover_payload, load_covers
+from services.data_store import cover_counts, cover_detail_payload, get_cover_or_404, graph_cover_payload, load_covers
 from services.embedding_matcher import match_user_text
 from services.llm_client import get_llm_client
 from services.rag_store import retrieve_historical_context
@@ -34,8 +34,7 @@ app.add_middleware(
 
 @app.get("/health", response_model=HealthResponse)
 async def health() -> dict:
-    raw_count = _safe_cover_count(prefer_processed=False)
-    processed_count = _safe_cover_count(prefer_processed=True) if settings.processed_covers_path.exists() else 0
+    counts = cover_counts()
     return {
         "status": "ok",
         "app": settings.app_name,
@@ -44,8 +43,7 @@ async def health() -> dict:
         "llm_configured": get_llm_client().is_configured(),
         "raw_covers_exists": settings.raw_covers_path.exists(),
         "processed_covers_exists": settings.processed_covers_path.exists(),
-        "raw_cover_count": raw_count,
-        "processed_cover_count": processed_count,
+        **counts,
     }
 
 
@@ -192,13 +190,6 @@ def _generate_or_fallback(prompt: str, *, fallback: Callable[[], str], temperatu
         return llm.generate_text(prompt, temperature=temperature), "llm"
     except HTTPException:
         return fallback(), "local_fallback"
-
-
-def _safe_cover_count(*, prefer_processed: bool) -> int:
-    try:
-        return len(load_covers(prefer_processed=prefer_processed))
-    except HTTPException:
-        return 0
 
 
 def _fallback_compare_text(cover_a: dict, cover_b: dict) -> str:

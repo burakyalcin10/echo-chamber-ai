@@ -17,6 +17,7 @@ def test_health_reports_backend_state():
     assert body["raw_covers_exists"] is True
     assert body["raw_cover_count"] >= 25
     assert "processed_cover_count" in body
+    assert "processed_data_stale" in body
 
 
 def test_graph_returns_covers_without_embedding_vectors():
@@ -25,6 +26,7 @@ def test_graph_returns_covers_without_embedding_vectors():
     assert response.status_code == 200
     covers = response.json()["covers"]
     assert covers
+    assert len(covers) >= 50
     assert "embedding_vector" not in covers[0]
     assert {"id", "artist", "year", "position", "emotion_scores"}.issubset(covers[0])
 

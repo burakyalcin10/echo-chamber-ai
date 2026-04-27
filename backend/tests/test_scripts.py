@@ -29,8 +29,8 @@ def test_build_covers_dry_run_reports_target_gap():
     )
 
     assert result.returncode == 0
-    assert "Merged covers: 26" in result.stdout
-    assert "Remaining gap: 24" in result.stdout
+    assert "Merged covers: 50" in result.stdout
+    assert "Remaining gap: 0" in result.stdout
     assert "Dry-run only" in result.stdout
 
 

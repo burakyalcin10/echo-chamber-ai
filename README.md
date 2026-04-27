@@ -8,8 +8,9 @@ Echo Chamber maps covers of Bob Dylan's "Knockin' on Heaven's Door" as a 3D emot
 
 - Project planning and kanban are in `PROJECT_KANBAN_BACKLOG.md`.
 - Backend scaffold is in `backend/`.
-- Initial cover dataset is in `backend/data/covers.json`.
+- 50-cover dataset is in `backend/data/covers.json`.
 - RAG source preparation guide is in `docs/RAG_PREP_GUIDE.md`.
+- Data/source attribution notes are in `docs/DATA_SOURCES.md`.
 
 ## Backend Setup
 

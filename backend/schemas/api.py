@@ -26,6 +26,7 @@ class HealthResponse(BaseModel):
     processed_covers_exists: bool
     raw_cover_count: int
     processed_cover_count: int
+    processed_data_stale: bool
 
 
 class Position(BaseModel):

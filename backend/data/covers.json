@@ -21,6 +21,48 @@
     "spiritual_weight": 0.84
   },
   {
+    "id": "inger_lise_rypdal_1973",
+    "artist": "Inger Lise Rypdal",
+    "year": 1973,
+    "album": "Early Scandinavian cover recording",
+    "is_original": false,
+    "context_notes": "One of the earliest documented cover recordings, moving Dylan's American frontier elegy into a Scandinavian pop context during the same year the original entered public circulation.",
+    "genre": "scandinavian pop",
+    "mood_hint": "translation, early afterlife, soft melancholy",
+    "emotion_scores": {
+      "surrender": 0.66,
+      "defiance": 0.18,
+      "grief": 0.6,
+      "hope": 0.42,
+      "exhaustion": 0.42,
+      "transcendence": 0.46
+    },
+    "era_tension": 0.48,
+    "political_charge": 0.22,
+    "spiritual_weight": 0.5
+  },
+  {
+    "id": "fairport_convention_1974",
+    "artist": "Fairport Convention",
+    "year": 1974,
+    "album": "Live at the Troubadour era",
+    "is_original": false,
+    "context_notes": "A British folk-rock live reading from the immediate post-original moment, carrying the song through communal band interplay rather than Dylan's spare filmic stillness.",
+    "genre": "folk rock",
+    "mood_hint": "communal folk elegy, road-worn farewell",
+    "emotion_scores": {
+      "surrender": 0.7,
+      "defiance": 0.28,
+      "grief": 0.58,
+      "hope": 0.46,
+      "exhaustion": 0.54,
+      "transcendence": 0.52
+    },
+    "era_tension": 0.55,
+    "political_charge": 0.28,
+    "spiritual_weight": 0.58
+  },
+  {
     "id": "clapton_1975",
     "artist": "Eric Clapton",
     "year": 1975,
@@ -40,6 +82,48 @@
     "era_tension": 0.68,
     "political_charge": 0.42,
     "spiritual_weight": 0.58
+  },
+  {
+    "id": "jerry_garcia_band_1976",
+    "artist": "Jerry Garcia Band",
+    "year": 1976,
+    "album": "Live cover performances",
+    "is_original": false,
+    "context_notes": "Garcia's extended live versions stretch the song into improvisational after-hours space, where farewell becomes less a lyric than a slow communal trance.",
+    "genre": "jam rock",
+    "mood_hint": "improvisation, trance, communal release",
+    "emotion_scores": {
+      "surrender": 0.64,
+      "defiance": 0.24,
+      "grief": 0.52,
+      "hope": 0.6,
+      "exhaustion": 0.44,
+      "transcendence": 0.78
+    },
+    "era_tension": 0.46,
+    "political_charge": 0.18,
+    "spiritual_weight": 0.72
+  },
+  {
+    "id": "booker_t_jones_1977",
+    "artist": "Booker T. Jones",
+    "year": 1977,
+    "album": "Instrumental soul cover era",
+    "is_original": false,
+    "context_notes": "Booker T. Jones moves the song toward soul-instrumental language, letting organ warmth and groove carry the sense of farewell without relying on Dylan's words.",
+    "genre": "soul instrumental",
+    "mood_hint": "organ warmth, wordless grief, dignified release",
+    "emotion_scores": {
+      "surrender": 0.68,
+      "defiance": 0.12,
+      "grief": 0.56,
+      "hope": 0.58,
+      "exhaustion": 0.36,
+      "transcendence": 0.68
+    },
+    "era_tension": 0.34,
+    "political_charge": 0.12,
+    "spiritual_weight": 0.66
   },
   {
     "id": "marley_1978",
@@ -63,6 +147,27 @@
     "spiritual_weight": 0.86
   },
   {
+    "id": "television_1978",
+    "artist": "Television",
+    "year": 1978,
+    "album": "Live at My Father's Place era",
+    "is_original": false,
+    "context_notes": "Television's late-1970s live cover pulls the song into downtown guitar abstraction, making the door feel urban, nervous, and electrically unresolved.",
+    "genre": "art punk",
+    "mood_hint": "urban nervousness, guitar abstraction, unresolved farewell",
+    "emotion_scores": {
+      "surrender": 0.42,
+      "defiance": 0.66,
+      "grief": 0.48,
+      "hope": 0.28,
+      "exhaustion": 0.58,
+      "transcendence": 0.44
+    },
+    "era_tension": 0.7,
+    "political_charge": 0.28,
+    "spiritual_weight": 0.36
+  },
+  {
     "id": "randy_crawford_1980",
     "artist": "Randy Crawford",
     "year": 1980,
@@ -82,6 +187,69 @@
     "era_tension": 0.48,
     "political_charge": 0.22,
     "spiritual_weight": 0.64
+  },
+  {
+    "id": "sisters_of_mercy_1984",
+    "artist": "The Sisters of Mercy",
+    "year": 1984,
+    "album": "Live medley recordings",
+    "is_original": false,
+    "context_notes": "A gothic post-punk medley context recasts the song's threshold imagery as nocturnal fatalism, ritual noise, and theatrical darkness in early-1980s Britain.",
+    "genre": "gothic rock",
+    "mood_hint": "nocturnal fatalism, ritual darkness, post-punk dread",
+    "emotion_scores": {
+      "surrender": 0.5,
+      "defiance": 0.62,
+      "grief": 0.66,
+      "hope": 0.14,
+      "exhaustion": 0.68,
+      "transcendence": 0.48
+    },
+    "era_tension": 0.76,
+    "political_charge": 0.34,
+    "spiritual_weight": 0.5
+  },
+  {
+    "id": "heaven_1985",
+    "artist": "Heaven",
+    "year": 1985,
+    "album": "Australian hard rock single era",
+    "is_original": false,
+    "context_notes": "The Australian hard rock band Heaven turns the song toward mid-1980s metal drama, where the quiet badge becomes amplified pressure and arena-sized release.",
+    "genre": "hard rock",
+    "mood_hint": "metal drama, amplified pressure, arena release",
+    "emotion_scores": {
+      "surrender": 0.4,
+      "defiance": 0.74,
+      "grief": 0.44,
+      "hope": 0.34,
+      "exhaustion": 0.58,
+      "transcendence": 0.36
+    },
+    "era_tension": 0.64,
+    "political_charge": 0.2,
+    "spiritual_weight": 0.34
+  },
+  {
+    "id": "grateful_dead_1987",
+    "artist": "Grateful Dead",
+    "year": 1987,
+    "album": "Dylan & The Dead touring era",
+    "is_original": false,
+    "context_notes": "In the late-1980s Dead orbit, the song becomes a traveling communal chant, less about one dying lawman than a crowd rehearsing surrender together.",
+    "genre": "jam rock",
+    "mood_hint": "communal chant, road memory, collective surrender",
+    "emotion_scores": {
+      "surrender": 0.7,
+      "defiance": 0.18,
+      "grief": 0.48,
+      "hope": 0.66,
+      "exhaustion": 0.36,
+      "transcendence": 0.76
+    },
+    "era_tension": 0.42,
+    "political_charge": 0.14,
+    "spiritual_weight": 0.72
   },
   {
     "id": "gnr_1990",
@@ -126,6 +294,48 @@
     "spiritual_weight": 0.38
   },
   {
+    "id": "leningrad_cowboys_1992",
+    "artist": "Leningrad Cowboys",
+    "year": 1992,
+    "album": "Post-Soviet rock spectacle era",
+    "is_original": false,
+    "context_notes": "The Leningrad Cowboys' theatrical rock persona reframes the song after the Cold War collapse, turning farewell into absurdist pageant and border-crossing performance.",
+    "genre": "theatrical rock",
+    "mood_hint": "post-soviet spectacle, absurdity, border crossing",
+    "emotion_scores": {
+      "surrender": 0.38,
+      "defiance": 0.68,
+      "grief": 0.34,
+      "hope": 0.5,
+      "exhaustion": 0.42,
+      "transcendence": 0.36
+    },
+    "era_tension": 0.62,
+    "political_charge": 0.52,
+    "spiritual_weight": 0.28
+  },
+  {
+    "id": "tracy_chapman_1992",
+    "artist": "Tracy Chapman",
+    "year": 1992,
+    "album": "Live acoustic cover era",
+    "is_original": false,
+    "context_notes": "Chapman's acoustic social-conscience language pulls the song back toward plain witness, moral fatigue, and the quiet dignity of a single voice before history.",
+    "genre": "acoustic folk",
+    "mood_hint": "plain witness, moral fatigue, intimate dignity",
+    "emotion_scores": {
+      "surrender": 0.72,
+      "defiance": 0.34,
+      "grief": 0.68,
+      "hope": 0.42,
+      "exhaustion": 0.62,
+      "transcendence": 0.56
+    },
+    "era_tension": 0.58,
+    "political_charge": 0.54,
+    "spiritual_weight": 0.64
+  },
+  {
     "id": "jeff_buckley_1994",
     "artist": "Jeff Buckley",
     "year": 1994,
@@ -145,6 +355,69 @@
     "era_tension": 0.54,
     "political_charge": 0.16,
     "spiritual_weight": 0.88
+  },
+  {
+    "id": "bon_jovi_1995",
+    "artist": "Bon Jovi",
+    "year": 1995,
+    "album": "Live acoustic rock cover era",
+    "is_original": false,
+    "context_notes": "Bon Jovi's mid-1990s performance language makes the song a mass singalong of vulnerability, with arena rock softening into acoustic public confession.",
+    "genre": "acoustic arena rock",
+    "mood_hint": "mass singalong, public confession, soft arena grief",
+    "emotion_scores": {
+      "surrender": 0.56,
+      "defiance": 0.5,
+      "grief": 0.5,
+      "hope": 0.62,
+      "exhaustion": 0.34,
+      "transcendence": 0.5
+    },
+    "era_tension": 0.42,
+    "political_charge": 0.12,
+    "spiritual_weight": 0.44
+  },
+  {
+    "id": "zucchero_1995",
+    "artist": "Zucchero",
+    "year": 1995,
+    "album": "Italian blues rock cover era",
+    "is_original": false,
+    "context_notes": "Zucchero brings the song into Italian blues-rock phrasing, shifting the farewell toward Mediterranean gravel, secular prayer, and smoky resilience.",
+    "genre": "blues rock",
+    "mood_hint": "smoky resilience, secular prayer, mediterranean blues",
+    "emotion_scores": {
+      "surrender": 0.64,
+      "defiance": 0.38,
+      "grief": 0.6,
+      "hope": 0.5,
+      "exhaustion": 0.5,
+      "transcendence": 0.58
+    },
+    "era_tension": 0.44,
+    "political_charge": 0.18,
+    "spiritual_weight": 0.58
+  },
+  {
+    "id": "beau_jocque_1996",
+    "artist": "Beau Jocque",
+    "year": 1996,
+    "album": "Zydeco cover era",
+    "is_original": false,
+    "context_notes": "Beau Jocque's zydeco context pulls the song into dance, accordion drive, and Gulf Coast resilience, making farewell move through the body rather than stillness.",
+    "genre": "zydeco",
+    "mood_hint": "dance grief, gulf coast resilience, bodily release",
+    "emotion_scores": {
+      "surrender": 0.42,
+      "defiance": 0.46,
+      "grief": 0.42,
+      "hope": 0.72,
+      "exhaustion": 0.24,
+      "transcendence": 0.5
+    },
+    "era_tension": 0.38,
+    "political_charge": 0.16,
+    "spiritual_weight": 0.38
   },
   {
     "id": "dunblane_1996",
@@ -168,6 +441,27 @@
     "spiritual_weight": 0.8
   },
   {
+    "id": "ladysmith_black_mambazo_1997",
+    "artist": "Ladysmith Black Mambazo",
+    "year": 1997,
+    "album": "Choral world-music adaptation era",
+    "is_original": false,
+    "context_notes": "A South African choral frame transforms the song into group breath, spiritual harmony, and post-apartheid resonance, replacing the solitary sheriff with collective voice.",
+    "genre": "isicathamiya choral",
+    "mood_hint": "collective voice, spiritual harmony, post-apartheid resonance",
+    "emotion_scores": {
+      "surrender": 0.66,
+      "defiance": 0.32,
+      "grief": 0.58,
+      "hope": 0.76,
+      "exhaustion": 0.28,
+      "transcendence": 0.86
+    },
+    "era_tension": 0.62,
+    "political_charge": 0.58,
+    "spiritual_weight": 0.9
+  },
+  {
     "id": "wyclef_jean_1997",
     "artist": "Wyclef Jean",
     "year": 1997,
@@ -189,25 +483,46 @@
     "spiritual_weight": 0.44
   },
   {
-    "id": "warren_zevon_2003",
-    "artist": "Warren Zevon",
-    "year": 2003,
-    "album": "The Wind",
+    "id": "rudy_rotta_1999",
+    "artist": "Rudy Rotta",
+    "year": 1999,
+    "album": "European blues cover era",
     "is_original": false,
-    "context_notes": "Recorded while Zevon was terminally ill, making the song nearly literal: a dying songwriter singing at the edge of his own door.",
-    "genre": "rock",
-    "mood_hint": "terminal clarity, gallows humor, direct farewell",
+    "context_notes": "Rotta's blues guitar setting pushes the song toward late-century barroom testimony, where mortality becomes bent strings, smoke, and slow-burning endurance.",
+    "genre": "electric blues",
+    "mood_hint": "barroom testimony, bent strings, slow endurance",
     "emotion_scores": {
-      "surrender": 0.9,
-      "defiance": 0.34,
-      "grief": 0.88,
-      "hope": 0.32,
-      "exhaustion": 0.84,
-      "transcendence": 0.72
+      "surrender": 0.6,
+      "defiance": 0.42,
+      "grief": 0.62,
+      "hope": 0.38,
+      "exhaustion": 0.66,
+      "transcendence": 0.44
     },
-    "era_tension": 0.7,
-    "political_charge": 0.18,
-    "spiritual_weight": 0.86
+    "era_tension": 0.46,
+    "political_charge": 0.16,
+    "spiritual_weight": 0.46
+  },
+  {
+    "id": "aerosmith_2000",
+    "artist": "Aerosmith",
+    "year": 2000,
+    "album": "Live hard rock cover era",
+    "is_original": false,
+    "context_notes": "Aerosmith's performance context bends the song toward bluesy hard-rock swagger, making the door feel less like surrender than a scarred showman's last spotlight.",
+    "genre": "hard rock",
+    "mood_hint": "scarred swagger, bluesy defiance, last spotlight",
+    "emotion_scores": {
+      "surrender": 0.42,
+      "defiance": 0.76,
+      "grief": 0.48,
+      "hope": 0.36,
+      "exhaustion": 0.58,
+      "transcendence": 0.36
+    },
+    "era_tension": 0.58,
+    "political_charge": 0.14,
+    "spiritual_weight": 0.34
   },
   {
     "id": "matrix_reloaded_2003",
@@ -229,6 +544,27 @@
     "era_tension": 0.84,
     "political_charge": 0.58,
     "spiritual_weight": 0.48
+  },
+  {
+    "id": "warren_zevon_2003",
+    "artist": "Warren Zevon",
+    "year": 2003,
+    "album": "The Wind",
+    "is_original": false,
+    "context_notes": "Recorded while Zevon was terminally ill, making the song nearly literal: a dying songwriter singing at the edge of his own door.",
+    "genre": "rock",
+    "mood_hint": "terminal clarity, gallows humor, direct farewell",
+    "emotion_scores": {
+      "surrender": 0.9,
+      "defiance": 0.34,
+      "grief": 0.88,
+      "hope": 0.32,
+      "exhaustion": 0.84,
+      "transcendence": 0.72
+    },
+    "era_tension": 0.7,
+    "political_charge": 0.18,
+    "spiritual_weight": 0.86
   },
   {
     "id": "avril_lavigne_2004",
@@ -273,6 +609,27 @@
     "spiritual_weight": 0.46
   },
   {
+    "id": "seether_2004",
+    "artist": "Seether",
+    "year": 2004,
+    "album": "Post-grunge cover era",
+    "is_original": false,
+    "context_notes": "Seether's post-grunge language places the song in a raw early-2000s register of alienation, distortion, and inward collapse after public trauma.",
+    "genre": "post-grunge",
+    "mood_hint": "alienation, distortion, inward collapse",
+    "emotion_scores": {
+      "surrender": 0.48,
+      "defiance": 0.68,
+      "grief": 0.7,
+      "hope": 0.2,
+      "exhaustion": 0.74,
+      "transcendence": 0.28
+    },
+    "era_tension": 0.72,
+    "political_charge": 0.28,
+    "spiritual_weight": 0.32
+  },
+  {
     "id": "antony_2005",
     "artist": "Antony and the Johnsons",
     "year": 2005,
@@ -312,6 +669,69 @@
     },
     "era_tension": 0.74,
     "political_charge": 0.72,
+    "spiritual_weight": 0.76
+  },
+  {
+    "id": "aretha_franklin_2007",
+    "artist": "Aretha Franklin",
+    "year": 2007,
+    "album": "Soul cover performance era",
+    "is_original": false,
+    "context_notes": "Franklin's soul-gospel authority reframes the song as testimony, giving Dylan's plain deathbed refrain the scale of church, survival, and vocal command.",
+    "genre": "soul gospel",
+    "mood_hint": "testimony, gospel authority, survival",
+    "emotion_scores": {
+      "surrender": 0.62,
+      "defiance": 0.5,
+      "grief": 0.62,
+      "hope": 0.74,
+      "exhaustion": 0.34,
+      "transcendence": 0.86
+    },
+    "era_tension": 0.48,
+    "political_charge": 0.3,
+    "spiritual_weight": 0.92
+  },
+  {
+    "id": "angela_aki_2008",
+    "artist": "Angela Aki",
+    "year": 2008,
+    "album": "Japanese-language cover era",
+    "is_original": false,
+    "context_notes": "Angela Aki's Japanese-language context makes the song a piano-centered translation of farewell, emphasizing clarity, interior distance, and cross-cultural tenderness.",
+    "genre": "j-pop piano ballad",
+    "mood_hint": "piano translation, interior distance, tenderness",
+    "emotion_scores": {
+      "surrender": 0.66,
+      "defiance": 0.12,
+      "grief": 0.58,
+      "hope": 0.58,
+      "exhaustion": 0.28,
+      "transcendence": 0.5
+    },
+    "era_tension": 0.32,
+    "political_charge": 0.1,
+    "spiritual_weight": 0.46
+  },
+  {
+    "id": "ze_ramalho_2008",
+    "artist": "Zé Ramalho",
+    "year": 2008,
+    "album": "Brazilian adaptation era",
+    "is_original": false,
+    "context_notes": "Zé Ramalho's Brazilian interpretive world translates the song through northeastern mysticism, folk-rock grit, and a different geography of fate.",
+    "genre": "brazilian folk rock",
+    "mood_hint": "translation, mysticism, regional fate",
+    "emotion_scores": {
+      "surrender": 0.68,
+      "defiance": 0.38,
+      "grief": 0.56,
+      "hope": 0.48,
+      "exhaustion": 0.44,
+      "transcendence": 0.74
+    },
+    "era_tension": 0.5,
+    "political_charge": 0.34,
     "spiritual_weight": 0.76
   },
   {
@@ -378,6 +798,27 @@
     "spiritual_weight": 0.7
   },
   {
+    "id": "bruce_springsteen_2012",
+    "artist": "Bruce Springsteen",
+    "year": 2012,
+    "album": "Live tribute performance era",
+    "is_original": false,
+    "context_notes": "Springsteen's live tribute language makes the song a working-class vigil, placing farewell in a communal American register of labor, grief, and endurance.",
+    "genre": "heartland rock",
+    "mood_hint": "working-class vigil, communal endurance, american grief",
+    "emotion_scores": {
+      "surrender": 0.58,
+      "defiance": 0.58,
+      "grief": 0.66,
+      "hope": 0.56,
+      "exhaustion": 0.52,
+      "transcendence": 0.54
+    },
+    "era_tension": 0.62,
+    "political_charge": 0.52,
+    "spiritual_weight": 0.58
+  },
+  {
     "id": "lana_del_rey_2012",
     "artist": "Lana Del Rey",
     "year": 2012,
@@ -399,6 +840,48 @@
     "spiritual_weight": 0.52
   },
   {
+    "id": "eric_burdon_2013",
+    "artist": "Eric Burdon",
+    "year": 2013,
+    "album": "Late-career blues rock cover era",
+    "is_original": false,
+    "context_notes": "Burdon's weathered blues-rock voice returns the song to an elder witness mode, hearing the door through age, war memory, and decades of countercultural aftermath.",
+    "genre": "blues rock",
+    "mood_hint": "elder witness, war memory, weathered blues",
+    "emotion_scores": {
+      "surrender": 0.74,
+      "defiance": 0.42,
+      "grief": 0.7,
+      "hope": 0.34,
+      "exhaustion": 0.76,
+      "transcendence": 0.58
+    },
+    "era_tension": 0.64,
+    "political_charge": 0.48,
+    "spiritual_weight": 0.66
+  },
+  {
+    "id": "susan_tedeschi_2014",
+    "artist": "Susan Tedeschi",
+    "year": 2014,
+    "album": "Live blues-soul cover era",
+    "is_original": false,
+    "context_notes": "Tedeschi's blues-soul performance style lets the song breathe as adult grief and guitar testimony, less mythic than human-scaled and road-worn.",
+    "genre": "blues soul",
+    "mood_hint": "adult grief, guitar testimony, road-worn compassion",
+    "emotion_scores": {
+      "surrender": 0.62,
+      "defiance": 0.36,
+      "grief": 0.68,
+      "hope": 0.52,
+      "exhaustion": 0.46,
+      "transcendence": 0.58
+    },
+    "era_tension": 0.4,
+    "political_charge": 0.18,
+    "spiritual_weight": 0.58
+  },
+  {
     "id": "cold_chisel_2015",
     "artist": "Cold Chisel",
     "year": 2015,
@@ -418,6 +901,27 @@
     "era_tension": 0.52,
     "political_charge": 0.28,
     "spiritual_weight": 0.36
+  },
+  {
+    "id": "avener_phoebe_kildeer_2015",
+    "artist": "The Avener & Phoebe Killdeer",
+    "year": 2015,
+    "album": "Electronic reinterpretation era",
+    "is_original": false,
+    "context_notes": "An electronic reinterpretation places the song in a club-adjacent atmosphere, where farewell becomes pulse, distance, and late-night digital melancholy.",
+    "genre": "electronic pop",
+    "mood_hint": "digital melancholy, pulse, nocturnal distance",
+    "emotion_scores": {
+      "surrender": 0.52,
+      "defiance": 0.24,
+      "grief": 0.5,
+      "hope": 0.46,
+      "exhaustion": 0.54,
+      "transcendence": 0.5
+    },
+    "era_tension": 0.38,
+    "political_charge": 0.1,
+    "spiritual_weight": 0.34
   },
   {
     "id": "ed_sheeran_2016",
