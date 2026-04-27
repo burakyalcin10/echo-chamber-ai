@@ -94,3 +94,16 @@ def test_compare_uses_llm_when_configured(monkeypatch):
     body = response.json()
     assert body["analysis"] == "LLM comparison text"
     assert body["analysis_source"] == "llm"
+
+
+def test_openapi_exposes_response_models():
+    response = client.get("/openapi.json")
+
+    assert response.status_code == 200
+    openapi = response.json()
+    schemas = openapi["components"]["schemas"]
+    assert "GraphResponse" in schemas
+    assert "CoverDetailResponse" in schemas
+    assert "CompareResponse" in schemas
+    assert "VoiceResponse" in schemas
+    assert "MatchResponse" in schemas

@@ -3,7 +3,17 @@ from fastapi.middleware.cors import CORSMiddleware
 from collections.abc import Callable
 
 from config import get_settings
-from schemas.api import CompareRequest, MatchRequest, VoiceRequest
+from schemas.api import (
+    CompareRequest,
+    CompareResponse,
+    CoverDetailResponse,
+    GraphResponse,
+    HealthResponse,
+    MatchRequest,
+    MatchResponse,
+    VoiceRequest,
+    VoiceResponse,
+)
 from services.data_store import cover_detail_payload, get_cover_or_404, graph_cover_payload, load_covers
 from services.embedding_matcher import match_user_text
 from services.llm_client import get_llm_client
@@ -22,7 +32,7 @@ app.add_middleware(
 )
 
 
-@app.get("/health")
+@app.get("/health", response_model=HealthResponse)
 async def health() -> dict:
     raw_count = _safe_cover_count(prefer_processed=False)
     processed_count = _safe_cover_count(prefer_processed=True) if settings.processed_covers_path.exists() else 0
@@ -39,18 +49,18 @@ async def health() -> dict:
     }
 
 
-@app.get("/api/graph")
+@app.get("/api/graph", response_model=GraphResponse)
 async def get_graph() -> dict:
     covers = load_covers(prefer_processed=True)
     return {"covers": [graph_cover_payload(cover) for cover in covers]}
 
 
-@app.get("/api/cover/{cover_id}")
+@app.get("/api/cover/{cover_id}", response_model=CoverDetailResponse)
 async def get_cover(cover_id: str) -> dict:
     return cover_detail_payload(get_cover_or_404(cover_id))
 
 
-@app.post("/api/compare")
+@app.post("/api/compare", response_model=CompareResponse)
 async def compare_covers(request: CompareRequest) -> dict:
     if request.cover_id_a == request.cover_id_b:
         raise HTTPException(status_code=400, detail="Choose two different covers.")
@@ -89,7 +99,7 @@ Be specific, poetic, and historically grounded. Language: English.
     }
 
 
-@app.post("/api/voice")
+@app.post("/api/voice", response_model=VoiceResponse)
 async def era_voice(request: VoiceRequest) -> dict:
     cover = cover_detail_payload(get_cover_or_404(request.cover_id))
     rag_context, sources = retrieve_historical_context(
@@ -123,7 +133,7 @@ Be poetic but grounded. Do not explain; evoke.
     }
 
 
-@app.post("/api/match")
+@app.post("/api/match", response_model=MatchResponse)
 async def match_farewell(request: MatchRequest) -> dict:
     user_text = request.user_text.strip()
     if not user_text:
