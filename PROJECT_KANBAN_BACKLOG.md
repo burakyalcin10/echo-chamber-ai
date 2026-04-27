@@ -66,6 +66,7 @@ Kullanıcı:
 | RAG-05 | RAG index dry-run | `04_build_rag.py --dry-run` doküman/chunk kontrolünü model yüklemeden yapıyor |
 | API-07 | Typed API response modelleri | FastAPI OpenAPI şemaları `GraphResponse`, `CoverDetailResponse`, `CompareResponse`, `VoiceResponse`, `MatchResponse` ile sabitlendi |
 | CI-01 | Backend CI workflow | GitHub Actions push/PR üzerinde validation, dry-run ve pytest çalıştırıyor |
+| CI-02 | Node 24 uyumlu Actions | CI workflow `actions/checkout@v6` ve `actions/setup-python@v6` kullanıyor |
 
 ### Ready
 
