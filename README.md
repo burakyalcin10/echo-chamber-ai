@@ -118,6 +118,13 @@ python scripts/04_build_rag.py --dry-run
 
 Generated files under `backend/data/processed/` are local artifacts and are not committed.
 
+GitHub Actions runs the lightweight backend CI workflow on pushes and pull requests using:
+
+```text
+.github/workflows/backend-ci.yml
+backend/requirements-ci.txt
+```
+
 ## API Overview
 
 Base URL:
