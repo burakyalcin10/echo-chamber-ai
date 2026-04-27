@@ -24,6 +24,8 @@ app.add_middleware(
 
 @app.get("/health")
 async def health() -> dict:
+    raw_count = _safe_cover_count(prefer_processed=False)
+    processed_count = _safe_cover_count(prefer_processed=True) if settings.processed_covers_path.exists() else 0
     return {
         "status": "ok",
         "app": settings.app_name,
@@ -32,6 +34,8 @@ async def health() -> dict:
         "llm_configured": get_llm_client().is_configured(),
         "raw_covers_exists": settings.raw_covers_path.exists(),
         "processed_covers_exists": settings.processed_covers_path.exists(),
+        "raw_cover_count": raw_count,
+        "processed_cover_count": processed_count,
     }
 
 
@@ -174,6 +178,13 @@ def _generate_or_fallback(prompt: str, *, fallback: Callable[[], str], temperatu
     llm = get_llm_client()
     if not llm.is_configured():
         return fallback(), "local_fallback"
+
+
+def _safe_cover_count(*, prefer_processed: bool) -> int:
+    try:
+        return len(load_covers(prefer_processed=prefer_processed))
+    except HTTPException:
+        return 0
     try:
         return llm.generate_text(prompt, temperature=temperature), "llm"
     except HTTPException:

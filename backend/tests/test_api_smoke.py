@@ -14,6 +14,8 @@ def test_health_reports_backend_state():
     body = response.json()
     assert body["status"] == "ok"
     assert body["raw_covers_exists"] is True
+    assert body["raw_cover_count"] >= 25
+    assert "processed_cover_count" in body
 
 
 def test_graph_returns_covers_without_embedding_vectors():

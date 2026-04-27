@@ -20,7 +20,9 @@ Response:
   "llm_provider": "gemini",
   "llm_configured": false,
   "raw_covers_exists": true,
-  "processed_covers_exists": true
+  "processed_covers_exists": true,
+  "raw_cover_count": 26,
+  "processed_cover_count": 26
 }
 ```
 
