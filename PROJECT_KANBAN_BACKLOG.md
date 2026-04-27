@@ -65,6 +65,7 @@ Kullanıcı:
 | RAG-04 | RAG doküman validation workflow | `00_validate_rag_docs.py` format, kaynak ve minimum uzunluk kontrolü yapıyor |
 | RAG-05 | RAG index dry-run | `04_build_rag.py --dry-run` doküman/chunk kontrolünü model yüklemeden yapıyor |
 | API-07 | Typed API response modelleri | FastAPI OpenAPI şemaları `GraphResponse`, `CoverDetailResponse`, `CompareResponse`, `VoiceResponse`, `MatchResponse` ile sabitlendi |
+| CI-01 | Backend CI workflow | GitHub Actions push/PR üzerinde validation, dry-run ve pytest çalıştırıyor |
 
 ### Ready
 
