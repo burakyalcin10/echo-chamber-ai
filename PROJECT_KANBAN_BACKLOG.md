@@ -59,6 +59,7 @@ Kullanıcı:
 | TEST-02 | Script dry-run kontrolleri | Skor ve embedding scriptleri dry-run/subprocess testleriyle doğrulanıyor |
 | API-03A | `/api/compare` demo-safe fallback | API key yokken lokal karşılaştırma analizi ve source metadata dönüyor |
 | API-04A | `/api/voice` demo-safe fallback | API key/RAG yokken lokal dönem monoloğu ve source metadata dönüyor |
+| FE-CONTRACT-01 | Frontend API sözleşmesi | `docs/API_CONTRACT.md` içinde endpoint request/response alanları sabitlendi |
 
 ### Ready
 
@@ -74,7 +75,6 @@ Kullanıcı:
 |---|---|---|---|
 | API-03 | `/api/compare` kalite iyileştirmesi | P1 | Gerçek `llm_analysis` çıktıları |
 | API-04 | `/api/voice` RAG kaynaklı test | P1 | `RAG-01`, `04_build_rag.py` |
-| FE-CONTRACT-01 | Frontend mock veri sözleşmesi | P1 | `API-01`, `API-02` |
 | MAN-01 | Manifesto taslağı | P1 | Konsept ve teknik kararlar |
 
 ### Later
