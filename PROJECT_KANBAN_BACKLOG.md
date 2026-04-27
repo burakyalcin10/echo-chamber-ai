@@ -69,12 +69,13 @@ Kullanıcı:
 | CI-02 | Node 24 uyumlu Actions | CI workflow `actions/checkout@v6` ve `actions/setup-python@v6` kullanıyor |
 | DATA-04 | Cover build workflow | `01_build_covers.py` merge/normalize/validate yapıyor ve 50 cover hedef gap'ini raporluyor |
 | DATA-02 | Nihai cover veri seti | 50 cover doğrulanmış metadata ile `covers.json` içinde tamamlandı |
+| RAG-01 | Tarihsel belge klasörü | 5 core starter RAG dokümanı eklendi ve validator'dan geçti |
+| RAG-06 | RAG index smoke | 5 dokümandan 15 chunk üretilip lokal `rag_index.json` build edildi |
 
 ### Ready
 
 | ID | İş | Öncelik | Kabul kriteri |
 |---|---|---|---|
-| RAG-01 | Tarihsel belge klasörü | P0 | En az 5 tarihsel doküman hazırlanır |
 | AI-06 | Gerçek provider ile ilk skor batch'i | P0 | API key ile 3-5 cover skorlanır ve cache davranışı görülür |
 
 ### Next
