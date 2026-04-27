@@ -21,6 +21,7 @@ class Settings:
 
     openai_api_key: str | None = os.getenv("OPENAI_API_KEY") or None
     openai_model: str = os.getenv("OPENAI_MODEL", "gpt-4.1-mini")
+    embedding_model: str = os.getenv("EMBEDDING_MODEL", "all-MiniLM-L6-v2")
 
     data_dir: Path = BASE_DIR / "data"
     raw_covers_path: Path = BASE_DIR / "data" / "covers.json"
@@ -28,6 +29,7 @@ class Settings:
     historical_docs_dir: Path = BASE_DIR / "data" / "historical_docs"
     chroma_dir: Path = BASE_DIR / "data" / "processed" / "chroma_db"
     umap_reducer_path: Path = BASE_DIR / "data" / "processed" / "umap_reducer.pkl"
+    umap_bounds_path: Path = BASE_DIR / "data" / "processed" / "umap_bounds.json"
 
     @property
     def frontend_origins(self) -> list[str]:

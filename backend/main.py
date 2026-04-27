@@ -4,6 +4,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from config import get_settings
 from schemas.api import CompareRequest, MatchRequest, VoiceRequest
 from services.data_store import cover_detail_payload, get_cover_or_404, graph_cover_payload, load_covers
+from services.embedding_matcher import match_user_text
 from services.llm_client import get_llm_client
 
 
@@ -108,7 +109,7 @@ async def match_farewell(request: MatchRequest) -> dict:
         raise HTTPException(status_code=400, detail="user_text cannot be empty.")
 
     covers = load_covers(prefer_processed=True)
-    matched = _keyword_match(user_text, covers)
+    matched, similarity_score, user_position = match_user_text(user_text, covers)
     detail = cover_detail_payload(matched)
     prompt = f"""
 A user wrote this farewell:
@@ -129,9 +130,9 @@ Be empathetic, literary, and specific. Do not be generic.
             "artist": detail["artist"],
             "year": detail["year"],
         },
-        "similarity_score": 0.5,
+        "similarity_score": similarity_score,
         "bridge_text": bridge_text,
-        "user_position": detail["position"],
+        "user_position": user_position,
     }
 
 
@@ -144,18 +145,3 @@ def _shift_direction(cover_a: dict, cover_b: dict) -> str:
     strongest_b = max(scores_b, key=scores_b.get)
     return f"{strongest_a}->{strongest_b}"
 
-
-def _keyword_match(user_text: str, covers: list[dict]) -> dict:
-    words = {word.strip(".,;:!?()[]{}\"'").lower() for word in user_text.split()}
-    best_cover = covers[0]
-    best_score = -1
-    for cover in covers:
-        haystack = " ".join(
-            str(cover.get(field, ""))
-            for field in ("artist", "genre", "mood_hint", "context_notes")
-        ).lower()
-        score = sum(1 for word in words if word and word in haystack)
-        if score > best_score:
-            best_cover = cover
-            best_score = score
-    return best_cover
