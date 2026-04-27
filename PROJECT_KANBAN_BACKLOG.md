@@ -61,6 +61,7 @@ Kullanıcı:
 | API-04A | `/api/voice` demo-safe fallback | API key/RAG yokken lokal dönem monoloğu ve source metadata dönüyor |
 | FE-CONTRACT-01 | Frontend API sözleşmesi | `docs/API_CONTRACT.md` içinde endpoint request/response alanları sabitlendi |
 | DATA-03 | Veri doğrulama helper'ı | `00_validate_covers.py` cover şeması, skor aralıkları ve tek-orijinal kuralını test ediyor |
+| BE-03 | Health debug metrikleri | `/health` raw/processed cover sayılarını döndürüyor |
 
 ### Ready
 
