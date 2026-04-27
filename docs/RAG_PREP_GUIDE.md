@@ -161,3 +161,21 @@ If time is tight, prepare these five first:
 5. `dylan_nobel_and_songwriting.txt`
 
 With these, the RAG voice endpoint can already produce grounded outputs.
+
+## Validation Commands
+
+After adding your files, run these from `backend/`:
+
+```bash
+python scripts/00_validate_rag_docs.py
+python scripts/04_build_rag.py --dry-run
+python scripts/04_build_rag.py
+```
+
+For a partial draft folder while you are still writing:
+
+```bash
+python scripts/00_validate_rag_docs.py --allow-missing-core --min-words 100
+```
+
+The full validator expects the five core files, the section headers from this guide, at least 300 words per document, and at least one URL source when possible.
