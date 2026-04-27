@@ -70,7 +70,10 @@ def test_compare_works_without_llm_key():
     assert body["shift_direction"]
 
 
-def test_voice_works_without_llm_key():
+def test_voice_works_without_llm_key(monkeypatch):
+    settings = get_settings()
+    monkeypatch.setattr(settings, "rag_index_path", settings.data_dir / "processed" / "__missing_rag_test.json")
+
     response = client.post("/api/voice", json={"cover_id": "dylan_1973"})
 
     assert response.status_code == 200

@@ -34,9 +34,22 @@ def test_build_covers_dry_run_reports_target_gap():
     assert "Dry-run only" in result.stdout
 
 
-def test_validate_rag_docs_reports_missing_documents():
+def test_validate_rag_docs_accepts_current_dataset():
     result = subprocess.run(
         [sys.executable, "scripts/00_validate_rag_docs.py"],
+        cwd=BACKEND_DIR,
+        text=True,
+        capture_output=True,
+        check=False,
+    )
+
+    assert result.returncode == 0
+    assert "Validated 5 RAG documents" in result.stdout
+
+
+def test_validate_rag_docs_reports_missing_documents_for_empty_dir(tmp_path):
+    result = subprocess.run(
+        [sys.executable, "scripts/00_validate_rag_docs.py", "--docs-dir", str(tmp_path)],
         cwd=BACKEND_DIR,
         text=True,
         capture_output=True,
@@ -133,7 +146,7 @@ def test_embedding_script_dry_run_validates_without_model_load():
     assert "Embedding texts prepared:" in result.stdout
 
 
-def test_rag_build_dry_run_handles_missing_docs_without_model_load():
+def test_rag_build_dry_run_lists_current_documents_without_model_load():
     result = subprocess.run(
         [sys.executable, "scripts/04_build_rag.py", "--dry-run"],
         cwd=BACKEND_DIR,
@@ -143,4 +156,5 @@ def test_rag_build_dry_run_handles_missing_docs_without_model_load():
     )
 
     assert result.returncode == 0
-    assert "No historical docs found" in result.stdout
+    assert "Historical docs: 5" in result.stdout
+    assert "Chunks prepared:" in result.stdout

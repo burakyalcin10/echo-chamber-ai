@@ -211,7 +211,7 @@ def _fallback_compare_text(cover_a: dict, cover_b: dict) -> str:
 
 def _fallback_voice_text(cover: dict, historical_context: str) -> str:
     meaning = _ensure_sentence(cover["meaning_shift"].lower())
-    context = _ensure_sentence(historical_context.strip() or cover["historical_pulse"])
+    context = _ensure_sentence(_compact_context(historical_context) or cover["historical_pulse"])
     return (
         f"I am {cover['year']}, speaking through {cover['artist']}'s version of the song. "
         f"I carry {meaning} "
@@ -228,6 +228,35 @@ def _fallback_bridge_text(cover: dict) -> str:
         f"That recording turns the song toward {meaning} "
         f"Its historical pulse is {pulse}"
     )
+
+
+def _compact_context(text: str, *, limit: int = 300) -> str:
+    cleaned_lines = []
+    for line in text.splitlines():
+        stripped = line.strip()
+        if not stripped or stripped.startswith("[") or stripped.startswith("Title:"):
+            continue
+        cleaned_lines.append(stripped)
+    cleaned = " ".join(cleaned_lines)
+    cleaned = " ".join(cleaned.split())
+    sentences = [
+        sentence.strip()
+        for sentence in cleaned.split(".")
+        if sentence.strip() and sentence.strip()[0].isupper()
+    ]
+    if sentences:
+        selected: list[str] = []
+        total = 0
+        for sentence in sentences:
+            addition = len(sentence) + (2 if selected else 0)
+            if selected and total + addition > limit:
+                break
+            selected.append(sentence)
+            total += addition
+        return ". ".join(selected)
+    if len(cleaned) <= limit:
+        return cleaned
+    return cleaned[:limit].rsplit(" ", 1)[0] + "."
 
 
 def _ensure_sentence(text: str) -> str:

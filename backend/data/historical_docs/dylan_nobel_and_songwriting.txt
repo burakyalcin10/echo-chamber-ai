@@ -1,0 +1,32 @@
+Title: Dylan's Nobel Lecture, Songwriting, and the Life of Covers
+Timeframe: Dylan's 2016 Nobel lecture, applied backward to the song's afterlife
+Why it matters for Knockin' on Heaven's Door:
+Dylan's Nobel lecture helps frame songs as living forms shaped by tradition, performance, memory, and inheritance. That idea supports Echo Chamber's cover galaxy: each cover is not a duplicate but a new historical reading.
+
+Key facts:
+- Bob Dylan received the 2016 Nobel Prize in Literature.
+- His Nobel lecture discusses songs in relation to literary and oral traditions rather than treating them as isolated texts.
+- Dylan emphasizes influence, old stories, performance, and the way songs enter listeners' lives.
+- Covers can reveal how a song changes when different voices, eras, languages, and genres inhabit it.
+- Echo Chamber uses AI to map those changes as emotional and historical transformations.
+
+Emotional / cultural keywords:
+- oral tradition
+- inheritance
+- transformation
+- voice
+- covers
+- memory
+- authorship
+
+Short narrative:
+Dylan's Nobel lecture is useful for Echo Chamber because it resists the idea that a song is only words on a page. Songs live in performance, memory, borrowing, tone, arrangement, and repetition. They pass through mouths. They change shape when sung by a different body. A lyric can remain almost identical while its meaning moves drastically because the voice, historical moment, tempo, instrumentation, and audience have changed. This is the central artistic premise of the project.
+
+"Knockin' on Heaven's Door" is especially suited to this treatment because it is minimal. Its images are few: mother, badge, guns, cloud, door. Because the song does not over-explain itself, it leaves room for history to enter. Dylan's original belongs to a 1973 Western and to the wider exhaustion of the Vietnam-Watergate moment. But when Bob Marley touches the song, spiritual resistance and reggae community enter it. When Guns N' Roses amplifies it, hard-rock defiance and late-century spectacle enter it. When Warren Zevon sings it near his own death, biography makes the door almost literal. When a user writes a farewell into Echo Chamber, the song becomes a mirror for one more threshold.
+
+The Nobel frame also helps with authorship and AI. The project does not claim that AI replaces the songwriter, historian, or listener. Instead, AI becomes a mapping instrument and interpretive collaborator. It helps score emotional dimensions, retrieve historical context, and generate bridges between personal text and musical afterlife. But the meaning depends on curation: which covers are chosen, which histories are attached, what kind of language is allowed, and how the user is invited into the door. Dylan's lecture reminds us that songs are not dead artifacts. They are living arrangements between old material and present need. A cover is therefore not only repetition. It is evidence that the song found another body.
+
+Sources:
+- https://www.nobelprize.org/prizes/literature/2016/dylan/lecture/
+- https://www.nobelprize.org/prizes/literature/2016/dylan/facts/
+- https://www.bobdylan.com/books/the-nobel-lecture/
