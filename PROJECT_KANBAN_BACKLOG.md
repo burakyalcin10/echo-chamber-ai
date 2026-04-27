@@ -57,6 +57,8 @@ Kullanıcı:
 | EMB-05 | Embedding/UMAP script smoke run | Processed covers, UMAP reducer ve bounds lokal olarak üretildi |
 | API-06 | `/api/match` gerçek embedding modu | Processed data varken cosine similarity ve projected user position dönüyor |
 | TEST-02 | Script dry-run kontrolleri | Skor ve embedding scriptleri dry-run/subprocess testleriyle doğrulanıyor |
+| API-03A | `/api/compare` demo-safe fallback | API key yokken lokal karşılaştırma analizi ve source metadata dönüyor |
+| API-04A | `/api/voice` demo-safe fallback | API key/RAG yokken lokal dönem monoloğu ve source metadata dönüyor |
 
 ### Ready
 
@@ -72,7 +74,6 @@ Kullanıcı:
 |---|---|---|---|
 | API-03 | `/api/compare` kalite iyileştirmesi | P1 | Gerçek `llm_analysis` çıktıları |
 | API-04 | `/api/voice` RAG kaynaklı test | P1 | `RAG-01`, `04_build_rag.py` |
-| API-05 | `/api/match` response polish | P1 | `EMB-05` |
 | FE-CONTRACT-01 | Frontend mock veri sözleşmesi | P1 | `API-01`, `API-02` |
 | MAN-01 | Manifesto taslağı | P1 | Konsept ve teknik kararlar |
 
