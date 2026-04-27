@@ -92,6 +92,8 @@ python scripts/03_embed_and_umap.py
 3. After historical documents are added under `backend/data/historical_docs/`, build the local RAG index:
 
 ```bash
+python scripts/00_validate_rag_docs.py
+python scripts/04_build_rag.py --dry-run
 python scripts/04_build_rag.py
 ```
 
@@ -111,6 +113,7 @@ Fast script checks without API/model calls:
 python scripts/00_validate_covers.py
 python scripts/02_score_covers.py --dry-run --limit 5
 python scripts/03_embed_and_umap.py --dry-run
+python scripts/04_build_rag.py --dry-run
 ```
 
 Generated files under `backend/data/processed/` are local artifacts and are not committed.

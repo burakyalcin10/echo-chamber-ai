@@ -1,11 +1,10 @@
 from __future__ import annotations
 
+import argparse
 import json
 import sys
 from pathlib import Path
 from typing import Any
-
-from sentence_transformers import SentenceTransformer
 
 sys.path.append(str(Path(__file__).resolve().parents[1]))
 
@@ -13,12 +12,20 @@ from config import get_settings
 
 
 def main() -> None:
+    parser = argparse.ArgumentParser(description="Build the local historical-docs RAG index.")
+    parser.add_argument("--docs-dir", type=Path, default=None, help="Optional historical docs directory.")
+    parser.add_argument("--dry-run", action="store_true", help="List documents and chunks without loading models.")
+    args = parser.parse_args()
+
     settings = get_settings()
-    docs_dir = settings.historical_docs_dir
+    docs_dir = args.docs_dir or settings.historical_docs_dir
     docs_dir.mkdir(parents=True, exist_ok=True)
 
     documents = sorted([*docs_dir.glob("*.txt"), *docs_dir.glob("*.md")])
     if not documents:
+        if args.dry_run:
+            print(f"No historical docs found in {docs_dir}")
+            return
         raise SystemExit(f"No historical docs found in {docs_dir}")
 
     chunks = []
@@ -32,6 +39,15 @@ def main() -> None:
                     "text": chunk_text,
                 }
             )
+
+    if args.dry_run:
+        print(f"Historical docs: {len(documents)}")
+        print(f"Chunks prepared: {len(chunks)}")
+        for path in documents:
+            print(f"- {path.name}")
+        return
+
+    from sentence_transformers import SentenceTransformer
 
     model = SentenceTransformer(settings.embedding_model)
     vectors = model.encode([chunk["text"] for chunk in chunks])
