@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import argparse
 import json
 import pickle
 import sys
@@ -7,8 +8,6 @@ from pathlib import Path
 from typing import Any
 
 import numpy as np
-import umap
-from sentence_transformers import SentenceTransformer
 
 sys.path.append(str(Path(__file__).resolve().parents[1]))
 
@@ -16,15 +15,32 @@ from config import get_settings
 
 
 def main() -> None:
+    parser = argparse.ArgumentParser(description="Build cover embeddings and UMAP 3D coordinates.")
+    parser.add_argument(
+        "--dry-run",
+        action="store_true",
+        help="Validate cover inputs and embedding text without loading models or writing files.",
+    )
+    args = parser.parse_args()
+
     settings = get_settings()
     covers = _load_covers(settings.raw_covers_path)
     if len(covers) < 3:
         raise SystemExit("Need at least 3 covers for UMAP.")
 
-    _patch_umap_sklearn_compat()
+    texts = [build_embedding_text(cover) for cover in covers]
+    if args.dry_run:
+        print(f"Covers in file: {len(covers)}")
+        print(f"Embedding texts prepared: {len(texts)}")
+        print(f"First cover: {covers[0]['id']}")
+        return
+
+    import umap
+    from sentence_transformers import SentenceTransformer
+
+    _patch_umap_sklearn_compat(umap)
 
     model = SentenceTransformer(settings.embedding_model)
-    texts = [build_embedding_text(cover) for cover in covers]
     vectors = np.asarray(model.encode(texts), dtype=np.float32)
 
     reducer = umap.UMAP(
@@ -50,11 +66,11 @@ def main() -> None:
     print(f"Saved UMAP reducer to {settings.umap_reducer_path}")
 
 
-def _patch_umap_sklearn_compat() -> None:
+def _patch_umap_sklearn_compat(umap_module: Any) -> None:
     """Support newer scikit-learn versions where force_all_finite was renamed."""
     import inspect
 
-    original = umap.umap_.check_array
+    original = umap_module.umap_.check_array
     signature = inspect.signature(original)
     if "force_all_finite" in signature.parameters or "ensure_all_finite" not in signature.parameters:
         return
@@ -64,7 +80,7 @@ def _patch_umap_sklearn_compat() -> None:
             kwargs["ensure_all_finite"] = force_all_finite
         return original(*args, **kwargs)
 
-    umap.umap_.check_array = compat_check_array
+    umap_module.umap_.check_array = compat_check_array
 
 
 def build_embedding_text(cover: dict[str, Any]) -> str:

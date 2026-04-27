@@ -1,5 +1,6 @@
 from fastapi.testclient import TestClient
 
+from config import get_settings
 from main import app
 
 
@@ -34,7 +35,10 @@ def test_cover_detail_for_original_song():
     assert body["is_original"] is True
 
 
-def test_match_works_without_llm_key():
+def test_match_works_without_llm_key(monkeypatch):
+    settings = get_settings()
+    monkeypatch.setattr(settings, "processed_covers_path", settings.data_dir / "processed" / "__missing_test.json")
+
     response = client.post("/api/match", json={"user_text": "I am tired and saying goodbye to an old life."})
 
     assert response.status_code == 200
