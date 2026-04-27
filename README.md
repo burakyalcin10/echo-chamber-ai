@@ -91,6 +91,23 @@ python scripts/04_build_rag.py
 
 Then restart the API.
 
+## Tests
+
+Run backend tests from `backend/`:
+
+```bash
+python -m pytest -q
+```
+
+Fast script checks without API/model calls:
+
+```bash
+python scripts/02_score_covers.py --dry-run --limit 5
+python scripts/03_embed_and_umap.py --dry-run
+```
+
+Generated files under `backend/data/processed/` are local artifacts and are not committed.
+
 ## API Overview
 
 Base URL:
