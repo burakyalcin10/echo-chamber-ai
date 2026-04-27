@@ -13,3 +13,4 @@ llama-index-vector-stores-chroma==0.4.1
 chromadb==0.5.23
 musicbrainzngs==0.7.1
 requests==2.32.3
+pytest==8.3.4

@@ -115,7 +115,8 @@ async def match_farewell(request: MatchRequest) -> dict:
         raise HTTPException(status_code=400, detail="user_text cannot be empty.")
 
     covers = load_covers(prefer_processed=True)
-    matched, similarity_score, user_position = match_user_text(user_text, covers)
+    match = match_user_text(user_text, covers)
+    matched = match["cover"]
     detail = cover_detail_payload(matched)
     prompt = f"""
 A user wrote this farewell:
@@ -128,7 +129,17 @@ Historical context: {detail['historical_pulse']}
 Write 3 sentences connecting their personal farewell to this cover and its era.
 Be empathetic, literary, and specific. Do not be generic.
 """.strip()
-    bridge_text = get_llm_client().generate_text(prompt, temperature=0.7)
+    llm = get_llm_client()
+    if llm.is_configured():
+        try:
+            bridge_text = llm.generate_text(prompt, temperature=0.7)
+            bridge_source = "llm"
+        except HTTPException:
+            bridge_text = _fallback_bridge_text(detail)
+            bridge_source = "local_fallback"
+    else:
+        bridge_text = _fallback_bridge_text(detail)
+        bridge_source = "local_fallback"
 
     return {
         "matched_cover": {
@@ -136,9 +147,11 @@ Be empathetic, literary, and specific. Do not be generic.
             "artist": detail["artist"],
             "year": detail["year"],
         },
-        "similarity_score": similarity_score,
+        "similarity_score": match["similarity_score"],
         "bridge_text": bridge_text,
-        "user_position": user_position,
+        "user_position": match["user_position"],
+        "match_method": match["match_method"],
+        "bridge_source": bridge_source,
     }
 
 
@@ -150,3 +163,20 @@ def _shift_direction(cover_a: dict, cover_b: dict) -> str:
     strongest_a = max(scores_a, key=scores_a.get)
     strongest_b = max(scores_b, key=scores_b.get)
     return f"{strongest_a}->{strongest_b}"
+
+
+def _fallback_bridge_text(cover: dict) -> str:
+    meaning = _ensure_sentence(cover["meaning_shift"].lower())
+    pulse = _ensure_sentence(cover["historical_pulse"].lower())
+    return (
+        f"Your farewell lands closest to the {cover['year']} {cover['artist']} version. "
+        f"That recording turns the song toward {meaning} "
+        f"Its historical pulse is {pulse}"
+    )
+
+
+def _ensure_sentence(text: str) -> str:
+    stripped = text.strip()
+    if not stripped:
+        return stripped
+    return stripped if stripped[-1] in ".!?" else f"{stripped}."

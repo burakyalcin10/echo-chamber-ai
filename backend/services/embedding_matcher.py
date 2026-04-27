@@ -9,15 +9,27 @@ import numpy as np
 from config import get_settings
 
 
-def match_user_text(user_text: str, covers: list[dict[str, Any]]) -> tuple[dict[str, Any], float, dict[str, float]]:
-    if covers and all("embedding_vector" in cover for cover in covers):
-        return _embedding_match(user_text, covers)
+def match_user_text(user_text: str, covers: list[dict[str, Any]]) -> dict[str, Any]:
+    if not covers:
+        raise RuntimeError("No covers available for matching.")
+
+    if all("embedding_vector" in cover for cover in covers):
+        try:
+            return _embedding_match(user_text, covers)
+        except Exception:
+            # Keep the interactive demo usable even if the local embedding stack is unavailable.
+            pass
 
     matched = _keyword_match(user_text, covers)
-    return matched, 0.5, matched["position"]
+    return {
+        "cover": matched,
+        "similarity_score": _keyword_similarity(user_text, matched),
+        "user_position": matched["position"],
+        "match_method": "keyword_fallback",
+    }
 
 
-def _embedding_match(user_text: str, covers: list[dict[str, Any]]) -> tuple[dict[str, Any], float, dict[str, float]]:
+def _embedding_match(user_text: str, covers: list[dict[str, Any]]) -> dict[str, Any]:
     try:
         from sentence_transformers import SentenceTransformer
     except ImportError as exc:
@@ -34,7 +46,12 @@ def _embedding_match(user_text: str, covers: list[dict[str, Any]]) -> tuple[dict
     score = float(similarities[best_index])
 
     user_position = _project_user_position(user_vector) or matched["position"]
-    return matched, score, user_position
+    return {
+        "cover": matched,
+        "similarity_score": score,
+        "user_position": user_position,
+        "match_method": "embedding",
+    }
 
 
 def _cosine_similarity(vector: np.ndarray, matrix: np.ndarray) -> np.ndarray:
@@ -85,3 +102,15 @@ def _keyword_match(user_text: str, covers: list[dict[str, Any]]) -> dict[str, An
             best_cover = cover
             best_score = score
     return best_cover
+
+
+def _keyword_similarity(user_text: str, cover: dict[str, Any]) -> float:
+    words = {word.strip(".,;:!?()[]{}\"'").lower() for word in user_text.split() if word.strip()}
+    if not words:
+        return 0.0
+    haystack = " ".join(
+        str(cover.get(field, ""))
+        for field in ("artist", "genre", "mood_hint", "context_notes")
+    ).lower()
+    hits = sum(1 for word in words if word and word in haystack)
+    return round(min(0.95, 0.35 + hits / max(len(words), 1)), 3)
