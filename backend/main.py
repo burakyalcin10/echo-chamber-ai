@@ -178,6 +178,10 @@ def _generate_or_fallback(prompt: str, *, fallback: Callable[[], str], temperatu
     llm = get_llm_client()
     if not llm.is_configured():
         return fallback(), "local_fallback"
+    try:
+        return llm.generate_text(prompt, temperature=temperature), "llm"
+    except HTTPException:
+        return fallback(), "local_fallback"
 
 
 def _safe_cover_count(*, prefer_processed: bool) -> int:
@@ -185,10 +189,6 @@ def _safe_cover_count(*, prefer_processed: bool) -> int:
         return len(load_covers(prefer_processed=prefer_processed))
     except HTTPException:
         return 0
-    try:
-        return llm.generate_text(prompt, temperature=temperature), "llm"
-    except HTTPException:
-        return fallback(), "local_fallback"
 
 
 def _fallback_compare_text(cover_a: dict, cover_b: dict) -> str:

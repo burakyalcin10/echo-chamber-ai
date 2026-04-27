@@ -1,6 +1,7 @@
 from fastapi.testclient import TestClient
 
 from config import get_settings
+import main as main_module
 from main import app
 
 
@@ -75,3 +76,21 @@ def test_voice_works_without_llm_key():
     assert body["monologue"]
     assert body["monologue_source"] in {"local_fallback", "llm"}
     assert body["artist"] == "Bob Dylan"
+
+
+def test_compare_uses_llm_when_configured(monkeypatch):
+    class FakeLLM:
+        def is_configured(self):
+            return True
+
+        def generate_text(self, prompt, *, temperature):
+            return "LLM comparison text"
+
+    monkeypatch.setattr(main_module, "get_llm_client", lambda: FakeLLM())
+
+    response = client.post("/api/compare", json={"cover_id_a": "dylan_1973", "cover_id_b": "gnr_1990"})
+
+    assert response.status_code == 200
+    body = response.json()
+    assert body["analysis"] == "LLM comparison text"
+    assert body["analysis_source"] == "llm"
