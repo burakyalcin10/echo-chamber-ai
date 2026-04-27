@@ -52,6 +52,8 @@ Kullanıcı:
 | RAG-02 | Yerel RAG index scripti | `04_build_rag.py` ile historical docs chunk/index akışı eklendi |
 | RAG-03 | RAG query helper | `/api/voice` için local semantic retrieval helper eklendi |
 | DOC-01 | README omurgası | Kurulum, pipeline, API ve RAG notları belgelendi |
+| API-06A | `/api/match` demo-safe fallback | API key yokken lokal bridge text ve keyword fallback ile çalışıyor |
+| TEST-01 | Backend smoke testleri | Health, graph, cover, match ve compare guard testleri eklendi |
 
 ### Ready
 
@@ -62,7 +64,7 @@ Kullanıcı:
 | AI-06 | Gerçek provider ile ilk skor batch'i | P0 | API key ile 3-5 cover skorlanır ve cache davranışı görülür |
 | EMB-05 | Embedding/UMAP script smoke run | P0 | `covers_with_embeddings.json`, reducer ve bounds dosyaları oluşur |
 | API-06 | `/api/match` gerçek embedding modu | P1 | Processed data varsa cosine similarity ve user position kullanılır |
-| TEST-01 | Backend smoke testleri | P1 | Health, graph, cover, compare/match happy path test edilir |
+| TEST-02 | Script dry-run kontrolleri | P1 | Skor ve embedding scriptleri hata durumlarında anlaşılır çıktı verir |
 
 ### Next
 
