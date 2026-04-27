@@ -28,6 +28,7 @@ class Settings:
     processed_covers_path: Path = BASE_DIR / "data" / "processed" / "covers_with_embeddings.json"
     historical_docs_dir: Path = BASE_DIR / "data" / "historical_docs"
     chroma_dir: Path = BASE_DIR / "data" / "processed" / "chroma_db"
+    rag_index_path: Path = BASE_DIR / "data" / "processed" / "rag_index.json"
     umap_reducer_path: Path = BASE_DIR / "data" / "processed" / "umap_reducer.pkl"
     umap_bounds_path: Path = BASE_DIR / "data" / "processed" / "umap_bounds.json"
 

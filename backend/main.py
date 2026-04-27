@@ -6,6 +6,7 @@ from schemas.api import CompareRequest, MatchRequest, VoiceRequest
 from services.data_store import cover_detail_payload, get_cover_or_404, graph_cover_payload, load_covers
 from services.embedding_matcher import match_user_text
 from services.llm_client import get_llm_client
+from services.rag_store import retrieve_historical_context
 
 
 settings = get_settings()
@@ -81,13 +82,18 @@ Be specific, poetic, and historically grounded. Language: English.
 @app.post("/api/voice")
 async def era_voice(request: VoiceRequest) -> dict:
     cover = cover_detail_payload(get_cover_or_404(request.cover_id))
+    rag_context, sources = retrieve_historical_context(
+        f"What was happening culturally and politically around {cover['year']} "
+        f"for {cover['artist']} and Knockin' on Heaven's Door?"
+    )
+    historical_context = rag_context or cover["historical_pulse"]
     prompt = f"""
 You are a literary AI channeling the internal voice of an era.
 
 The year is {cover['year']}. {cover['artist']} has recorded "Knockin' on Heaven's Door".
 
-Historical context:
-{cover['historical_pulse']}
+Historical context from the archive:
+{historical_context}
 
 Write a 150-word first-person interior monologue as if you are the era itself speaking
 through this recording. Use sensory details. Reference real historical events.
@@ -98,7 +104,7 @@ Be poetic but grounded. Do not explain; evoke.
         "monologue": monologue,
         "year": cover["year"],
         "artist": cover["artist"],
-        "rag_sources_used": [],
+        "rag_sources_used": sources,
     }
 
 
@@ -144,4 +150,3 @@ def _shift_direction(cover_a: dict, cover_b: dict) -> str:
     strongest_a = max(scores_a, key=scores_a.get)
     strongest_b = max(scores_b, key=scores_b.get)
     return f"{strongest_a}->{strongest_b}"
-
