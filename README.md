@@ -59,6 +59,24 @@ Run these from `backend/`.
 python scripts/02_score_covers.py
 ```
 
+Useful scoring options:
+
+```bash
+# Validate input and see which covers would be scored without calling an API.
+python scripts/02_score_covers.py --dry-run --limit 5
+
+# Score only selected covers.
+python scripts/02_score_covers.py --ids dylan_1973,clapton_1975
+
+# Retry transient provider/rate-limit failures and keep going after one cover fails.
+python scripts/02_score_covers.py --retries 3 --continue-on-error
+
+# Rescore covers that already have llm_analysis.
+python scripts/02_score_covers.py --force
+```
+
+The scorer writes after each successful cover and keeps a local cache under `backend/data/processed/score_cache.json`, so interrupted runs can resume without repeating successful paid calls.
+
 2. Build semantic embeddings and 3D UMAP positions:
 
 ```bash

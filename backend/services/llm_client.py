@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+import re
 from typing import Any
 
 from fastapi import HTTPException
@@ -46,10 +47,7 @@ class LLMClient:
         else:
             raise HTTPException(status_code=500, detail=f"Unsupported LLM_PROVIDER: {self.settings.llm_provider}")
 
-        try:
-            return json.loads(text)
-        except json.JSONDecodeError as exc:
-            raise HTTPException(status_code=502, detail="LLM returned invalid JSON") from exc
+        return _parse_json_response(text)
 
     def _openai_text(
         self,
@@ -123,3 +121,21 @@ def _extract_openai_text(response: Any) -> str:
             if text:
                 chunks.append(text)
     return "\n".join(chunks)
+
+
+def _parse_json_response(text: str) -> dict[str, Any]:
+    cleaned = _strip_code_fence(text.strip())
+    if not cleaned:
+        raise HTTPException(status_code=502, detail="LLM returned an empty response.")
+    try:
+        parsed = json.loads(cleaned)
+    except json.JSONDecodeError as exc:
+        raise HTTPException(status_code=502, detail="LLM returned invalid JSON.") from exc
+    if not isinstance(parsed, dict):
+        raise HTTPException(status_code=502, detail="LLM JSON response must be an object.")
+    return parsed
+
+
+def _strip_code_fence(text: str) -> str:
+    match = re.fullmatch(r"```(?:json)?\s*(.*?)\s*```", text, flags=re.DOTALL | re.IGNORECASE)
+    return match.group(1).strip() if match else text
