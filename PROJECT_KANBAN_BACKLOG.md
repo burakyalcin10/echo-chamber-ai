@@ -67,12 +67,13 @@ Kullanıcı:
 | API-07 | Typed API response modelleri | FastAPI OpenAPI şemaları `GraphResponse`, `CoverDetailResponse`, `CompareResponse`, `VoiceResponse`, `MatchResponse` ile sabitlendi |
 | CI-01 | Backend CI workflow | GitHub Actions push/PR üzerinde validation, dry-run ve pytest çalıştırıyor |
 | CI-02 | Node 24 uyumlu Actions | CI workflow `actions/checkout@v6` ve `actions/setup-python@v6` kullanıyor |
+| DATA-04 | Cover build workflow | `01_build_covers.py` merge/normalize/validate yapıyor ve 50 cover hedef gap'ini raporluyor |
 
 ### Ready
 
 | ID | İş | Öncelik | Kabul kriteri |
 |---|---|---|---|
-| DATA-02 | Nihai cover veri seti | P1 | Yaklaşık 50 cover ve temel metadata tamamlanır |
+| DATA-02 | Nihai cover veri seti | P1 | 50 hedefi için kalan 24 cover doğrulanmış metadata ile eklenir |
 | RAG-01 | Tarihsel belge klasörü | P0 | En az 5 tarihsel doküman hazırlanır |
 | AI-06 | Gerçek provider ile ilk skor batch'i | P0 | API key ile 3-5 cover skorlanır ve cache davranışı görülür |
 
