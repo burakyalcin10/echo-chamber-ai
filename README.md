@@ -127,6 +127,12 @@ Endpoints:
 
 LLM-backed endpoints require either `GEMINI_API_KEY` or `OPENAI_API_KEY`.
 
+The frontend-facing contract is documented in:
+
+```text
+docs/API_CONTRACT.md
+```
+
 ## AI Techniques
 
 Planned techniques:
