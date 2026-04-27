@@ -21,9 +21,11 @@ def main() -> None:
     if len(covers) < 3:
         raise SystemExit("Need at least 3 covers for UMAP.")
 
+    _patch_umap_sklearn_compat()
+
     model = SentenceTransformer(settings.embedding_model)
     texts = [build_embedding_text(cover) for cover in covers]
-    vectors = model.encode(texts)
+    vectors = np.asarray(model.encode(texts), dtype=np.float32)
 
     reducer = umap.UMAP(
         n_components=3,
@@ -46,6 +48,23 @@ def main() -> None:
 
     print(f"Saved processed covers to {settings.processed_covers_path}")
     print(f"Saved UMAP reducer to {settings.umap_reducer_path}")
+
+
+def _patch_umap_sklearn_compat() -> None:
+    """Support newer scikit-learn versions where force_all_finite was renamed."""
+    import inspect
+
+    original = umap.umap_.check_array
+    signature = inspect.signature(original)
+    if "force_all_finite" in signature.parameters or "ensure_all_finite" not in signature.parameters:
+        return
+
+    def compat_check_array(*args: Any, force_all_finite: Any = None, **kwargs: Any) -> Any:
+        if force_all_finite is not None and "ensure_all_finite" not in kwargs:
+            kwargs["ensure_all_finite"] = force_all_finite
+        return original(*args, **kwargs)
+
+    umap.umap_.check_array = compat_check_array
 
 
 def build_embedding_text(cover: dict[str, Any]) -> str:

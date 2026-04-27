@@ -66,6 +66,8 @@ def _project_user_position(user_vector: np.ndarray) -> dict[str, float] | None:
     if not settings.umap_reducer_path.exists() or not settings.umap_bounds_path.exists():
         return None
 
+    _patch_umap_sklearn_compat()
+
     with settings.umap_reducer_path.open("rb") as file:
         reducer = pickle.load(file)
     with settings.umap_bounds_path.open("r", encoding="utf-8") as file:
@@ -86,6 +88,26 @@ def _project_user_position(user_vector: np.ndarray) -> dict[str, float] | None:
         "y": round(normalized[1], 3),
         "z": round(normalized[2], 3),
     }
+
+
+def _patch_umap_sklearn_compat() -> None:
+    try:
+        import inspect
+        import umap
+    except ImportError:
+        return
+
+    original = umap.umap_.check_array
+    signature = inspect.signature(original)
+    if "force_all_finite" in signature.parameters or "ensure_all_finite" not in signature.parameters:
+        return
+
+    def compat_check_array(*args: Any, force_all_finite: Any = None, **kwargs: Any) -> Any:
+        if force_all_finite is not None and "ensure_all_finite" not in kwargs:
+            kwargs["ensure_all_finite"] = force_all_finite
+        return original(*args, **kwargs)
+
+    umap.umap_.check_array = compat_check_array
 
 
 def _keyword_match(user_text: str, covers: list[dict[str, Any]]) -> dict[str, Any]:
