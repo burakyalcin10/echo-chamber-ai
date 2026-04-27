@@ -143,6 +143,13 @@ The frontend-facing contract is documented in:
 docs/API_CONTRACT.md
 ```
 
+FastAPI also exposes typed OpenAPI docs while the server is running:
+
+```text
+http://localhost:8000/docs
+http://localhost:8000/openapi.json
+```
+
 ## AI Techniques
 
 Planned techniques:
