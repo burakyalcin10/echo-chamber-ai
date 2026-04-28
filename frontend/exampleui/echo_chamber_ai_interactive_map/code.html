@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Echo Chamber AI</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&amp;family=Newsreader:ital,opsz,wght@0,6..72,200..800;1,6..72,200..800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "on-error-container": "#ffdad6",
+                    "on-error": "#690005",
+                    "on-tertiary-fixed-variant": "#374952",
+                    "on-tertiary-fixed": "#0a1e26",
+                    "secondary-container": "#7b3224",
+                    "surface-tint": "#e9c176",
+                    "surface-dim": "#131313",
+                    "surface-bright": "#393939",
+                    "tertiary": "#b5cad4",
+                    "tertiary-fixed": "#d1e6f0",
+                    "inverse-primary": "#775a19",
+                    "secondary-fixed": "#ffdad3",
+                    "primary": "#e9c176",
+                    "on-primary-fixed": "#261900",
+                    "primary-fixed": "#ffdea5",
+                    "on-secondary": "#5b1a0e",
+                    "surface-container-high": "#2a2a2a",
+                    "secondary": "#ffb4a5",
+                    "on-primary-fixed-variant": "#5d4201",
+                    "surface": "#131313",
+                    "on-secondary-container": "#ff9f8c",
+                    "on-secondary-fixed-variant": "#783022",
+                    "error-container": "#93000a",
+                    "surface-container": "#201f1f",
+                    "on-primary": "#412d00",
+                    "surface-container-highest": "#353534",
+                    "outline-variant": "#4e4639",
+                    "on-tertiary": "#20333b",
+                    "on-primary-container": "#4e3700",
+                    "surface-container-lowest": "#0e0e0e",
+                    "error": "#ffb4ab",
+                    "outline": "#9a8f80",
+                    "inverse-surface": "#e5e2e1",
+                    "on-surface": "#e5e2e1",
+                    "on-secondary-fixed": "#3e0501",
+                    "background": "#131313",
+                    "surface-container-low": "#1c1b1b",
+                    "primary-fixed-dim": "#e9c176",
+                    "on-surface-variant": "#d1c5b4",
+                    "inverse-on-surface": "#313030",
+                    "on-tertiary-container": "#2b3d46",
+                    "primary-container": "#c5a059",
+                    "surface-variant": "#353534",
+                    "tertiary-container": "#94a8b2",
+                    "secondary-fixed-dim": "#ffb4a5",
+                    "on-background": "#e5e2e1",
+                    "tertiary-fixed-dim": "#b5cad4"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "container-max": "1440px",
+                    "stack-md": "24px",
+                    "gutter": "24px",
+                    "margin": "64px",
+                    "stack-sm": "8px",
+                    "unit": "4px",
+                    "stack-lg": "48px"
+            },
+            "fontFamily": {
+                    "body-md": [
+                            "Inter"
+                    ],
+                    "label-caps": [
+                            "Inter"
+                    ],
+                    "body-lg": [
+                            "Inter"
+                    ],
+                    "display-lg": [
+                            "Newsreader"
+                    ],
+                    "h1": [
+                            "Newsreader"
+                    ],
+                    "h2": [
+                            "Newsreader"
+                    ],
+                    "data-mono": [
+                            "Inter"
+                    ]
+            },
+            "fontSize": {
+                    "body-md": [
+                            "1rem",
+                            {
+                                    "lineHeight": "1.6",
+                                    "fontWeight": "400"
+                            }
+                    ],
+                    "label-caps": [
+                            "0.75rem",
+                            {
+                                    "lineHeight": "1",
+                                    "letterSpacing": "0.1em",
+                                    "fontWeight": "700"
+                            }
+                    ],
+                    "body-lg": [
+                            "1.125rem",
+                            {
+                                    "lineHeight": "1.6",
+                                    "fontWeight": "400"
+                            }
+                    ],
+                    "display-lg": [
+                            "4.5rem",
+                            {
+                                    "lineHeight": "1.1",
+                                    "letterSpacing": "-0.02em",
+                                    "fontWeight": "300"
+                            }
+                    ],
+                    "h1": [
+                            "3rem",
+                            {
+                                    "lineHeight": "1.2",
+                                    "fontWeight": "400"
+                            }
+                    ],
+                    "h2": [
+                            "2.25rem",
+                            {
+                                    "lineHeight": "1.3",
+                                    "fontWeight": "400"
+                            }
+                    ],
+                    "data-mono": [
+                            "0.875rem",
+                            {
+                                    "lineHeight": "1.4",
+                                    "letterSpacing": "0.05em",
+                                    "fontWeight": "500"
+                            }
+                    ]
+            }
+    },
+        },
+      }
+    </script>
+<style>
+        body {
+            background-color: #000000;
+            color: #e5e2e1;
+            /* Subtle film grain overlay */
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.03'/%3E%3C/svg%3E");
+        }
+        
+        /* Interactive Data Nodes glow effects */
+        .node-glow {
+            box-shadow: 0 0 12px rgba(233, 193, 118, 0.4);
+        }
+        .node-glow-active {
+            box-shadow: 0 0 24px rgba(233, 193, 118, 0.8), 0 0 4px rgba(255, 255, 255, 0.8);
+        }
+        
+        /* Ghost borders */
+        .ghost-border {
+            border: 1px solid rgba(255, 255, 255, 0.15);
+        }
+    </style>
+</head>
+<body class="font-body-md text-body-md antialiased overflow-hidden selection:bg-primary/30 selection:text-primary">
+<!-- TopNavBar -->
+<nav class="hidden md:flex flex-row justify-between items-center px-8 z-40 bg-black/80 backdrop-blur-md fixed top-0 right-0 w-[calc(100%-5rem)] h-12 border-b border-white/10">
+<!-- Search & Filter -->
+<div class="flex items-center gap-6">
+<div class="relative flex items-center ghost-border rounded px-3 py-1 bg-surface-container-low/50">
+<span class="material-symbols-outlined text-stone-400 text-sm mr-2" data-icon="search">search</span>
+<input class="bg-transparent border-none text-data-mono font-data-mono text-on-surface focus:ring-0 w-48 placeholder-stone-500 h-6" placeholder="Search artist, year, era..." type="text"/>
+</div>
+<div class="flex items-center gap-4 text-stone-400 font-data-mono text-data-mono uppercase tracking-widest text-xs">
+<span class="cursor-pointer hover:text-amber-200 transition-colors">1970s</span>
+<span class="cursor-pointer hover:text-amber-200 transition-colors">1980s</span>
+<span class="cursor-pointer text-amber-500 border-b border-amber-500 opacity-80">1990s</span>
+<span class="cursor-pointer hover:text-amber-200 transition-colors">2000s</span>
+<span class="cursor-pointer hover:text-amber-200 transition-colors">2010s</span>
+<span class="cursor-pointer hover:text-amber-200 transition-colors">2020s</span>
+</div>
+</div>
+<!-- Trailing Actions -->
+<div class="flex items-center gap-4">
+<button class="font-label-caps text-label-caps uppercase tracking-widest text-primary border border-primary/30 px-3 py-1 rounded hover:bg-primary/10 transition-colors">
+                Relationship Mode
+            </button>
+<span class="material-symbols-outlined text-stone-400 cursor-pointer hover:text-amber-200 transition-colors" data-icon="filter_list">filter_list</span>
+<span class="material-symbols-outlined text-stone-400 cursor-pointer hover:text-amber-200 transition-colors" data-icon="history_edu">history_edu</span>
+</div>
+</nav>
+<!-- SideNavBar -->
+<nav class="hidden md:flex flex-col items-center py-8 z-50 bg-black fixed left-0 top-0 h-full w-20 border-r border-white/15">
+<div class="font-newsreader italic text-amber-500 text-lg border-b border-white/10 pb-4 mb-4 text-center transform -rotate-90 whitespace-nowrap mt-16 tracking-widest">
+            Echo Chamber
+        </div>
+<div class="flex flex-col gap-8 mt-12 flex-1">
+<a class="flex flex-col items-center gap-1 text-amber-500 drop-shadow-[0_0_8px_rgba(197,160,89,0.6)] scale-95 transition-transform group" href="#">
+<span class="material-symbols-outlined" data-icon="explore" style="font-variation-settings: 'FILL' 1;">explore</span>
+<span class="font-newsreader uppercase tracking-widest text-[10px] text-center opacity-0 group-hover:opacity-100 transition-opacity absolute top-10">Explore</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-stone-500 hover:text-stone-200 transition-colors duration-300 group relative" href="#">
+<span class="material-symbols-outlined" data-icon="compare_arrows">compare_arrows</span>
+<span class="font-newsreader uppercase tracking-widest text-[10px] text-center opacity-0 group-hover:opacity-100 transition-opacity absolute top-8">Match</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-stone-500 hover:text-stone-200 transition-colors duration-300 group relative" href="#">
+<span class="material-symbols-outlined" data-icon="analytics">analytics</span>
+<span class="font-newsreader uppercase tracking-widest text-[10px] text-center opacity-0 group-hover:opacity-100 transition-opacity absolute top-8">Compare</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-stone-500 hover:text-stone-200 transition-colors duration-300 group relative" href="#">
+<span class="material-symbols-outlined" data-icon="auto_awesome">auto_awesome</span>
+<span class="font-newsreader uppercase tracking-widest text-[10px] text-center opacity-0 group-hover:opacity-100 transition-opacity absolute top-8 text-nowrap">Era Voice</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-stone-500 hover:text-stone-200 transition-colors duration-300 group relative" href="#">
+<span class="material-symbols-outlined" data-icon="inventory_2">inventory_2</span>
+<span class="font-newsreader uppercase tracking-widest text-[10px] text-center opacity-0 group-hover:opacity-100 transition-opacity absolute top-8">Archive</span>
+</a>
+</div>
+<div class="flex flex-col gap-6 mb-4">
+<a class="text-stone-500 hover:text-stone-200 transition-colors duration-300" href="#">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+</a>
+<div class="relative group cursor-pointer text-amber-500">
+<span class="material-symbols-outlined animate-pulse text-[16px]" data-icon="lens" style="font-variation-settings: 'FILL' 1;">lens</span>
+<div class="absolute left-10 top-1/2 -translate-y-1/2 bg-surface-container-high px-2 py-1 rounded border border-white/10 font-data-mono text-[10px] whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
+                     Gemini / OpenAI Ready
+                 </div>
+</div>
+</div>
+</nav>
+<!-- Main Canvas Area -->
+<main class="ml-20 mt-12 h-[calc(100vh-3rem)] flex flex-col md:flex-row relative">
+<!-- Central Interactive Graph Canvas ("Echo Map") -->
+<div class="flex-1 relative overflow-hidden bg-surface-dim">
+<!-- Background Map / Nodes -->
+<div class="absolute inset-0 w-full h-full cursor-grab active:cursor-grabbing">
+<!-- Edges (SVG) -->
+<svg class="absolute inset-0 w-full h-full pointer-events-none" xmlns="http://www.w3.org/2000/svg">
+<!-- Dylan to Clapton (Amber) -->
+<path d="M 300 400 Q 400 300 500 250" fill="none" stroke="#e9c176" stroke-dasharray="4 4" stroke-opacity="0.6" stroke-width="1.5"></path>
+<!-- Dylan to Zevon (Rust) -->
+<path d="M 300 400 Q 350 550 450 600" fill="none" stroke="#7b3224" stroke-opacity="0.4" stroke-width="1"></path>
+<!-- Dylan to Antony (Gold) -->
+<path d="M 300 400 Q 500 500 700 550" fill="none" stroke="#c5a059" stroke-opacity="0.3" stroke-width="0.5"></path>
+<!-- Dylan to Lavigne (Ivory) -->
+<path d="M 300 400 Q 550 350 750 300" fill="none" stroke="#e5e2e1" stroke-opacity="0.2" stroke-width="0.5"></path>
+<!-- Highlighted Path: Dylan to Guns N' Roses -->
+<path class="animate-pulse" d="M 300 400 Q 450 200 650 150" fill="none" stroke="#e9c176" stroke-linecap="round" stroke-width="3"></path>
+<!-- User Match Path (Dotted) -->
+<path d="M 650 150 Q 750 200 800 650" fill="none" stroke="#b5cad4" stroke-dasharray="6 6" stroke-opacity="0.8" stroke-width="2"></path>
+</svg>
+<!-- Nodes -->
+<!-- Origin Node: Bob Dylan -->
+<div class="absolute w-4 h-4 bg-on-surface rounded-full node-glow" style="left: 292px; top: 392px;">
+<div class="absolute top-6 left-1/2 -translate-x-1/2 whitespace-nowrap text-center">
+<div class="font-label-caps text-label-caps text-on-surface-variant">Bob Dylan</div>
+<div class="font-data-mono text-[10px] text-stone-500">1973</div>
+</div>
+</div>
+<!-- Eric Clapton -->
+<div class="absolute w-3 h-3 bg-primary rounded-full opacity-60" style="left: 494px; top: 244px;">
+<div class="absolute -top-8 left-1/2 -translate-x-1/2 whitespace-nowrap text-center">
+<div class="font-label-caps text-[10px] text-stone-400">Eric Clapton</div>
+<div class="font-data-mono text-[8px] text-stone-600">1975</div>
+</div>
+</div>
+<!-- Warren Zevon -->
+<div class="absolute w-2 h-2 bg-secondary-container rounded-full opacity-80" style="left: 446px; top: 596px;">
+<div class="absolute top-4 left-1/2 -translate-x-1/2 whitespace-nowrap text-center">
+<div class="font-label-caps text-[10px] text-stone-400">Warren Zevon</div>
+<div class="font-data-mono text-[8px] text-stone-600">2003</div>
+</div>
+</div>
+<!-- Avril Lavigne -->
+<div class="absolute w-2 h-2 bg-on-surface rounded-full opacity-40" style="left: 746px; top: 296px;">
+<div class="absolute top-4 left-1/2 -translate-x-1/2 whitespace-nowrap text-center">
+<div class="font-label-caps text-[10px] text-stone-500">Avril Lavigne</div>
+<div class="font-data-mono text-[8px] text-stone-600">2003</div>
+</div>
+</div>
+<!-- Antony and the Johnsons -->
+<div class="absolute w-2 h-2 bg-primary-container rounded-full opacity-50" style="left: 696px; top: 546px;">
+<div class="absolute top-4 left-1/2 -translate-x-1/2 whitespace-nowrap text-center">
+<div class="font-label-caps text-[10px] text-stone-500">Antony &amp; The Johnsons</div>
+<div class="font-data-mono text-[8px] text-stone-600">2007</div>
+</div>
+</div>
+<!-- Active Node: Guns N' Roses -->
+<div class="absolute w-6 h-6 bg-primary rounded-full node-glow-active z-10" style="left: 638px; top: 138px;">
+<div class="absolute top-8 left-1/2 -translate-x-1/2 whitespace-nowrap text-center bg-black/60 backdrop-blur px-3 py-1 rounded ghost-border">
+<div class="font-label-caps text-[14px] text-primary">Guns N' Roses</div>
+<div class="font-data-mono text-[10px] text-stone-300">1990</div>
+</div>
+</div>
+<!-- User Match Node -->
+<div class="absolute w-5 h-5 bg-tertiary rounded-full animate-pulse z-10" style="left: 790px; top: 640px;">
+<div class="absolute top-7 left-1/2 -translate-x-1/2 whitespace-nowrap text-center">
+<div class="font-label-caps text-[12px] text-tertiary">Your Signal</div>
+</div>
+</div>
+</div>
+<!-- Controls (Bottom Left Canvas) -->
+<div class="absolute bottom-6 left-6 flex flex-col gap-2 z-20">
+<div class="bg-surface-container/80 backdrop-blur ghost-border p-1 rounded flex flex-col gap-1">
+<button aria-label="Zoom In" class="p-1 hover:bg-white/10 rounded text-stone-400 hover:text-white transition-colors">
+<span class="material-symbols-outlined text-sm" data-icon="add">add</span>
+</button>
+<button aria-label="Zoom Out" class="p-1 hover:bg-white/10 rounded text-stone-400 hover:text-white transition-colors">
+<span class="material-symbols-outlined text-sm" data-icon="remove">remove</span>
+</button>
+<div class="h-px bg-white/10 w-full my-1"></div>
+<button aria-label="Reset View" class="p-1 hover:bg-white/10 rounded text-stone-400 hover:text-white transition-colors">
+<span class="material-symbols-outlined text-sm" data-icon="my_location">my_location</span>
+</button>
+</div>
+</div>
+<!-- Legend (Top Right Canvas) -->
+<div class="absolute top-6 right-6 z-20 bg-surface-container/80 backdrop-blur ghost-border p-4 rounded min-w-[150px]">
+<h4 class="font-label-caps text-[10px] text-stone-500 mb-3 border-b border-white/10 pb-1">RELATIONSHIPS</h4>
+<div class="flex flex-col gap-2 text-data-mono text-[10px]">
+<div class="flex items-center gap-2"><div class="w-3 h-0.5 bg-primary"></div><span>Emotional</span></div>
+<div class="flex items-center gap-2"><div class="w-3 h-0.5 bg-on-surface"></div><span>Historical</span></div>
+<div class="flex items-center gap-2"><div class="w-3 h-0.5 bg-secondary-container"></div><span>Genre</span></div>
+<div class="flex items-center gap-2"><div class="w-3 h-0.5 bg-primary-container"></div><span>Influence</span></div>
+</div>
+</div>
+<!-- Bottom Interaction Dock Overlay -->
+<div class="absolute bottom-6 left-1/2 -translate-x-1/2 w-full max-w-2xl px-6 z-30">
+<div class="bg-surface-container-high/90 backdrop-blur-xl ghost-border rounded-lg p-4 shadow-2xl flex flex-col gap-3">
+<div class="flex items-center justify-between">
+<span class="font-label-caps text-[10px] text-tertiary flex items-center gap-1">
+<span class="material-symbols-outlined text-[12px]" data-icon="radar">radar</span> Signal Match Active
+                        </span>
+<span class="font-data-mono text-[10px] text-stone-400">Similarity: 89%</span>
+</div>
+<div class="relative">
+<input class="w-full bg-surface-container-low border border-white/10 rounded px-4 py-3 font-body-md text-stone-400 focus:outline-none cursor-not-allowed" readonly="" type="text" value="Write the goodbye you are trying to understand..."/>
+<button class="absolute right-2 top-1/2 -translate-y-1/2 bg-primary text-on-primary p-1.5 rounded flex items-center justify-center hover:bg-primary-fixed transition-colors">
+<span class="material-symbols-outlined text-[18px]" data-icon="send">send</span>
+</button>
+</div>
+<div class="font-body-md text-[13px] text-stone-300 italic border-l-2 border-tertiary pl-3 py-1">
+                        "Matched through emotional proximity and lyrical tone."
+                    </div>
+</div>
+</div>
+</div>
+<!-- Right Detail / Analysis Panel -->
+<aside class="w-full md:w-96 bg-surface border-l border-white/10 flex flex-col h-full overflow-y-auto hidden md:flex z-20">
+<!-- Header Image Area (Abstracted Album Art) -->
+<div class="h-48 relative w-full bg-surface-container-highest overflow-hidden">
+<div class="absolute inset-0 bg-gradient-to-b from-transparent to-surface z-10"></div>
+<!-- Abstract image placeholder -->
+<img alt="Abstract atmosphere" class="w-full h-full object-cover opacity-40 mix-blend-luminosity hover:mix-blend-normal hover:opacity-80 transition-all duration-700" data-alt="abstract moody dark texture with subtle crimson and gold lighting mimicking a rock concert atmosphere" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAaFY78BnWz6PveoiOZj95s7BiaVB3ypdXDLWa1a9cL1OH6_ywZMLkgzsWmpjnlcy7ZZh2ErPXSJMsDP5dPwoT4aayMcmT-LlnahxSjfIoBv3cMJtNcNrogoikFrrOda2tJzTy4bGRhaiAplHKzhSQH1sdUuIp-f5_PdifS8QreEpW3f61pRxmji_I8pznn8inWD709yatiaNcRAe0sjZMlt4td8PZgz8hqYtwdStqIP0X95klOoMemUJAmVIfySrKf-YtZF_ERKkBK"/>
+<div class="absolute bottom-4 left-6 z-20">
+<div class="font-data-mono text-[10px] text-primary tracking-widest uppercase mb-1">Cover Version</div>
+<h2 class="font-h2 text-h2 text-on-surface m-0 leading-none">Guns N' Roses</h2>
+<div class="font-data-mono text-stone-400 mt-1">1990</div>
+</div>
+</div>
+<!-- Content Area -->
+<div class="p-6 flex flex-col gap-8">
+<!-- Editorial Text -->
+<div>
+<p class="font-body-lg text-body-lg text-stone-300 leading-relaxed">
+                        "A farewell becomes an anthem. The song moves from cinematic elegy to stadium ritual."
+                    </p>
+</div>
+<!-- Emotional Profile Meters -->
+<div class="flex flex-col gap-4">
+<h3 class="font-label-caps text-label-caps text-stone-500 border-b border-white/10 pb-2">EMOTIONAL PROFILE</h3>
+<!-- Meter 1 -->
+<div class="flex flex-col gap-1">
+<div class="flex justify-between font-data-mono text-[10px]">
+<span class="text-stone-300">Rebellion</span>
+<span class="text-primary">95%</span>
+</div>
+<div class="h-1 w-full bg-surface-container-high rounded-full overflow-hidden">
+<div class="h-full bg-primary w-[95%]"></div>
+</div>
+</div>
+<!-- Meter 2 -->
+<div class="flex flex-col gap-1">
+<div class="flex justify-between font-data-mono text-[10px]">
+<span class="text-stone-300">Cinematic Intensity</span>
+<span class="text-secondary-container">88%</span>
+</div>
+<div class="h-1 w-full bg-surface-container-high rounded-full overflow-hidden">
+<div class="h-full bg-secondary-container w-[88%]"></div>
+</div>
+</div>
+<!-- Meter 3 -->
+<div class="flex flex-col gap-1">
+<div class="flex justify-between font-data-mono text-[10px]">
+<span class="text-stone-300">Grief</span>
+<span class="text-tertiary">42%</span>
+</div>
+<div class="h-1 w-full bg-surface-container-high rounded-full overflow-hidden">
+<div class="h-full bg-tertiary w-[42%]"></div>
+</div>
+</div>
+</div>
+<!-- Historical Pulse -->
+<div class="bg-surface-container-low p-4 rounded ghost-border">
+<div class="flex items-center gap-2 mb-2 text-stone-400">
+<span class="material-symbols-outlined text-[16px]" data-icon="timeline">timeline</span>
+<h3 class="font-label-caps text-[10px]">HISTORICAL PULSE</h3>
+</div>
+<p class="font-body-md text-[14px] text-stone-400">
+                        Late-century arena rock, post-Cold War transition.
+                    </p>
+</div>
+<!-- Actions -->
+<div class="mt-auto pt-4 flex gap-3">
+<button class="flex-1 bg-transparent border border-white/20 text-on-surface font-label-caps text-[11px] py-3 rounded hover:bg-white/5 transition-colors uppercase tracking-widest text-center">
+                        Compare
+                    </button>
+<button class="flex-1 bg-primary text-on-primary font-label-caps text-[11px] py-3 rounded hover:bg-primary-fixed transition-colors uppercase tracking-widest text-center shadow-[0_0_15px_rgba(233,193,118,0.2)]">
+                        Match My Farewell
+                    </button>
+</div>
+</div>
+</aside>
+</main>
+</body></html>

@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Echo Chamber AI - Echo Map</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&amp;family=Newsreader:ital,opsz,wght@0,6..72,300;0,6..72,400;1,6..72,400&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-error-container": "#ffdad6",
+                        "on-error": "#690005",
+                        "on-tertiary-fixed-variant": "#374952",
+                        "on-tertiary-fixed": "#0a1e26",
+                        "secondary-container": "#7b3224",
+                        "surface-tint": "#e9c176",
+                        "surface-dim": "#131313",
+                        "surface-bright": "#393939",
+                        "tertiary": "#b5cad4",
+                        "tertiary-fixed": "#d1e6f0",
+                        "inverse-primary": "#775a19",
+                        "secondary-fixed": "#ffdad3",
+                        "primary": "#e9c176",
+                        "on-primary-fixed": "#261900",
+                        "primary-fixed": "#ffdea5",
+                        "on-secondary": "#5b1a0e",
+                        "surface-container-high": "#2a2a2a",
+                        "secondary": "#ffb4a5",
+                        "on-primary-fixed-variant": "#5d4201",
+                        "surface": "#131313",
+                        "on-secondary-container": "#ff9f8c",
+                        "on-secondary-fixed-variant": "#783022",
+                        "error-container": "#93000a",
+                        "surface-container": "#201f1f",
+                        "on-primary": "#412d00",
+                        "surface-container-highest": "#353534",
+                        "outline-variant": "#4e4639",
+                        "on-tertiary": "#20333b",
+                        "on-primary-container": "#4e3700",
+                        "surface-container-lowest": "#0e0e0e",
+                        "error": "#ffb4ab",
+                        "outline": "#9a8f80",
+                        "inverse-surface": "#e5e2e1",
+                        "on-surface": "#e5e2e1",
+                        "on-secondary-fixed": "#3e0501",
+                        "background": "#131313",
+                        "surface-container-low": "#1c1b1b",
+                        "primary-fixed-dim": "#e9c176",
+                        "on-surface-variant": "#d1c5b4",
+                        "inverse-on-surface": "#313030",
+                        "on-tertiary-container": "#2b3d46",
+                        "primary-container": "#c5a059",
+                        "surface-variant": "#353534",
+                        "tertiary-container": "#94a8b2",
+                        "secondary-fixed-dim": "#ffb4a5",
+                        "on-background": "#e5e2e1",
+                        "tertiary-fixed-dim": "#b5cad4"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "container-max": "1440px",
+                        "stack-md": "24px",
+                        "gutter": "24px",
+                        "margin": "64px",
+                        "stack-sm": "8px",
+                        "unit": "4px",
+                        "stack-lg": "48px"
+                    },
+                    "fontFamily": {
+                        "body-md": ["Inter"],
+                        "label-caps": ["Inter"],
+                        "body-lg": ["Inter"],
+                        "display-lg": ["Newsreader"],
+                        "h1": ["Newsreader"],
+                        "h2": ["Newsreader"],
+                        "data-mono": ["Inter"]
+                    },
+                    "fontSize": {
+                        "body-md": ["1rem", { "lineHeight": "1.6", "fontWeight": "400" }],
+                        "label-caps": ["0.75rem", { "lineHeight": "1", "letterSpacing": "0.1em", "fontWeight": "700" }],
+                        "body-lg": ["1.125rem", { "lineHeight": "1.6", "fontWeight": "400" }],
+                        "display-lg": ["4.5rem", { "lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "300" }],
+                        "h1": ["3rem", { "lineHeight": "1.2", "fontWeight": "400" }],
+                        "h2": ["2.25rem", { "lineHeight": "1.3", "fontWeight": "400" }],
+                        "data-mono": ["0.875rem", { "lineHeight": "1.4", "letterSpacing": "0.05em", "fontWeight": "500" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .noise-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100vw; height: 100vh;
+            pointer-events: none;
+            z-index: 9999;
+            opacity: 0.03;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background font-body-md min-h-screen flex overflow-hidden">
+<div class="noise-overlay"></div>
+<!-- SideNavBar Component -->
+<nav class="fixed left-0 top-0 h-full w-20 border-r border-white/15 bg-black flex flex-col items-center py-8 z-50">
+<div class="font-newsreader italic text-amber-500 text-lg border-b border-white/10 pb-4 mb-4 text-center w-full">
+<span class="block px-2">Echo</span>
+<span class="block px-2">Chamber</span>
+</div>
+<div class="flex-grow flex flex-col items-center gap-8 mt-4 w-full">
+<!-- Explore (Active) -->
+<button aria-label="Explore" class="flex flex-col items-center gap-2 group w-full active scale-95 transition-transform">
+<span class="material-symbols-outlined text-amber-500 drop-shadow-[0_0_8px_rgba(197,160,89,0.6)]" style="font-variation-settings: 'FILL' 1;">explore</span>
+<span class="font-newsreader uppercase tracking-widest text-xs text-amber-500 drop-shadow-[0_0_8px_rgba(197,160,89,0.6)]">Explore</span>
+</button>
+<!-- Match -->
+<button aria-label="Match" class="flex flex-col items-center gap-2 group w-full hover:text-stone-200 transition-colors duration-300">
+<span class="material-symbols-outlined text-stone-500 group-hover:text-stone-200">compare_arrows</span>
+<span class="font-newsreader uppercase tracking-widest text-xs text-stone-500 group-hover:text-stone-200">Match</span>
+</button>
+<!-- Compare -->
+<button aria-label="Compare" class="flex flex-col items-center gap-2 group w-full hover:text-stone-200 transition-colors duration-300">
+<span class="material-symbols-outlined text-stone-500 group-hover:text-stone-200">analytics</span>
+<span class="font-newsreader uppercase tracking-widest text-xs text-stone-500 group-hover:text-stone-200">Compare</span>
+</button>
+<!-- Era Voice -->
+<button aria-label="Era Voice" class="flex flex-col items-center gap-2 group w-full hover:text-stone-200 transition-colors duration-300">
+<span class="material-symbols-outlined text-stone-500 group-hover:text-stone-200">auto_awesome</span>
+<span class="font-newsreader uppercase tracking-widest text-xs text-stone-500 group-hover:text-stone-200">Era Voice</span>
+</button>
+<!-- Archive -->
+<button aria-label="Archive" class="flex flex-col items-center gap-2 group w-full hover:text-stone-200 transition-colors duration-300">
+<span class="material-symbols-outlined text-stone-500 group-hover:text-stone-200">inventory_2</span>
+<span class="font-newsreader uppercase tracking-widest text-xs text-stone-500 group-hover:text-stone-200">Archive</span>
+</button>
+</div>
+<div class="flex flex-col items-center gap-6 mb-4 w-full">
+<button aria-label="Settings" class="flex flex-col items-center gap-2 group w-full hover:text-stone-200 transition-colors duration-300">
+<span class="material-symbols-outlined text-stone-500 group-hover:text-stone-200">settings</span>
+</button>
+<button aria-label="Status" class="flex flex-col items-center gap-2 group w-full hover:text-stone-200 transition-colors duration-300">
+<span class="material-symbols-outlined text-amber-500/50 group-hover:text-amber-500">lens</span>
+</button>
+</div>
+</nav>
+<!-- Main Content Area -->
+<main class="ml-20 flex-grow relative flex flex-col h-screen">
+<!-- TopNavBar Component -->
+<header class="fixed top-0 right-0 w-[calc(100%-5rem)] h-12 border-b border-white/10 bg-black/80 backdrop-blur-md flex justify-between items-center px-8 z-40">
+<div class="font-newsreader text-sm tracking-tight text-on-surface">Explore the Echo Map</div>
+<div class="flex items-center gap-6">
+<nav class="hidden md:flex items-center gap-4">
+<button class="font-newsreader text-sm tracking-tight text-stone-400 hover:text-amber-200 transition-colors">1970s</button>
+<button class="font-newsreader text-sm tracking-tight text-stone-400 hover:text-amber-200 transition-colors">1980s</button>
+<button class="font-newsreader text-sm tracking-tight text-amber-500 border-b border-amber-500 opacity-80">1990s</button>
+<button class="font-newsreader text-sm tracking-tight text-stone-400 hover:text-amber-200 transition-colors">2000s</button>
+<button class="font-newsreader text-sm tracking-tight text-stone-400 hover:text-amber-200 transition-colors">2010s</button>
+<button class="font-newsreader text-sm tracking-tight text-stone-400 hover:text-amber-200 transition-colors">2020s</button>
+</nav>
+<div class="h-4 w-px bg-white/15 mx-2 hidden md:block"></div>
+<div class="flex items-center gap-4">
+<button class="text-stone-400 hover:text-amber-200 transition-colors flex items-center">
+<span class="material-symbols-outlined text-sm">filter_list</span>
+</button>
+<button class="text-stone-400 hover:text-amber-200 transition-colors flex items-center">
+<span class="material-symbols-outlined text-sm">history_edu</span>
+</button>
+<button class="font-newsreader text-sm tracking-tight text-amber-500 hover:text-amber-200 transition-colors uppercase ml-4">Relationship Mode</button>
+</div>
+</div>
+</header>
+<!-- Echo Map Canvas -->
+<div class="flex-grow pt-12 relative flex">
+<!-- Graph Area -->
+<div class="flex-grow relative overflow-hidden bg-[#0a0a0a]">
+<!-- Simulated connections -->
+<svg class="absolute inset-0 w-full h-full pointer-events-none" xmlns="http://www.w3.org/2000/svg">
+<defs>
+<lineargradient id="gradAmber" x1="0%" x2="100%" y1="0%" y2="100%">
+<stop offset="0%" stop-color="#e9c176" stop-opacity="0.8"></stop>
+<stop offset="100%" stop-color="#e9c176" stop-opacity="0.1"></stop>
+</lineargradient>
+</defs>
+<!-- Path from Dylan to GNR (Selected) -->
+<path d="M 300 400 Q 450 250 600 300" fill="none" stroke="url(#gradAmber)" stroke-dasharray="4,4" stroke-width="2"></path>
+<!-- Path from Dylan to Clapton -->
+<path d="M 300 400 Q 350 550 500 600" fill="none" stroke="#4e4639" stroke-width="1"></path>
+<!-- Path from Dylan to Antony -->
+<path d="M 300 400 Q 500 450 700 500" fill="none" stroke="#4e4639" stroke-width="1"></path>
+</svg>
+<!-- Central Node: Bob Dylan -->
+<div class="absolute left-[250px] top-[350px] flex flex-col items-center">
+<div class="w-24 h-24 rounded-full border border-white/20 bg-surface-dim overflow-hidden p-1">
+<div class="w-full h-full rounded-full bg-surface-container bg-cover bg-center grayscale" data-alt="vintage black and white portrait of a folk musician with acoustic guitar in shadowy lighting" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDGrfBHybpnCH5R1b5uPir1oQWz2ZZ-z5btfyJXymLRCU-UnlWAiaxyyIu2kG0xfHqiu0snhKW22W0sPaZfJDdVjubWs_AOf9zMscQVL9fuUSb-R64OqF7JsooxqHdESCCviutQ2QvEvu5R71a5XceuEchRZGu2fnJ_8Mnx_nHb6fKiAurHJz60VdsqJ1I05lR3M96qJ7O8fWdDtxRAlno2zyazf0KquU7g48m-3kdqsjH_AABW4oQb8XyuphS_-vlZsEwxTmkxZutO');"></div>
+</div>
+<span class="mt-3 font-newsreader text-body-lg text-on-surface">Bob Dylan</span>
+<span class="font-data-mono text-label-caps text-on-surface-variant mt-1">1973 • ORIGIN</span>
+</div>
+<!-- Selected Node: Guns N' Roses -->
+<div class="absolute left-[580px] top-[260px] flex flex-col items-center z-10">
+<div class="w-20 h-20 rounded-full border-2 border-primary bg-surface-dim overflow-hidden p-1 shadow-[0_0_15px_rgba(233,193,118,0.3)]">
+<div class="w-full h-full rounded-full bg-surface-container bg-cover bg-center" data-alt="gritty close up of a rock concert stage with vibrant red and amber lighting" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDwPcxBwBKI_qMzShJLX1_ogwZImrgkD0l137QYGvHlG-v4u59XPh9ertGMI77q7CKPpIqji5s2fSvDzqLld1_oP62zFOr2Ybfbs2XhaE5FFkGbcSs7lOUzxFrdkQLaHcqrINNhvTTG-PfoePD8uuca5KTxKxZwpVLAF8jMUqimzQLk4YWXA_5W5cpbm0zVe3ksZi-B49Hmp7n2avnLco6cQKys8JodTzoNgrGED3NTeFLj3VV6DmDBb3TWhwgai2Dl_g_qTQ3_zMs1');"></div>
+</div>
+<span class="mt-3 font-newsreader text-body-lg text-primary">Guns N' Roses</span>
+<span class="font-data-mono text-label-caps text-on-surface-variant mt-1">1990 • COVER</span>
+</div>
+<!-- Node: Eric Clapton -->
+<div class="absolute left-[480px] top-[580px] flex flex-col items-center opacity-60 hover:opacity-100 transition-opacity">
+<div class="w-16 h-16 rounded-full border border-white/20 bg-surface-dim overflow-hidden p-1">
+<div class="w-full h-full rounded-full bg-surface-container bg-cover bg-center grayscale" data-alt="blues guitarist performing on stage under blue spotlight" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuADB7hHjjkwuCRSDabz5LTjOZsUS7aYP0as6rUlxeM9GWTByPLrkHUSTs1sg-RsdMnmhWUpqFwo4uJtG0w94Ag66-ztdi3ZeNcKLK5b7FFJcDecDIRAkvrmgkDfLgmdWTIbk9IfMvyuaptV5aNY5qbxReC9HE-qEtf0UAIu9-Re6L2Y4ArLaf4QaGAekHWRI1-kldANQ5HUXBrS6mTS5qnYbc6XAuWnDt7k0PWkwt-43PyXFwZR3PLpaluZiCYDuc2Z4gFAlndA3fL0');"></div>
+</div>
+<span class="mt-2 font-newsreader text-sm text-on-surface">Eric Clapton</span>
+</div>
+<!-- Node: Antony and the Johnsons -->
+<div class="absolute left-[680px] top-[480px] flex flex-col items-center opacity-60 hover:opacity-100 transition-opacity">
+<div class="w-16 h-16 rounded-full border border-white/20 bg-surface-dim overflow-hidden p-1">
+<div class="w-full h-full rounded-full bg-surface-container bg-cover bg-center grayscale" data-alt="dramatic lighting on an empty stage with a single microphone stand" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCA2Zaq6Q4ffLclA4MhgqFoQ7Iouvj6PuFW3OUdocds2XNremAxVoSCb9E1IrWdE0e4GhVRdIBP5s0PScj01f2efVuQSCarFe8XprPmoSX6m3x67eqYkp9BK5MAGJ8IeZK5aJUDwCGRTwpA9h_7OFdUDShcSMS9NyQqeObIaw67kX-2SVWMRXtP05nc9qKc6fz-c4ZWACEPSVqAZwCOgtjdjfwsJbKYGnx5dXu-M5qlUBBvulyU5bxZlCMHOqa-SrEoPTT91S10oXE6');"></div>
+</div>
+<span class="mt-2 font-newsreader text-sm text-on-surface">Antony &amp; the Johnsons</span>
+</div>
+</div>
+<!-- Analysis Panel (Right Side) -->
+<aside class="w-96 border-l border-white/10 bg-surface-dim/95 backdrop-blur flex flex-col z-20">
+<div class="p-8 border-b border-white/10">
+<div class="font-data-mono text-label-caps text-primary mb-2 flex items-center gap-2">
+<span class="material-symbols-outlined text-[14px]">analytics</span>
+                        ANALYSIS
+                    </div>
+<h2 class="font-h2 text-on-surface mb-1">Guns N' Roses</h2>
+<p class="font-newsreader text-body-md text-on-surface-variant italic">"Knockin' on Heaven's Door"</p>
+</div>
+<div class="flex-grow p-8 overflow-y-auto">
+<div class="mb-8">
+<p class="font-body-md text-on-surface-variant leading-relaxed">
+                            A farewell becomes an anthem. The original somber acoustic reflection is transformed into an arena-rock spectacle, magnifying the emotion from intimate acceptance to defiant lament.
+                        </p>
+</div>
+<div class="space-y-6">
+<h3 class="font-data-mono text-label-caps text-on-surface border-b border-white/10 pb-2 mb-4">EMOTIONAL PROFILE</h3>
+<!-- Meter: Rebellion -->
+<div class="mb-4">
+<div class="flex justify-between font-data-mono text-xs mb-1">
+<span class="text-on-surface-variant">REBELLION</span>
+<span class="text-primary">95%</span>
+</div>
+<div class="w-full h-1 bg-surface-container rounded-full overflow-hidden">
+<div class="h-full bg-primary" style="width: 95%"></div>
+</div>
+</div>
+<!-- Meter: Intensity -->
+<div class="mb-4">
+<div class="flex justify-between font-data-mono text-xs mb-1">
+<span class="text-on-surface-variant">INTENSITY</span>
+<span class="text-primary">88%</span>
+</div>
+<div class="w-full h-1 bg-surface-container rounded-full overflow-hidden">
+<div class="h-full bg-primary opacity-80" style="width: 88%"></div>
+</div>
+</div>
+<!-- Meter: Melancholy -->
+<div class="mb-4">
+<div class="flex justify-between font-data-mono text-xs mb-1">
+<span class="text-on-surface-variant">MELANCHOLY</span>
+<span class="text-tertiary">40%</span>
+</div>
+<div class="w-full h-1 bg-surface-container rounded-full overflow-hidden">
+<div class="h-full bg-tertiary opacity-50" style="width: 40%"></div>
+</div>
+</div>
+</div>
+<div class="mt-8 border border-white/10 bg-surface-container-low p-4 rounded">
+<h4 class="font-data-mono text-label-caps text-on-surface mb-2">SONIC SIGNATURE</h4>
+<div class="h-12 w-full flex items-center gap-[2px]">
+<!-- Simulated waveform -->
+<div class="w-1 h-3 bg-secondary-container"></div>
+<div class="w-1 h-5 bg-secondary-container"></div>
+<div class="w-1 h-8 bg-secondary-container"></div>
+<div class="w-1 h-6 bg-secondary-container"></div>
+<div class="w-1 h-10 bg-primary"></div>
+<div class="w-1 h-12 bg-primary"></div>
+<div class="w-1 h-8 bg-primary"></div>
+<div class="w-1 h-5 bg-secondary-container"></div>
+<div class="w-1 h-7 bg-secondary-container"></div>
+<div class="w-1 h-4 bg-secondary-container"></div>
+</div>
+</div>
+</div>
+</aside>
+</div>
+<!-- Bottom Input Dock -->
+<div class="border-t border-white/10 bg-surface px-8 py-6 flex justify-center items-center z-30">
+<div class="w-full max-w-2xl relative">
+<label class="absolute -top-6 left-0 font-data-mono text-label-caps text-on-surface-variant" for="match-input">MATCH MY FAREWELL</label>
+<div class="flex items-end border-b border-white/20 pb-2 focus-within:border-primary transition-colors">
+<input class="bg-transparent border-none outline-none w-full font-newsreader text-body-lg text-on-surface placeholder:text-on-surface-variant/50 focus:ring-0 px-0" id="match-input" placeholder="Describe the feeling of an ending..." type="text"/>
+<button class="text-primary hover:text-primary-fixed ml-4">
+<span class="material-symbols-outlined">send</span>
+</button>
+</div>
+</div>
+</div>
+</main>
+</body></html>
