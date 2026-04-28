@@ -73,6 +73,19 @@ Kullanıcı:
 | RAG-06 | RAG index smoke | 5 dokümandan 15 chunk üretilip lokal `rag_index.json` build edildi |
 | DOC-05 | Backend runbook | `docs/BACKEND_RUNBOOK.md` kurulum, test, pipeline ve demo komutlarını topluyor |
 | BE-04 | Backend demo-ready kapanış | API key olmadan tüm endpointler demo-safe, validation/test/CI yeşil |
+| FE-IMPL-01 | Frontend Vite vanilla projesi | Vite 8 + Three.js 0.184 kurulumu, `frontend/` klasörü oluşturuldu |
+| FE-IMPL-02 | Galaxy.js — Three.js galaksi | Bloom post-processing, cover küreleri, oto-rotasyon, drag/zoom/touch, raycasting |
+| FE-IMPL-03 | Cover detay paneli | `/api/cover/{id}` → sol panel, duygu barları, anlam notu, orijinal rozeti |
+| FE-IMPL-04 | Voice panel + typewriter | `/api/voice` → modal, karakter karakter yazma efekti, RAG kaynak listesi |
+| FE-IMPL-05 | Compare modu + çizgi | İki cover seçimi, `/api/compare` → sağ panel, amber Three.js çizgisi |
+| FE-IMPL-06 | Match/farewell akışı | `/api/match` → mavi kullanıcı noktası, enerji çizgisi, match paneli |
+| FE-IMPL-07 | Demo güvenlik ve hata halleri | Loading/error screen, timeout, fallback source rozetleri, toast bildirimleri |
+| FE-01 | Galaksi ilk açılış verisi | `/api/graph` ile 50 cover yükleniyor, era_tension renk/boyut etkisi uygulandı |
+| FE-02 | Cover seçimi | `/api/cover/{id}` detaylı panel çalışıyor |
+| FE-03 | Karşılaştırma modu | `/api/compare` response ile sağ panel ve Three.js çizgisi çalışıyor |
+| FE-04 | Dönemin sesi paneli | `/api/voice` modal + typewriter çalışıyor |
+| FE-05 | Vedanı bul input'u | `/api/match` ile user_position ve matched_cover dönüyor |
+| FE-06 | Backend kapalı hata hali | "Galaksi şu an sessiz." error screen + retry butonu |
 
 ### Ready
 
@@ -87,6 +100,8 @@ Kullanıcı:
 | API-03 | `/api/compare` kalite iyileştirmesi | P1 | Gerçek `llm_analysis` çıktıları |
 | API-04 | `/api/voice` RAG kaynaklı test | P1 | `RAG-01`, `04_build_rag.py` |
 | MAN-01 | Manifesto taslağı | P1 | Konsept ve teknik kararlar |
+| FE-POLISH-01 | Frontend E2E demo testi | P1 | Backend ayakta + FE-IMPL serisi tamamlandı |
+| FE-POLISH-02 | README frontend kurulum bölümü | P1 | FE-IMPL serisi tamamlandı |
 
 ### Later
 
@@ -94,9 +109,11 @@ Kullanıcı:
 |---|---|---|---|
 | MB-01 | MusicBrainz zenginleştirme | P2 | Manuel veri çekirdeği çalıştıktan sonra |
 | TTS-01 | Dönemin sesi için TTS/voiceover | P2 | Ana demo stabil olduktan sonra |
-| POLISH-01 | Demo senaryosu ve ekran görüntüleri | P2 | Frontend ayağa kalkınca |
+| POLISH-01 | Demo senaryosu ve ekran görüntüleri | P2 | Frontend E2E onaylanınca |
 | RAG-03 | Kaynak izleme ve alıntı metadata'sı | P2 | RAG temel akışı çalışınca |
 | PERF-01 | Model yükleme/cache optimizasyonu | P2 | İlk darboğaz görülünce |
+| FE-POLISH-03 | Mobil dokunma deneyimi refinement | P2 | Sunum öncesi |
+| FE-POLISH-04 | Cover yıl/dönem filtre/highlight | P2 | Opsiyonel geliştirme |
 
 ### Blocked / Riskli
 
