@@ -73,19 +73,18 @@ Kullanıcı:
 | RAG-06 | RAG index smoke | 5 dokümandan 15 chunk üretilip lokal `rag_index.json` build edildi |
 | DOC-05 | Backend runbook | `docs/BACKEND_RUNBOOK.md` kurulum, test, pipeline ve demo komutlarını topluyor |
 | BE-04 | Backend demo-ready kapanış | API key olmadan tüm endpointler demo-safe, validation/test/CI yeşil |
-| FE-IMPL-01 | Frontend Vite vanilla projesi | Vite 8 + Three.js 0.184 kurulumu, `frontend/` klasörü oluşturuldu |
-| FE-IMPL-02 | Galaxy.js — Three.js galaksi | Bloom post-processing, cover küreleri, oto-rotasyon, drag/zoom/touch, raycasting |
-| FE-IMPL-03 | Cover detay paneli | `/api/cover/{id}` → sol panel, duygu barları, anlam notu, orijinal rozeti |
-| FE-IMPL-04 | Voice panel + typewriter | `/api/voice` → modal, karakter karakter yazma efekti, RAG kaynak listesi |
-| FE-IMPL-05 | Compare modu + çizgi | İki cover seçimi, `/api/compare` → sağ panel, amber Three.js çizgisi |
-| FE-IMPL-06 | Match/farewell akışı | `/api/match` → mavi kullanıcı noktası, enerji çizgisi, match paneli |
-| FE-IMPL-07 | Demo güvenlik ve hata halleri | Loading/error screen, timeout, fallback source rozetleri, toast bildirimleri |
-| FE-01 | Galaksi ilk açılış verisi | `/api/graph` ile 50 cover yükleniyor, era_tension renk/boyut etkisi uygulandı |
-| FE-02 | Cover seçimi | `/api/cover/{id}` detaylı panel çalışıyor |
-| FE-03 | Karşılaştırma modu | `/api/compare` response ile sağ panel ve Three.js çizgisi çalışıyor |
-| FE-04 | Dönemin sesi paneli | `/api/voice` modal + typewriter çalışıyor |
-| FE-05 | Vedanı bul input'u | `/api/match` ile user_position ve matched_cover dönüyor |
-| FE-06 | Backend kapalı hata hali | "Galaksi şu an sessiz." error screen + retry butonu |
+| FE-NEXT-01 | Next.js 16 + R3F kurulumu | Vite/vanilla scaffold yerine Next.js 16 (Turbopack) + React 19 + Tailwind v4 + React Three Fiber kuruldu |
+| FE-NEXT-02 | Tasarım sistemi (Archival Minimalism) | `globals.css` design token'ları, Newsreader/Inter tipografi, lucide-react ikonları |
+| FE-NEXT-03 | API client + tipler | `lib/api.ts` typed fetch wrapper, `lib/types.ts` backend Pydantic kontratını yansıtıyor |
+| FE-NEXT-04 | EchoMap (R3F) | 3D galaksi, R3F Bloom post-processing, OrbitControls auto-rotate, hover/select node davranışı |
+| FE-NEXT-05 | DetailPanel | Hero band gradient header, EmotionMeter'lar, Sonic Signature waveform, Historical Pulse, Compare/Era Voice CTA'ları |
+| FE-NEXT-06 | MatchDock | Bottom farewell input, similarity %, bridge text, match-method ve bridge-source rozetleri, inline error UI |
+| FE-NEXT-07 | Compare/Voice overlayleri | `/api/compare` ve `/api/voice` için modal overlay, RAG source chip'leri, fallback rozetleri |
+| FE-NEXT-08 | Relationship engine | `lib/relationships.ts` deterministik 4 tip kenar (emotional/historical/genre/influence), per-node cap, mode filtresi |
+| FE-NEXT-09 | TopBar arama + relationship modu + sayaç | Artist/year search, decade filter "All", Relationship Mode select, görünür/total cover sayacı |
+| FE-NEXT-10 | Match auto-select + User Signal | `/api/match` sonrası matched cover otomatik açılıyor, User Signal node + dashed edge ile vurgulanıyor |
+| FE-NEXT-11 | Empty/guidance/error UX | DetailPanel empty state, mod-bağlı guidance bannerları, top-right toast sistemi |
+| FE-NEXT-12 | Backend offline UX | "Galaksi şu an sessiz." ekranı + retry butonu
 
 ### Ready
 
@@ -100,8 +99,7 @@ Kullanıcı:
 | API-03 | `/api/compare` kalite iyileştirmesi | P1 | Gerçek `llm_analysis` çıktıları |
 | API-04 | `/api/voice` RAG kaynaklı test | P1 | `RAG-01`, `04_build_rag.py` |
 | MAN-01 | Manifesto taslağı | P1 | Konsept ve teknik kararlar |
-| FE-POLISH-01 | Frontend E2E demo testi | P1 | Backend ayakta + FE-IMPL serisi tamamlandı |
-| FE-POLISH-02 | README frontend kurulum bölümü | P1 | FE-IMPL serisi tamamlandı |
+| FE-POLISH-01 | Frontend E2E demo testi | P1 | Backend ayakta + FE-NEXT serisi tamamlandı |
 
 ### Later
 

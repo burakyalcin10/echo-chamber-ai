@@ -52,6 +52,45 @@ curl http://localhost:8000/api/graph
 curl http://localhost:8000/api/cover/dylan_1973
 ```
 
+## Frontend Setup
+
+The frontend requires the backend API to be running first (see **Backend Setup** above).
+
+```bash
+cd frontend
+npm install
+npm run dev
+```
+
+The app runs at `http://localhost:3000`.
+
+### Environment variable
+
+By default the frontend calls `http://localhost:8000`. To point at a different backend, create `frontend/.env.local`:
+
+```env
+NEXT_PUBLIC_API_URL=http://localhost:8000
+```
+
+### Key dependencies
+
+| Package | Purpose |
+|---------|---------|
+| `next` 16 | App framework (has breaking changes — see `frontend/AGENTS.md`) |
+| `react` / `react-dom` 19 | UI layer |
+| `three` + `@react-three/fiber` | 3D galaxy renderer |
+| `@react-three/drei` | R3F helpers (camera, labels, etc.) |
+| `tailwindcss` v4 | Styling |
+
+### Frontend scripts
+
+```bash
+npm run dev      # dev server on :3000 with hot reload
+npm run build    # production build
+npm run start    # serve the production build
+npm run lint     # ESLint
+```
+
 ## Backend Pipeline
 
 Run these from `backend/`.
