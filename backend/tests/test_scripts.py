@@ -1,9 +1,21 @@
+import os
 import subprocess
 import sys
 from pathlib import Path
 
 
 BACKEND_DIR = Path(__file__).resolve().parents[1]
+
+
+def _env_without_keys() -> dict[str, str]:
+    """Subprocess env with provider API keys stripped, so tests for the
+    "no key configured" code path are not contaminated by the developer's .env."""
+    env = os.environ.copy()
+    for key in ("GEMINI_API_KEY", "OPENAI_API_KEY"):
+        env.pop(key, None)
+    # Force-disable .env autoloading inside the script
+    env["AIKNOCK_DISABLE_DOTENV"] = "1"
+    return env
 
 
 def test_validate_covers_script_accepts_current_dataset():
@@ -125,6 +137,7 @@ def test_score_script_reports_missing_provider_key_cleanly():
         text=True,
         capture_output=True,
         check=False,
+        env=_env_without_keys(),
     )
 
     assert result.returncode == 2

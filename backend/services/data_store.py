@@ -81,6 +81,7 @@ def graph_cover_payload(cover: dict[str, Any]) -> dict[str, Any]:
         "era_tension": analysis.get("era_tension", cover.get("era_tension", 0.5)),
         "political_charge": analysis.get("political_charge", cover.get("political_charge", 0.5)),
         "is_original": cover.get("is_original", False),
+        "genre": cover.get("genre"),
     }
 
 

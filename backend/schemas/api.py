@@ -53,6 +53,7 @@ class GraphCover(BaseModel):
     era_tension: float
     political_charge: float
     is_original: bool
+    genre: str | None = None
 
 
 class GraphResponse(BaseModel):

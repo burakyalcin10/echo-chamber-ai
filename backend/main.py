@@ -190,6 +190,10 @@ def _generate_or_fallback(prompt: str, *, fallback: Callable[[], str], temperatu
         return llm.generate_text(prompt, temperature=temperature), "llm"
     except HTTPException:
         return fallback(), "local_fallback"
+    except Exception:
+        # Provider quota / network / unexpected SDK errors should not 500 the
+        # request — degrade to the local fallback so the app stays usable.
+        return fallback(), "local_fallback"
 
 
 def _fallback_compare_text(cover_a: dict, cover_b: dict) -> str:

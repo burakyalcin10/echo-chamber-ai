@@ -6,8 +6,9 @@ from dotenv import load_dotenv
 
 
 BASE_DIR = Path(__file__).resolve().parent
-load_dotenv(BASE_DIR / ".env")
-load_dotenv(BASE_DIR / ".env.local")
+if not os.getenv("AIKNOCK_DISABLE_DOTENV"):
+    load_dotenv(BASE_DIR / ".env")
+    load_dotenv(BASE_DIR / ".env.local")
 
 
 class Settings:

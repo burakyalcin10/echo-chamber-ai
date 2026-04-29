@@ -1,4 +1,4 @@
-fastapi==0.115.6
+fastapi>=0.123,<0.140
 httpx==0.28.1
 numpy==2.2.1
 pydantic==2.10.4
