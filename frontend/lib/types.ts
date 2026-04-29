@@ -24,6 +24,10 @@ export interface CoverNode {
   era_tension: number;
   political_charge: number;
   is_original: boolean;
+  // Optional metadata; backend `/api/graph` may or may not include genre.
+  // The `/api/cover/{id}` detail endpoint always does.
+  genre?: string;
+  album?: string;
 }
 
 export interface GraphResponse {
