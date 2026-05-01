@@ -136,15 +136,15 @@ GitHub Actions (`.github/workflows/backend-ci.yml`) runs on every push/PR: cover
 | Artist's Manifesto | ✅ Done | `MANIFESTO.md` (1 750 words) |
 | Code Repository + README | ✅ Done | README with screenshots, architecture, AI techniques |
 
-### Rubric gaps — ordered by impact
+### Rubric gaps — all resolved ✅
 
-| # | Item | Rubric criterion | Impact |
-|---|------|-----------------|--------|
-| 1 | **Architecture diagram** in README | Code quality (10 %) — Excellent = "Clear README with architecture diagram" | HIGH |
-| 2 | **Demo scenario** — write a 2-3 step live walkthrough for exhibition | Exhibition presentation (8 %) | HIGH |
-| 3 | **Manifesto §V "My Door"** — add a more specific personal anecdote or moment; currently too abstract | Personal connection (5 %) | MEDIUM |
-| 4 | **`npm run build` clean check** — confirm production build passes with no TypeScript errors | Polish and completeness (7 %) | MEDIUM |
-| 5 | **Compare mode** — test that compare overlay actually renders LLM text (not just fallback) when API key is set | AI technique integration (12 %) — demonstrate interplay during demo | LOW |
+| # | Item | Status |
+|---|------|--------|
+| 1 | Architecture diagram in README | ✅ Mermaid flowchart added |
+| 2 | Demo scenario | ✅ `DEMO.md` — 5-min script with Q&A and fallback plan |
+| 3 | Manifesto §V personal section | ✅ Warren Zevon anecdote, Turkish farewell, CS identity crisis |
+| 4 | `npm run build` clean | ✅ Zero errors, turbopack root warning fixed |
+| 5 | Compare mode LLM test | ✅ `test_compare_uses_llm_when_configured` in test_api_smoke.py |
 
 ### Architecture diagram (priority #1)
 
