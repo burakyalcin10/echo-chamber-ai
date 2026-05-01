@@ -121,3 +121,60 @@ FRONTEND_ORIGINS=http://localhost:5173,http://localhost:3000
 ## CI
 
 GitHub Actions (`.github/workflows/backend-ci.yml`) runs on every push/PR: cover validation, script dry-runs, and `pytest` using Python 3.11. CI dependencies are in `backend/requirements-ci.txt`.
+
+---
+
+## Project Status & Remaining Work
+
+**Last updated: 2026-05-01**
+
+### Deliverables — completion
+
+| Deliverable | Status | File |
+|-------------|--------|------|
+| Artwork (runnable) | ✅ Done | backend + frontend |
+| Artist's Manifesto | ✅ Done | `MANIFESTO.md` (1 750 words) |
+| Code Repository + README | ✅ Done | README with screenshots, architecture, AI techniques |
+
+### Rubric gaps — ordered by impact
+
+| # | Item | Rubric criterion | Impact |
+|---|------|-----------------|--------|
+| 1 | **Architecture diagram** in README | Code quality (10 %) — Excellent = "Clear README with architecture diagram" | HIGH |
+| 2 | **Demo scenario** — write a 2-3 step live walkthrough for exhibition | Exhibition presentation (8 %) | HIGH |
+| 3 | **Manifesto §V "My Door"** — add a more specific personal anecdote or moment; currently too abstract | Personal connection (5 %) | MEDIUM |
+| 4 | **`npm run build` clean check** — confirm production build passes with no TypeScript errors | Polish and completeness (7 %) | MEDIUM |
+| 5 | **Compare mode** — test that compare overlay actually renders LLM text (not just fallback) when API key is set | AI technique integration (12 %) — demonstrate interplay during demo | LOW |
+
+### Architecture diagram (priority #1)
+
+Add a Mermaid diagram to README showing:
+```
+covers.json
+    ↓  scripts/02_score_covers.py
+LLM (Gemini/OpenAI) → emotion scores (6 dims)
+    ↓  scripts/03_embed_and_umap.py
+SentenceTransformer embeddings → UMAP 3D → covers_with_embeddings.json
+    ↓
+historical_docs/  →  scripts/04_build_rag.py  →  rag_index.json
+    ↓
+FastAPI (port 8000)
+    ├── GET /api/graph          → 50 cover nodes + positions
+    ├── POST /api/match         → embedding similarity search
+    ├── POST /api/compare       → LLM comparative analysis
+    └── POST /api/voice         → RAG-augmented era monologue
+    ↓
+Next.js (port 3000)
+    ├── EchoMap.tsx             → R3F 3D galaxy
+    ├── relationships.ts        → client-side edge engine (4 kinds)
+    └── DetailPanel / MatchDock / Compare / Voice overlays
+```
+
+### Demo scenario (priority #2)
+
+Suggested 5-minute exhibition flow:
+1. **Open galaxy** — explain: each node = one cover, color = genre, glow = emotional intensity
+2. **Select a cover** (e.g., Guns N' Roses 1990) — show emotional profile, contrast with original Dylan 1973
+3. **Compare mode** — pick two distant covers (e.g., gospel vs. punk), narrate the LLM shift analysis
+4. **Era Voice** — trigger RAG monologue for the 1973 original; point out historical document retrieval
+5. **Match mode** — type a personal farewell, show the matched cover + similarity score
