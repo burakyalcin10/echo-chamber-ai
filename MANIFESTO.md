@@ -74,25 +74,23 @@ I did not write those words. I gathered them from history, and the model assembl
 
 ## V. My Door
 
-I am a computer science student in 2026, which means I am completing my education at a moment when artificial intelligence has made a significant portion of what I have learned potentially obsolete. Not the logic of it, not the problem-solving mind that studying algorithms builds, but the specific craft — the writing of code, the debugging of functions — is increasingly something a machine will handle.
+There was a night, somewhere in the middle of building this project, when I put on Warren Zevon's cover and let it play while the data pipeline ran. I had been debugging the UMAP coordinates for hours — the galaxy kept collapsing into a flat plane — and I was tired in a way that had nothing to do with the hour.
 
-I do not know what this means for me yet.
+Zevon recorded his version of this song in 2003 while dying of inoperable mesothelioma. He chose not to undergo chemotherapy because he wanted to finish his final album. When David Letterman asked him what he had learned from facing death, he said: *Enjoy every sandwich.* His version of this song — surrender 90%, grief 88%, defiance still at 34% — does not sound like a man who has given up. It sounds like a man who has decided what matters and is very calm about it.
 
-I have spent four years learning to think in a particular way: precisely, sequentially, with careful attention to edge cases and failure modes. That thinking has felt like a badge. A credential. A thing I could hold up and say: *this is what I am.*
+Sitting there at 2 a.m. with the galaxy finally spinning correctly on my screen, I realized what unsettled me about this project. It was not the technical difficulty. It was that I kept recognizing something in the covers I was analyzing. The exhaustion in Jeff Buckley's version. The strange peace in the original Dylan. The way Antony and the Johnsons sound like someone releasing a breath they have been holding for years.
 
-But what I am discovering, building this project, is that the most interesting work happens not in the writing of the code but in the asking of the right question. The model can write code. The model cannot decide what the six dimensions of emotional experience should be when analyzing fifty covers of a song about a dying sheriff. The model cannot feel that the word "surrender" is more honest than "sadness," that "transcendence" is more accurate than "happiness," that what Dylan's sheriff was experiencing was not grief exactly but something closer to relief.
+I am a computer science student in 2026, which means I am completing my education at the exact moment when artificial intelligence has begun to do a significant portion of what I spent four years learning to do. Not the thinking — the *doing*. The writing of code, the debugging of functions. I used AI tools to build this project, which means I used AI tools to build a project about what it feels like to hand something over.
 
-That choosing — that is mine.
+That is not lost on me.
 
-So my door, in 2026, is this threshold: the moment when I must decide what I am carrying and what I can no longer use. The specific technical skills I learned, some of them. The way of thinking that learning them built — that, I am keeping.
+The badge I have been carrying is the belief that knowing how to build systems — really build them, from first principles, line by line — is what makes me valuable. That identity held up for most of my degree. But working on this project, letting an LLM score emotional dimensions while I focused on what those dimensions should *mean*, I kept noticing that the most irreplaceable thing I brought was not the code. It was the weeks I had spent listening to the song. Reading about 1973. Deciding that the six emotions should be surrender, defiance, grief, hope, exhaustion, and transcendence rather than happy, sad, angry, and calm. The model was precise about the questions I told it to ask. The questions were mine.
 
-There is also something more personal.
+I am Turkish, which adds a particular texture to all of this. I grew up between two languages, which means I grew up knowing that the same thing can mean different things depending on which side of the door you are standing on. *Elveda* and *goodbye* are not the same word even when they translate to each other. There is a specific weight in Turkish farewells — we say *Allah'a ısmarladık,* which means something like *I entrust you to God* — that assumes the person leaving is going somewhere you cannot follow. I heard that weight in Dylan's sheriff. I heard it in the soldiers coming home from Vietnam who found that home had moved without them. I heard it in Zevon choosing which sandwich to enjoy.
 
-I am Turkish, which means I grew up in a country with its own complicated relationship to farewells: to empires that ended, to migrations that never fully ended, to the ongoing negotiation between what was and what is becoming. The image of a man handing over his badge and walking toward a door he cannot see past — that image is not foreign to me. My grandparents' generation handed over things they could not use anymore. My parents' generation did too.
+My door, right now, is the threshold between the student I have been and whoever comes after. I do not know what that person will need to know. I know that he will have to be comfortable asking the right questions and trusting machines to answer them precisely. I know that he will have to hold the reasons behind the questions himself, because machines cannot hold those yet.
 
-Dylan wrote this song about an American sheriff in a fictitious Western. But I heard it as something older and more widespread than that. The badge is anything you have held so long that you thought it was you. The door is what comes after you let it go.
-
-This project is my version of standing at that door. I do not know what is on the other side — for the sheriff, for the soldiers who came home in 1973, for me as a student at the edge of whatever comes next. But I know that building this galaxy, mapping the emotional terrain of fifty people's farewells, has changed how I hear the song.
+I do not know what is behind the door. But I know that building this galaxy — spending months with fifty strangers' grief, mapping the emotional terrain of fifty people who stood at the same threshold and each found a different word for it — has changed what the song means to me.
 
 That is what the best projects do. The assignment said so, and it was right.
 
