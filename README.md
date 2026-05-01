@@ -21,6 +21,73 @@ Echo Chamber maps covers of Bob Dylan's "Knockin' on Heaven's Door" as a 3D emot
 - `docs/` — API contract, backend runbook, data sources
 - `MANIFESTO.md` — Artist's statement (1,750 words)
 
+## Architecture
+
+### System Diagram
+
+```mermaid
+flowchart TD
+    subgraph PIPELINE["Offline Data Pipeline"]
+        direction TB
+        RAW["covers.json\n50 cover records"]
+        HD["historical_docs/\n5 era documents"]
+
+        RAW -->|"02_score_covers.py"| LLM
+        LLM["① LLM — Gemini / OpenAI\n─────────────────────\nEmotion scores × 6 dims\nera_tension · political_charge\nspiritual_weight"]
+
+        LLM --> SCORED["scored covers"]
+        SCORED -->|"03_embed_and_umap.py"| EMB
+        EMB["② SentenceTransformer\nall-MiniLM-L6-v2\n─────────────────────\nSemantic embeddings\n↓  UMAP 3D reduction\n3D coords in [-8, 8]³"]
+
+        EMB --> PROC[("covers_with_embeddings.json\numap_reducer.pkl")]
+
+        HD -->|"04_build_rag.py"| RAGI
+        RAGI["③ LlamaIndex + ChromaDB\n─────────────────────\n15 semantic chunks\nCosine similarity index"]
+        RAGI --> RAGF[("rag_index.json")]
+    end
+
+    subgraph API["FastAPI — port 8000"]
+        direction TB
+        PROC --> DS["DataStore\ndata_store.py"]
+        RAGF --> RS["RAGStore\nrag_store.py"]
+        DS --> EP
+        RS --> EP
+
+        EP["Endpoints"]
+        EP --> E1["GET /api/graph\n50 nodes + 3D positions"]
+        EP --> E2["GET /api/cover/:id\nfull cover detail"]
+        EP --> E3["POST /api/match\nembedding similarity search"]
+        EP --> E4["POST /api/compare\nLLM comparative analysis"]
+        EP --> E5["POST /api/voice\nRAG-augmented era monologue"]
+    end
+
+    subgraph FRONT["Next.js — port 3000"]
+        direction TB
+        GALAXY["EchoMap.tsx\nR3F 3D galaxy\n50 nodes · 4 edge kinds"]
+        DETAIL["DetailPanel\nemotion profile\nsonic signature\nhistorical pulse"]
+        MATCH["MatchDock\nuser farewell → closest cover"]
+        OVER["Compare / Voice overlays\nLLM diff · RAG monologue"]
+    end
+
+    E1 --> GALAXY
+    E2 --> DETAIL
+    E3 --> MATCH
+    E4 --> OVER
+    E5 --> OVER
+```
+
+> All LLM-backed endpoints fall back to locally generated text when no API key is configured.
+
+### How the three AI techniques interact
+
+The three techniques are designed to reinforce each other rather than operate independently:
+
+1. **LLM scoring** assigns each cover its emotional coordinates (6 dimensions + 3 era weights).
+2. **SentenceTransformer + UMAP** encodes cover metadata into semantic vectors and collapses them into the 3D galaxy; covers the LLM scored as emotionally close end up spatially close.
+3. **RAG** grounds the `/api/voice` era monologue in real historical documents from the same decade as the cover — so a 1973 cover speaks with 1973 texture, and a 1990 cover with 1990 texture.
+
+When a user types a farewell in Match mode, the same embedding model that built the galaxy encodes their text and finds the nearest cover by cosine similarity — connecting the user's emotional moment directly to the galaxy's geometry.
+
 ## Backend Setup
 
 ```bash
