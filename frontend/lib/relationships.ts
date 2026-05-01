@@ -87,8 +87,8 @@ export function buildRelationships(
   covers: CoverNode[],
   options: BuildOptions = {},
 ): Edge[] {
-  const maxPerKind = options.maxEdgesPerKindPerNode ?? 3;
-  const minStrength = options.minStrength ?? 0.45;
+  const maxPerKind = options.maxEdgesPerKindPerNode ?? 2;
+  const minStrength = options.minStrength ?? 0.6;
 
   if (covers.length < 2) return [];
 
@@ -115,9 +115,9 @@ export function buildRelationships(
         }
       }
 
-      // Historical — same decade or ±5 years
+      // Historical — only close years (≤5 yrs apart)
       const yp = yearProximity(a.year, b.year);
-      if (yp > 0) {
+      if (yp >= 0.5) {
         candidates.push({
           key,
           fromId: a.id,
@@ -199,10 +199,32 @@ export function buildRelationships(
   return accepted;
 }
 
-/** Filter edges by the active relationship mode. */
+/** Filter edges by the active relationship mode.
+ *
+ * In "all" mode we keep only the strongest edge per pair, so the graph stays
+ * legible. In a single-kind mode we return every edge of that kind.
+ */
 export function filterEdges(edges: Edge[], mode: RelationshipMode): Edge[] {
-  if (mode === "all") return edges;
-  return edges.filter((e) => e.kind === mode);
+  if (mode !== "all") return edges.filter((e) => e.kind === mode);
+
+  const bestByPair = new Map<string, Edge>();
+  for (const e of edges) {
+    const key = e.fromId < e.toId ? `${e.fromId}::${e.toId}` : `${e.toId}::${e.fromId}`;
+    const existing = bestByPair.get(key);
+    if (!existing || e.strength > existing.strength) bestByPair.set(key, e);
+  }
+  return Array.from(bestByPair.values());
+}
+
+/** Set of cover ids that share any edge with the given id. */
+export function getNeighborIds(edges: Edge[], id: string | null): Set<string> {
+  const set = new Set<string>();
+  if (!id) return set;
+  for (const e of edges) {
+    if (e.fromId === id) set.add(e.toId);
+    else if (e.toId === id) set.add(e.fromId);
+  }
+  return set;
 }
 
 /* ─── Edge style ─────────────────────────────────────── */

@@ -1,14 +1,16 @@
 "use client";
 
-import { Suspense, useMemo } from "react";
+import { Suspense, useMemo, useState } from "react";
 import { Canvas } from "@react-three/fiber";
 import { OrbitControls, Stars } from "@react-three/drei";
 import { EffectComposer, Bloom } from "@react-three/postprocessing";
 import * as THREE from "three";
+import { ChevronDown, Layers } from "lucide-react";
 import type { CoverNode as CoverNodeType, Position } from "@/lib/types";
 import {
   buildRelationships,
   filterEdges,
+  getNeighborIds,
   EDGE_KIND_HEX,
   EDGE_KIND_LABEL,
   type EdgeKind,
@@ -62,6 +64,13 @@ export default function EchoMap({
     }
     return [relationshipMode] as EdgeKind[];
   }, [edges, relationshipMode]);
+
+  const neighborIds = useMemo(
+    () => getNeighborIds(edges.map((e) => e.edge), selectedCoverId),
+    [edges, selectedCoverId],
+  );
+
+  const [legendOpen, setLegendOpen] = useState(false);
 
   return (
     <div className="w-full h-full bg-canvas relative">

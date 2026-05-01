@@ -4,15 +4,22 @@ Interactive AI artwork for the CSE 358 "KNOCK - Design Your Door" assignment.
 
 Echo Chamber maps covers of Bob Dylan's "Knockin' on Heaven's Door" as a 3D emotional galaxy. The backend processes cover metadata, generates musicological interpretations with Gemini or OpenAI, prepares embedding/UMAP coordinates, and exposes the API used by the frontend experience.
 
-## Current Status
+## Deliverables
 
-- Project planning and kanban are in `PROJECT_KANBAN_BACKLOG.md`.
-- Backend scaffold is in `backend/`.
-- 50-cover dataset is in `backend/data/covers.json`.
-- Starter RAG historical documents are in `backend/data/historical_docs/`.
-- RAG source preparation guide is in `docs/RAG_PREP_GUIDE.md`.
-- Data/source attribution notes are in `docs/DATA_SOURCES.md`.
-- Backend runbook is in `docs/BACKEND_RUNBOOK.md`.
+| Item | Location |
+|------|----------|
+| **Artwork** | This repository — run backend + frontend (see setup below) |
+| **Artist's Manifesto** | [`MANIFESTO.md`](MANIFESTO.md) |
+| **Code Repository** | This repo — see Architecture below |
+
+## Project Structure
+
+- `backend/` — FastAPI API server, data pipeline scripts, AI services
+- `frontend/` — Next.js + React Three Fiber interactive galaxy
+- `backend/data/covers.json` — 50-cover dataset with emotion scores
+- `backend/data/historical_docs/` — RAG source documents (1973 era)
+- `docs/` — API contract, backend runbook, data sources
+- `MANIFESTO.md` — Artist's statement (1,750 words)
 
 ## Backend Setup
 
@@ -203,12 +210,17 @@ http://localhost:8000/openapi.json
 
 ## AI Techniques
 
-Planned techniques:
+Three distinct generative AI techniques are deeply integrated:
 
-- LLM-based musicological and historical interpretation using Gemini or OpenAI.
-- Embedding-based semantic matching between user farewells and cover interpretations.
-- UMAP dimensionality reduction for the 3D galaxy layout.
-- RAG over historical documents for era voice generation.
+| Technique | Role in the artwork |
+|-----------|-------------------|
+| **LLM Emotion Scoring** (Gemini / OpenAI) | Scores each cover on 6 emotional dimensions: surrender, defiance, grief, hope, exhaustion, transcendence. Produces `era_tension`, `political_charge`, `spiritual_weight`. |
+| **Sentence Embeddings + UMAP** (`all-MiniLM-L6-v2`) | Converts cover metadata to semantic vectors; UMAP reduces to 3D galaxy coordinates. Powers the `/api/match` semantic search. |
+| **RAG Pipeline** (LlamaIndex + ChromaDB) | Retrieves from 5 historical documents (Vietnam, 1973, Pat Garrett, Dylan) to ground the era voice monologue in real historical texture. |
+
+All three techniques interact: LLM scores shape the embedding neighborhood structure, and the RAG voice is grounded in the same historical period that the embedding positions reflect.
+
+All LLM-backed endpoints fall back to locally generated text when no API key is configured, so the artwork is fully explorable without credentials.
 
 ## RAG Source Work
 
@@ -225,6 +237,16 @@ Minimum documents:
 - `pat_garrett_film_context.txt`
 - `counterculture_and_dylan_1970s.txt`
 - `dylan_nobel_and_songwriting.txt`
+
+## Screenshots
+
+> Start the backend (`uvicorn main:app --reload --port 8000`) and frontend (`npm run dev`) to experience the artwork live.
+
+Key screens:
+- **Galaxy view** — 50 covers as glowing nodes in 3D space, connected by colored relationship edges
+- **Detail panel** — Emotion profile, sonic signature, and era context for each cover
+- **Match mode** — Type a farewell and find your emotional twin among the covers
+- **Era voice** — A RAG-grounded monologue from the perspective of the cover's historical moment
 
 ## Repository Name
 
