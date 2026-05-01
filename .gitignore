@@ -30,3 +30,8 @@ Thumbs.db
 
 # Logs
 *.log
+
+# Root-level node_modules (screenshot tooling)
+node_modules/
+package-lock.json
+scripts_env/

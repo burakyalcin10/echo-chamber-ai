@@ -240,13 +240,17 @@ Minimum documents:
 
 ## Screenshots
 
-> Start the backend (`uvicorn main:app --reload --port 8000`) and frontend (`npm run dev`) to experience the artwork live.
+**Galaxy overview** — 50 covers mapped as nodes in 3D emotional space, connected by four kinds of relationships (emotional proximity, historical era, genre affinity, influence chains).
 
-Key screens:
-- **Galaxy view** — 50 covers as glowing nodes in 3D space, connected by colored relationship edges
-- **Detail panel** — Emotion profile, sonic signature, and era context for each cover
-- **Match mode** — Type a farewell and find your emotional twin among the covers
-- **Era voice** — A RAG-grounded monologue from the perspective of the cover's historical moment
+![Galaxy overview](docs/screenshots/01_galaxy.png)
+
+**Cover detail panel** — Selecting a cover (via click or Match mode) reveals its emotional profile across six dimensions, sonic signature, and a historical pulse grounding it in its era.
+
+![Cover detail panel](docs/screenshots/02_cover_detail.png)
+
+**Emotional edges** — Filter to a single relationship kind; here only emotional-proximity edges are shown, making the affinity clusters visible.
+
+![Emotional edges](docs/screenshots/03_emotional_edges.png)
 
 ## Repository Name
 
