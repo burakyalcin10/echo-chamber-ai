@@ -27,11 +27,27 @@ def load_covers(prefer_processed: bool = True) -> list[dict[str, Any]]:
     if prefer_processed and settings.processed_covers_path.exists():
         processed = _read_json(settings.processed_covers_path)
         raw = _read_json(settings.raw_covers_path)
-        covers = processed if len(processed) == len(raw) else raw
+        covers = _merge_raw_metadata(processed, raw) if len(processed) == len(raw) else raw
     else:
         covers = _read_json(settings.raw_covers_path)
 
     return [_with_fallback_position(cover, index, len(covers)) for index, cover in enumerate(covers)]
+
+
+def _merge_raw_metadata(processed: list[dict[str, Any]], raw: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    raw_by_id = {cover.get("id"): cover for cover in raw}
+    passthrough_fields = ("artist_image_url",)
+    merged: list[dict[str, Any]] = []
+
+    for cover in processed:
+        enriched = dict(cover)
+        raw_cover = raw_by_id.get(cover.get("id"), {})
+        for field in passthrough_fields:
+            if raw_cover.get(field) and not enriched.get(field):
+                enriched[field] = raw_cover[field]
+        merged.append(enriched)
+
+    return merged
 
 
 def cover_counts() -> dict[str, int | bool]:
@@ -82,6 +98,7 @@ def graph_cover_payload(cover: dict[str, Any]) -> dict[str, Any]:
         "political_charge": analysis.get("political_charge", cover.get("political_charge", 0.5)),
         "is_original": cover.get("is_original", False),
         "genre": cover.get("genre"),
+        "artist_image_url": cover.get("artist_image_url"),
     }
 
 
@@ -102,4 +119,5 @@ def cover_detail_payload(cover: dict[str, Any]) -> dict[str, Any]:
         "era_tension": analysis.get("era_tension", cover.get("era_tension", 0.5)),
         "political_charge": analysis.get("political_charge", cover.get("political_charge", 0.5)),
         "spiritual_weight": analysis.get("spiritual_weight", cover.get("spiritual_weight", 0.5)),
+        "artist_image_url": cover.get("artist_image_url"),
     }

@@ -52,7 +52,8 @@ npm run lint     # ESLint
 
 ## User journey
 
-1. The 3D **Echo Map** loads 32 verified cover nodes from `GET /api/graph`.
+1. The 3D **Echo Map** loads 32 verified cover nodes from `GET /api/graph`,
+   using artist portrait URLs when available.
 2. Click a node → right-side **DetailPanel** opens
    (`GET /api/cover/{id}`): hero band, meaning shift, emotional profile,
    sonic signature, historical pulse.
@@ -84,7 +85,7 @@ components/
                       relationship-mode selector · result count
   graph/
     EchoMap.tsx       R3F canvas, edges, legend
-    CoverNode.tsx     individual node (selected / highlighted / dimmed)
+    CoverNode.tsx     individual node with optional artist portrait
     EdgeLine.tsx      relationship edge (dashed for emotional)
     UserSignalNode.tsx  pulsing tertiary node placed by /api/match
   panels/

@@ -28,6 +28,7 @@ export interface CoverNode {
   // The `/api/cover/{id}` detail endpoint always does.
   genre?: string;
   album?: string;
+  artist_image_url?: string | null;
 }
 
 export interface GraphResponse {

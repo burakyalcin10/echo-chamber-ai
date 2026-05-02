@@ -1,5 +1,6 @@
 "use client";
 
+import type { CSSProperties } from "react";
 import {
   X,
   Star,
@@ -148,6 +149,7 @@ function HeroHeader({
 }) {
   const tension = cover.era_tension ?? 0.5;
   const charge = cover.political_charge ?? 0.5;
+  const heroImageStyle = getHeroImageStyle(cover.id);
   const hueA = Math.round(40 - tension * 12);
   const hueB = Math.round(220 - charge * 80);
   const gradient = `linear-gradient(135deg,
@@ -158,7 +160,26 @@ function HeroHeader({
   return (
     <div className="h-48 relative w-full flex-shrink-0 overflow-hidden border-b border-white/10">
       <div className="absolute inset-0" style={{ background: gradient }} />
-      <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-surface" />
+      {cover.artist_image_url && (
+        // eslint-disable-next-line @next/next/no-img-element
+        <img
+          src={cover.artist_image_url}
+          alt=""
+          className="absolute right-0 top-0 h-full w-[74%] object-cover opacity-70 grayscale-[12%] saturate-[0.9]"
+          style={heroImageStyle}
+          draggable={false}
+          loading="lazy"
+          referrerPolicy="no-referrer"
+        />
+      )}
+      <div
+        className="absolute inset-0"
+        style={{
+          background:
+            "linear-gradient(90deg, var(--color-surface) 0%, rgba(19,19,19,0.92) 46%, rgba(19,19,19,0.18) 100%)",
+        }}
+      />
+      <div className="absolute inset-0 bg-gradient-to-b from-black/10 via-transparent to-surface" />
       <div
         className="absolute inset-0 opacity-[0.08] mix-blend-overlay pointer-events-none"
         style={{
@@ -198,6 +219,22 @@ function HeroHeader({
       </div>
     </div>
   );
+}
+
+function getHeroImageStyle(coverId: string): CSSProperties {
+  if (coverId === "dylan_1973") {
+    return {
+      objectPosition: "55% 30%",
+      transform: "scale(1.08)",
+      transformOrigin: "65% 30%",
+    };
+  }
+
+  return {
+    objectPosition: "50% 32%",
+    transform: "scale(1.04)",
+    transformOrigin: "50% 35%",
+  };
 }
 
 /* ─── Sonic signature ───────────────────────────────── */

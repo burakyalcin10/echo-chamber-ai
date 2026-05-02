@@ -29,6 +29,7 @@ def test_graph_returns_covers_without_embedding_vectors():
     assert len(covers) >= 32
     assert "embedding_vector" not in covers[0]
     assert {"id", "artist", "year", "position", "emotion_scores"}.issubset(covers[0])
+    assert any(cover.get("artist_image_url") for cover in covers)
 
 
 def test_cover_detail_for_original_song():
@@ -38,6 +39,7 @@ def test_cover_detail_for_original_song():
     body = response.json()
     assert body["artist"] == "Bob Dylan"
     assert body["is_original"] is True
+    assert body["artist_image_url"]
 
 
 def test_match_works_without_llm_key(monkeypatch):

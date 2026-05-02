@@ -51,7 +51,8 @@ Response:
       },
       "era_tension": 0.82,
       "political_charge": 0.66,
-      "is_original": true
+      "is_original": true,
+      "artist_image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/..."
     }
   ]
 }
@@ -61,6 +62,7 @@ Notes:
 
 - `position.x/y/z` are normalized scene coordinates in roughly `[-8, 8]`.
 - `embedding_vector` is intentionally excluded from this endpoint.
+- `artist_image_url` is optional and is used by the frontend for artist portrait nodes.
 
 ## `GET /api/cover/{cover_id}`
 
@@ -90,7 +92,8 @@ Response:
   "historical_pulse": "Written for Sam Peckinpah's Western...",
   "era_tension": 0.82,
   "political_charge": 0.66,
-  "spiritual_weight": 0.84
+  "spiritual_weight": 0.84,
+  "artist_image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/..."
 }
 ```
 

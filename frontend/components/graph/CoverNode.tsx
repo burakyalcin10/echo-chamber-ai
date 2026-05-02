@@ -28,10 +28,17 @@ export default function CoverNodeMesh({
   const meshRef = useRef<THREE.Mesh>(null);
   const ringRef = useRef<THREE.Mesh>(null);
   const [hovered, setHovered] = useState(false);
+  const [photoFailed, setPhotoFailed] = useState(false);
+  const hasPhoto = Boolean(cover.artist_image_url && !photoFailed);
 
   const baseSize = cover.is_original
-    ? 0.35
+    ? 0.48
     : 0.12 + (cover.era_tension ?? 0.5) * 0.12;
+  const photoSizeClass = cover.is_original
+    ? "h-[72px] w-[72px]"
+    : isSelected || isHighlighted || hovered
+      ? "h-11 w-11"
+      : "h-9 w-9";
 
   const color = useMemo(() => {
     if (isSelected) return new THREE.Color(0xffffff);
@@ -45,6 +52,7 @@ export default function CoverNodeMesh({
   }, [cover, isSelected]);
 
   const showRing = isSelected || isHighlighted || cover.is_original;
+  const showLabel = hovered || isSelected || isHighlighted || cover.is_original;
 
   useFrame(({ clock }) => {
     if (meshRef.current) {
@@ -90,9 +98,43 @@ export default function CoverNodeMesh({
           document.body.style.cursor = "default";
         }}
       >
-        <sphereGeometry args={[baseSize, 16, 16]} />
-        <meshBasicMaterial color={color} transparent opacity={opacity} />
+        <sphereGeometry args={[hasPhoto ? baseSize * 1.08 : baseSize, 16, 16]} />
+        <meshBasicMaterial
+          color={color}
+          transparent
+          opacity={hasPhoto ? opacity * 0.32 : opacity}
+        />
       </mesh>
+
+      {hasPhoto && (
+        <Html
+          center
+          position={[0, 0, baseSize * 0.15]}
+          style={{ pointerEvents: "none", userSelect: "none" }}
+        >
+          <div
+            className={`${photoSizeClass} overflow-hidden rounded-full border bg-black/70 shadow-[0_0_18px_rgba(233,193,118,0.28)] transition-all duration-200 ${
+              isSelected
+                ? "border-white"
+                : isHighlighted || hovered
+                  ? "border-tertiary"
+                  : "border-primary/70"
+            }`}
+            style={{ opacity }}
+          >
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src={cover.artist_image_url ?? ""}
+              alt=""
+              className="h-full w-full object-cover grayscale-[20%] saturate-[0.9]"
+              draggable={false}
+              loading="lazy"
+              referrerPolicy="no-referrer"
+              onError={() => setPhotoFailed(true)}
+            />
+          </div>
+        </Html>
+      )}
 
       {showRing && (
         <mesh ref={ringRef}>
@@ -112,7 +154,34 @@ export default function CoverNodeMesh({
         </mesh>
       )}
 
-      {!suppressLabel && (hovered || isSelected || isHighlighted) && (
+      {cover.is_original && !suppressLabel && (
+        <Html
+          center
+          position={[0, baseSize + 0.6, 0]}
+          style={{ pointerEvents: "none", userSelect: "none" }}
+        >
+          <div
+            className="rounded-full border border-primary/60 bg-black/70 px-2.5 py-1 text-data-mono text-[9px] font-bold uppercase tracking-[0.18em] text-primary shadow-[0_0_18px_rgba(233,193,118,0.35)]"
+            style={{ opacity }}
+          >
+            Origin
+          </div>
+        </Html>
+      )}
+
+      {cover.is_original && (
+        <mesh>
+          <ringGeometry args={[baseSize * 2.2, baseSize * 2.34, 48]} />
+          <meshBasicMaterial
+            color={0xe9c176}
+            transparent
+            opacity={isDimmed ? 0.06 : 0.22}
+            side={THREE.DoubleSide}
+          />
+        </mesh>
+      )}
+
+      {!suppressLabel && showLabel && (
         <Html
           center
           position={[0, -(baseSize + 0.4), 0]}

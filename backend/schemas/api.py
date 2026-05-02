@@ -54,6 +54,7 @@ class GraphCover(BaseModel):
     political_charge: float
     is_original: bool
     genre: str | None = None
+    artist_image_url: str | None = None
 
 
 class GraphResponse(BaseModel):
@@ -75,6 +76,7 @@ class CoverDetailResponse(BaseModel):
     era_tension: float
     political_charge: float
     spiritual_weight: float
+    artist_image_url: str | None = None
 
 
 class CompareResponse(BaseModel):
