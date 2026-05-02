@@ -55,6 +55,8 @@ class GraphCover(BaseModel):
     is_original: bool
     genre: str | None = None
     artist_image_url: str | None = None
+    youtube_video_id: str | None = None
+    music_source_kind: str | None = None
 
 
 class GraphResponse(BaseModel):

@@ -34,7 +34,14 @@ async function apiFetch<T>(
 
     if (!res.ok) {
       const body = await res.text().catch(() => "");
-      throw new Error(`API ${res.status}: ${body || res.statusText}`);
+      let message = body || res.statusText;
+      try {
+        const parsed = JSON.parse(body) as { detail?: unknown };
+        if (typeof parsed.detail === "string") message = parsed.detail;
+      } catch {
+        // Keep the raw response body when the API does not return JSON.
+      }
+      throw new Error(message);
     }
 
     return (await res.json()) as T;

@@ -10,6 +10,8 @@ import {
   BarChart3,
   AlertCircle,
   Loader2,
+  Archive,
+  Music2,
 } from "lucide-react";
 import type {
   CoverNode,
@@ -352,7 +354,8 @@ export default function HomePage() {
   const overlayOpen = Boolean(
     (mode === "voice" && (voiceResult || voiceLoading)) ||
       compareResult ||
-      compareLoading,
+      compareLoading ||
+      mode === "archive",
   );
 
   // ─── Render ─────────────────────────────────────────
@@ -426,6 +429,10 @@ export default function HomePage() {
                   setCompareCoverB(null);
                 }}
               />
+            )}
+
+            {mode === "archive" && !graphLoading && !graphError && backendOnline && (
+              <ArchivePanel covers={filteredCovers} onSelectCover={handleSelectCover} />
             )}
           </div>
 
@@ -524,6 +531,77 @@ export default function HomePage() {
 }
 
 /* ─── Guidance banner ─────────────────────────────── */
+
+function ArchivePanel({
+  covers,
+  onSelectCover,
+}: {
+  covers: CoverNode[];
+  onSelectCover: (cover: CoverNode) => void;
+}) {
+  const sorted = [...covers].sort(
+    (a, b) => a.year - b.year || a.artist.localeCompare(b.artist),
+  );
+
+  return (
+    <div className="absolute inset-0 z-30 overflow-y-auto bg-black/85 backdrop-blur-sm">
+      <div className="mx-auto w-full max-w-5xl px-6 py-8">
+        <div className="mb-6 flex items-end justify-between gap-4 border-b border-white/10 pb-4">
+          <div>
+            <div className="flex items-center gap-2 text-label-caps text-primary">
+              <Archive size={15} strokeWidth={1.75} />
+              Archive
+            </div>
+            <h2 className="mt-2 font-serif text-3xl text-on-surface">
+              Cover index
+            </h2>
+          </div>
+          <span className="text-data-mono text-[11px] uppercase tracking-widest text-stone-500">
+            {sorted.length} visible records
+          </span>
+        </div>
+
+        <div className="grid gap-2">
+          {sorted.map((cover) => (
+            <button
+              key={cover.id}
+              onClick={() => onSelectCover(cover)}
+              className="grid grid-cols-[4.5rem_1fr_auto] items-center gap-4 border border-white/10 bg-surface-container-low/70 px-4 py-3 text-left transition-colors hover:border-primary/40 hover:bg-surface-container-high"
+            >
+              <span className="text-data-mono text-sm text-primary">
+                {cover.year}
+              </span>
+              <span className="min-w-0">
+                <span className="block truncate font-serif text-lg text-on-surface">
+                  {cover.artist}
+                </span>
+                <span className="mt-1 block truncate text-data-mono text-[10px] uppercase tracking-widest text-stone-500">
+                  {cover.genre || "uncategorized"} / {dominantEmotion(cover)}
+                </span>
+              </span>
+              <span className="flex items-center gap-3 text-data-mono text-[10px] uppercase tracking-widest text-stone-500">
+                {cover.youtube_video_id && (
+                  <span className="flex items-center gap-1 text-primary">
+                    <Music2 size={12} strokeWidth={1.75} />
+                    Player
+                  </span>
+                )}
+                {cover.is_original ? "Origin" : "Cover"}
+              </span>
+            </button>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function dominantEmotion(cover: CoverNode): string {
+  const [key] = Object.entries(cover.emotion_scores).sort(
+    (a, b) => b[1] - a[1],
+  )[0] ?? ["unknown", 0];
+  return key;
+}
 
 function GuidanceBanner({
   mode,

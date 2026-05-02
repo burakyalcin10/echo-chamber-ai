@@ -28,11 +28,20 @@ export default function MatchDock({
   onDismissError,
 }: MatchDockProps) {
   const [text, setText] = useState("");
+  const [localError, setLocalError] = useState<string | null>(null);
+  const shownError = localError || error;
 
   const handleSubmit = () => {
-    if (text.trim() && !loading) {
-      onSubmit(text.trim());
+    const trimmed = text.trim();
+    if (!trimmed || loading) return;
+    if (!hasEnoughSignal(trimmed)) {
+      setLocalError(
+        "Biraz daha gerçek bir veda yaz. En az birkaç kelimeyle neyi bıraktığını anlat.",
+      );
+      return;
     }
+    setLocalError(null);
+    onSubmit(trimmed);
   };
 
   return (
@@ -54,14 +63,17 @@ export default function MatchDock({
         {/* Input row */}
         <div
           className={`flex items-end border-b pb-2 transition-colors ${
-            error ? "border-error/60" : "border-white/20 focus-within:border-primary"
+            shownError ? "border-error/60" : "border-white/20 focus-within:border-primary"
           }`}
         >
           <input
             id="match-input"
             type="text"
             value={text}
-            onChange={(e) => setText(e.target.value)}
+            onChange={(e) => {
+              setText(e.target.value);
+              if (localError) setLocalError(null);
+            }}
             onKeyDown={(e) => e.key === "Enter" && handleSubmit()}
             placeholder="Write the goodbye you are trying to understand…"
             className="bg-transparent border-none outline-none w-full font-serif text-body-lg text-on-surface placeholder:text-on-surface-variant/50 focus:ring-0 px-0"
@@ -83,16 +95,19 @@ export default function MatchDock({
         </div>
 
         {/* Error inline */}
-        {error && (
+        {shownError && (
           <div className="mt-3 flex items-start gap-2 bg-error-container/40 border border-error/40 rounded p-3">
             <AlertCircle
               size={14}
               strokeWidth={1.75}
               className="text-error mt-0.5 flex-shrink-0"
             />
-            <div className="flex-1 text-[12px] text-error">{error}</div>
+            <div className="flex-1 text-[12px] text-error">{shownError}</div>
             <button
-              onClick={onDismissError}
+              onClick={() => {
+                setLocalError(null);
+                onDismissError();
+              }}
               aria-label="Dismiss error"
               className="text-error/60 hover:text-error transition-colors"
             >
@@ -153,4 +168,23 @@ function Badge({ children }: { children: React.ReactNode }) {
       {children}
     </span>
   );
+}
+
+function hasEnoughSignal(text: string): boolean {
+  const words = text
+    .toLowerCase()
+    .split(/\s+/)
+    .map((word) => word.replace(/[.,;:!?()[\]{}"'`]/g, ""))
+    .filter(Boolean);
+  const generic = new Set([
+    "hi",
+    "hello",
+    "hey",
+    "selam",
+    "merhaba",
+    "sa",
+    "slm",
+  ]);
+  const meaningfulWords = words.filter((word) => !generic.has(word));
+  return text.length >= 12 && meaningfulWords.length >= 3;
 }

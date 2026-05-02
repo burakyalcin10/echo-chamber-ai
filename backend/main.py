@@ -140,11 +140,17 @@ async def match_farewell(request: MatchRequest) -> dict:
     user_text = request.user_text.strip()
     if not user_text:
         raise HTTPException(status_code=400, detail="user_text cannot be empty.")
+    if not _has_enough_match_signal(user_text):
+        raise HTTPException(
+            status_code=400,
+            detail="Write a fuller farewell, not only a greeting. Describe what you are leaving behind.",
+        )
 
     covers = load_covers(prefer_processed=True)
     match = match_user_text(user_text, covers)
     matched = match["cover"]
     detail = cover_detail_payload(matched)
+    response_language = _detect_language(user_text)
     prompt = f"""
 A user wrote this farewell:
 "{user_text}"
@@ -155,10 +161,11 @@ Historical context: {detail['historical_pulse']}
 
 Write 3 sentences connecting their personal farewell to this cover and its era.
 Be empathetic, literary, and specific. Do not be generic.
+Language: {response_language}.
 """.strip()
     bridge_text, bridge_source = _generate_or_fallback(
         prompt,
-        fallback=lambda: _fallback_bridge_text(detail),
+        fallback=lambda: _fallback_bridge_text(detail, response_language),
         temperature=0.7,
     )
 
@@ -236,14 +243,90 @@ def _fallback_voice_text(cover: dict, historical_context: str) -> str:
     )
 
 
-def _fallback_bridge_text(cover: dict) -> str:
+def _fallback_bridge_text(cover: dict, language: str = "English") -> str:
     meaning = _ensure_sentence(cover["meaning_shift"].lower())
     pulse = _ensure_sentence(cover["historical_pulse"].lower())
+    if language == "Turkish":
+        dominant = _dominant_emotion_label(cover.get("emotion_scores") or {}, language="Turkish")
+        era_pressure = "yüksek" if cover.get("era_tension", 0.5) >= 0.65 else "daha sakin"
+        charge = "politik olarak yüklü" if cover.get("political_charge", 0.5) >= 0.55 else "daha kişisel"
+        return (
+            f"Vedana en yakın duran kayıt {cover['year']} tarihli {cover['artist']} yorumu. "
+            f"Eşleşme, metnindeki bırakma isteğini bu yorumdaki baskın {dominant} duygusuna yakın okuyor. "
+            f"Bu cover {era_pressure} dönem baskısı taşıyor ve şarkıyı {charge} bir eşiğe yerleştiriyor."
+        )
     return (
         f"Your farewell lands closest to the {cover['year']} {cover['artist']} version. "
         f"That recording turns the song toward {meaning} "
         f"Its historical pulse is {pulse}"
     )
+
+
+def _dominant_emotion_label(scores: dict, *, language: str = "English") -> str:
+    if not scores:
+        return "emotional"
+    key = max(scores, key=scores.get)
+    if language == "Turkish":
+        return {
+            "surrender": "teslimiyet",
+            "defiance": "başkaldırı",
+            "grief": "yas",
+            "hope": "umut",
+            "exhaustion": "tükenmişlik",
+            "transcendence": "aşkınlık",
+        }.get(key, key)
+    return key
+
+
+def _has_enough_match_signal(text: str) -> bool:
+    words = [
+        word.strip(".,;:!?()[]{}\"'`").lower()
+        for word in text.split()
+        if word.strip(".,;:!?()[]{}\"'`")
+    ]
+    generic = {"hi", "hello", "hey", "selam", "merhaba", "sa", "slm"}
+    meaningful_words = [word for word in words if word not in generic]
+    return len(text) >= 12 and len(meaningful_words) >= 3
+
+
+def _detect_language(text: str) -> str:
+    lowered = text.lower()
+    turkish_markers = set("çğıöşü")
+    mojibake_markers = ("Ã", "Ä", "Å")
+    turkish_words = {
+        "ben",
+        "bıktım",
+        "biktim",
+        "artık",
+        "artik",
+        "yaşamaktan",
+        "yasamaktan",
+        "hayat",
+        "veda",
+        "gidiyorum",
+        "bırakıyorum",
+        "birakiyorum",
+        "yoruldum",
+        "ölüm",
+        "olum",
+        "kapı",
+        "kapi",
+        "geride",
+        "istemiyorum",
+        "istiyorum",
+    }
+    words = {
+        word.strip(".,;:!?()[]{}\"'`")
+        for word in lowered.split()
+        if word.strip(".,;:!?()[]{}\"'`")
+    }
+    if (
+        any(char in lowered for char in turkish_markers)
+        or any(marker in text for marker in mojibake_markers)
+        or words.intersection(turkish_words)
+    ):
+        return "Turkish"
+    return "English"
 
 
 def _compact_context(text: str, *, limit: int = 300) -> str:

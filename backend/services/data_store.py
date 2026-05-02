@@ -104,6 +104,8 @@ def graph_cover_payload(cover: dict[str, Any]) -> dict[str, Any]:
         "is_original": cover.get("is_original", False),
         "genre": cover.get("genre"),
         "artist_image_url": cover.get("artist_image_url"),
+        "youtube_video_id": cover.get("youtube_video_id"),
+        "music_source_kind": cover.get("music_source_kind"),
     }
 
 

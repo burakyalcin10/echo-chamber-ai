@@ -167,19 +167,19 @@ function MusicPlayerModal({
 
   return (
     <div
-      className="fixed inset-0 z-[80] flex items-center justify-center bg-black/90 p-4 md:p-8"
+      className="fixed inset-0 z-[2147483647] flex items-center justify-center bg-black p-4 md:p-8"
       onClick={onClose}
     >
       <button
         onClick={onClose}
         aria-label="Close music player"
-        className="fixed top-5 right-5 z-[90] text-stone-300 hover:text-on-surface transition-colors"
+        className="fixed top-5 right-5 z-[2147483647] text-stone-300 hover:text-on-surface transition-colors"
       >
         <X size={24} strokeWidth={1.75} />
       </button>
 
       <div
-        className="w-full max-w-4xl border border-white/15 bg-surface shadow-2xl"
+        className="relative z-[2147483647] w-full max-w-4xl border border-white/15 bg-surface shadow-2xl"
         onClick={(event) => event.stopPropagation()}
       >
         <div className="flex items-center justify-between gap-4 border-b border-white/10 px-4 py-3 md:px-5">
