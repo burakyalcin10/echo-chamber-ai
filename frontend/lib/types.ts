@@ -42,6 +42,9 @@ export interface CoverDetail extends CoverNode {
   meaning_shift: string;
   historical_pulse: string;
   spiritual_weight: number;
+  youtube_video_id?: string | null;
+  music_source_label?: string | null;
+  music_source_kind?: string | null;
 }
 
 export interface CompareRequest {

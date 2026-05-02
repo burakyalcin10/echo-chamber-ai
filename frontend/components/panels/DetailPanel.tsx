@@ -1,12 +1,15 @@
 "use client";
 
 import type { CSSProperties } from "react";
+import { useState } from "react";
 import {
   X,
   Star,
   Disc3,
   Activity,
   Compass,
+  Play,
+  Music2,
 } from "lucide-react";
 import type { CoverDetail } from "@/lib/types";
 import { EMOTION_LABELS, EMOTION_COLORS } from "@/lib/constants";
@@ -80,6 +83,8 @@ function CoverDetailBody({
   onVoice: () => void;
   onClose: () => void;
 }) {
+  const [playerOpen, setPlayerOpen] = useState(false);
+
   return (
     <>
       <HeroHeader cover={cover} onClose={onClose} />
@@ -120,6 +125,15 @@ function CoverDetailBody({
         )}
 
         <div className="mt-auto pt-4 flex gap-3">
+          {cover.youtube_video_id && (
+            <button
+              onClick={() => setPlayerOpen(true)}
+              className="flex-1 bg-surface-container-high border border-primary/40 text-primary text-label-caps text-[11px] py-3 rounded hover:bg-primary/10 transition-colors text-center flex items-center justify-center gap-2"
+            >
+              <Play size={13} strokeWidth={1.75} fill="currentColor" />
+              Listen
+            </button>
+          )}
           <button
             onClick={onCompare}
             className="flex-1 bg-transparent border border-white/20 text-on-surface text-label-caps text-[11px] py-3 rounded hover:bg-white/5 transition-colors text-center"
@@ -134,7 +148,68 @@ function CoverDetailBody({
           </button>
         </div>
       </div>
+
+      {playerOpen && cover.youtube_video_id && (
+        <MusicPlayerModal cover={cover} onClose={() => setPlayerOpen(false)} />
+      )}
     </>
+  );
+}
+
+function MusicPlayerModal({
+  cover,
+  onClose,
+}: {
+  cover: CoverDetail;
+  onClose: () => void;
+}) {
+  const embedUrl = `https://www.youtube-nocookie.com/embed/${cover.youtube_video_id}?autoplay=1&rel=0&modestbranding=1`;
+
+  return (
+    <div
+      className="fixed inset-0 z-[80] flex items-center justify-center bg-black/90 p-4 md:p-8"
+      onClick={onClose}
+    >
+      <button
+        onClick={onClose}
+        aria-label="Close music player"
+        className="fixed top-5 right-5 z-[90] text-stone-300 hover:text-on-surface transition-colors"
+      >
+        <X size={24} strokeWidth={1.75} />
+      </button>
+
+      <div
+        className="w-full max-w-4xl border border-white/15 bg-surface shadow-2xl"
+        onClick={(event) => event.stopPropagation()}
+      >
+        <div className="flex items-center justify-between gap-4 border-b border-white/10 px-4 py-3 md:px-5">
+          <div className="min-w-0">
+            <div className="flex items-center gap-2 text-label-caps text-[10px] text-primary">
+              <Music2 size={13} strokeWidth={1.75} />
+              {cover.music_source_kind === "official" ? "Official source" : "Archive source"}
+            </div>
+            <h3 className="mt-1 truncate font-serif text-lg text-on-surface">
+              {cover.artist} - Knockin&apos; on Heaven&apos;s Door
+            </h3>
+          </div>
+          {cover.music_source_label && (
+            <span className="hidden max-w-[16rem] truncate text-right text-data-mono text-[10px] uppercase tracking-widest text-stone-500 md:block">
+              {cover.music_source_label}
+            </span>
+          )}
+        </div>
+
+        <div className="aspect-video w-full bg-black">
+          <iframe
+            className="h-full w-full"
+            src={embedUrl}
+            title={`${cover.artist} music player`}
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+            allowFullScreen
+          />
+        </div>
+      </div>
+    </div>
   );
 }
 

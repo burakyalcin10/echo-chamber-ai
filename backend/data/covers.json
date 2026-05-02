@@ -34,7 +34,10 @@
       "meaning_shift": "This original version profoundly establishes the song's meaning as a somber, exhausted farewell at the threshold of death.",
       "historical_pulse": "The recording captures the profound weariness and disillusionment prevalent in America during the Vietnam War and Watergate era."
     },
-    "artist_image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Bob%20Dylan%201965%20publicity%20photo.jpg?width=512"
+    "artist_image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Bob%20Dylan%201965%20publicity%20photo.jpg?width=512",
+    "youtube_video_id": "O-sVpVIovKk",
+    "music_source_label": "Bob Dylan original recording",
+    "music_source_kind": "community"
   },
   {
     "id": "inger_lise_rypdal_1973",
@@ -552,7 +555,10 @@
       "meaning_shift": "This version reinterprets the song's somber farewell into a stadium-sized hard rock anthem, transforming quiet resignation into a defiant and cathartic lament for a world in transition.",
       "historical_pulse": "The recording resonates with the complex pressures of the late Cold War era, reflecting a collective burnout, a defiant spirit, and an embrace of excess as global paradigms shifted."
     },
-    "artist_image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/GNR%20London%20Stadium%202017%203%20%28cropped%29.jpg?width=512"
+    "artist_image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/GNR%20London%20Stadium%202017%203%20%28cropped%29.jpg?width=512",
+    "youtube_video_id": "k04tX2fvh0o",
+    "music_source_label": "Guns N' Roses official artist channel",
+    "music_source_kind": "official"
   },
   {
     "id": "leningrad_cowboys_1993",
@@ -663,7 +669,10 @@
       "meaning_shift": "This version transforms the song into a collective lament for the working class, emphasizing shared struggle and enduring spirit rather than individual resignation.",
       "historical_pulse": "The recording reflects the ongoing struggles of the working class in a post-industrial landscape, even as the Cold War tensions had receded."
     },
-    "artist_image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Bruce%20Springsteen%202025.jpg?width=512"
+    "artist_image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Bruce%20Springsteen%202025.jpg?width=512",
+    "youtube_video_id": "RMcz5EOBik8",
+    "music_source_label": "Bruce Springsteen Berlin 1995 live recording",
+    "music_source_kind": "community"
   },
   {
     "id": "beau_jocque_1996",
@@ -869,7 +878,10 @@
     "era_tension": 0.42,
     "political_charge": 0.16,
     "spiritual_weight": 0.32,
-    "artist_image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Glaston2024%202806%20300624%20%28129%20of%20173%29%20%28cropped%29.jpg?width=512"
+    "artist_image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Glaston2024%202806%20300624%20%28129%20of%20173%29%20%28cropped%29.jpg?width=512",
+    "youtube_video_id": "3nh6kj3cCYc",
+    "music_source_label": "Avril Lavigne official artist channel",
+    "music_source_kind": "official"
   },
   {
     "id": "antony_2007",

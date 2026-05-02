@@ -77,6 +77,9 @@ class CoverDetailResponse(BaseModel):
     political_charge: float
     spiritual_weight: float
     artist_image_url: str | None = None
+    youtube_video_id: str | None = None
+    music_source_label: str | None = None
+    music_source_kind: str | None = None
 
 
 class CompareResponse(BaseModel):

@@ -36,7 +36,12 @@ def load_covers(prefer_processed: bool = True) -> list[dict[str, Any]]:
 
 def _merge_raw_metadata(processed: list[dict[str, Any]], raw: list[dict[str, Any]]) -> list[dict[str, Any]]:
     raw_by_id = {cover.get("id"): cover for cover in raw}
-    passthrough_fields = ("artist_image_url",)
+    passthrough_fields = (
+        "artist_image_url",
+        "youtube_video_id",
+        "music_source_label",
+        "music_source_kind",
+    )
     merged: list[dict[str, Any]] = []
 
     for cover in processed:
@@ -120,4 +125,7 @@ def cover_detail_payload(cover: dict[str, Any]) -> dict[str, Any]:
         "political_charge": analysis.get("political_charge", cover.get("political_charge", 0.5)),
         "spiritual_weight": analysis.get("spiritual_weight", cover.get("spiritual_weight", 0.5)),
         "artist_image_url": cover.get("artist_image_url"),
+        "youtube_video_id": cover.get("youtube_video_id"),
+        "music_source_label": cover.get("music_source_label"),
+        "music_source_kind": cover.get("music_source_kind"),
     }
