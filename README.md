@@ -16,7 +16,7 @@ Echo Chamber maps covers of Bob Dylan's "Knockin' on Heaven's Door" as a 3D emot
 
 - `backend/` — FastAPI API server, data pipeline scripts, AI services
 - `frontend/` — Next.js + React Three Fiber interactive galaxy
-- `backend/data/covers.json` — 50-cover dataset with emotion scores
+- `backend/data/covers.json` — 32 verified-cover dataset with emotion scores
 - `backend/data/historical_docs/` — RAG source documents (1973 era)
 - `docs/` — API contract, backend runbook, data sources
 - `MANIFESTO.md` — Artist's statement (1,750 words)
@@ -29,7 +29,7 @@ Echo Chamber maps covers of Bob Dylan's "Knockin' on Heaven's Door" as a 3D emot
 flowchart TD
     subgraph PIPELINE["Offline Data Pipeline"]
         direction TB
-        RAW["covers.json\n50 cover records"]
+        RAW["covers.json\n32 verified cover records"]
         HD["historical_docs/\n5 era documents"]
 
         RAW -->|"02_score_covers.py"| LLM
@@ -54,7 +54,7 @@ flowchart TD
         RS --> EP
 
         EP["Endpoints"]
-        EP --> E1["GET /api/graph\n50 nodes + 3D positions"]
+        EP --> E1["GET /api/graph\n32 nodes + 3D positions"]
         EP --> E2["GET /api/cover/:id\nfull cover detail"]
         EP --> E3["POST /api/match\nembedding similarity search"]
         EP --> E4["POST /api/compare\nLLM comparative analysis"]
@@ -63,7 +63,7 @@ flowchart TD
 
     subgraph FRONT["Next.js — port 3000"]
         direction TB
-        GALAXY["EchoMap.tsx\nR3F 3D galaxy\n50 nodes · 4 edge kinds"]
+        GALAXY["EchoMap.tsx\nR3F 3D galaxy\n32 nodes · 4 edge kinds"]
         DETAIL["DetailPanel\nemotion profile\nsonic signature\nhistorical pulse"]
         MATCH["MatchDock\nuser farewell → closest cover"]
         OVER["Compare / Voice overlays\nLLM diff · RAG monologue"]
@@ -98,14 +98,17 @@ pip install -r requirements.txt
 copy .env.example .env
 ```
 
-Set either Gemini or OpenAI credentials in `backend/.env`:
+Set Gemini for the default generation/scoring provider and OpenAI for Era Voice in `backend/.env`:
 
 ```env
 LLM_PROVIDER=gemini
 GEMINI_API_KEY=your_key_here
+GEMINI_MODEL=gemini-2.5-flash
+OPENAI_API_KEY=your_openai_key_here
+OPENAI_MODEL=gpt-4.1-mini
 ```
 
-or:
+Alternatively, set OpenAI as the default provider for all LLM-backed endpoints:
 
 ```env
 LLM_PROVIDER=openai
@@ -260,7 +263,7 @@ Endpoints:
 - `POST /api/voice`
 - `POST /api/match`
 
-LLM-backed endpoints require either `GEMINI_API_KEY` or `OPENAI_API_KEY`.
+LLM-backed endpoints use `LLM_PROVIDER` by default. `/api/voice` is the exception: it uses OpenAI/GPT so the RAG monologue is not blocked by Gemini quota.
 
 The frontend-facing contract is documented in:
 
@@ -307,7 +310,7 @@ Minimum documents:
 
 ## Screenshots
 
-**Galaxy overview** — 50 covers mapped as nodes in 3D emotional space, connected by four kinds of relationships (emotional proximity, historical era, genre affinity, influence chains).
+**Galaxy overview** — 32 verified covers mapped as nodes in 3D emotional space, connected by four kinds of relationships (emotional proximity, historical era, genre affinity, influence chains).
 
 ![Galaxy overview](docs/screenshots/01_galaxy.png)
 

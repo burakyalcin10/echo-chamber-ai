@@ -14,7 +14,7 @@ Working locally:
 - `POST /api/compare`
 - `POST /api/voice`
 - `POST /api/match`
-- 50-cover dataset
+- 32 verified-cover dataset
 - Local fallback text for LLM-backed endpoints
 - Embedding/UMAP processing pipeline
 - RAG document validation and indexing pipeline
@@ -23,8 +23,9 @@ Working locally:
 
 Still requiring external input for final AI quality:
 
-- Gemini or OpenAI API key for full LLM scoring/generation
-- Optional human review of the 50 cover metadata and RAG wording
+- Gemini key for cover scoring/compare/match when `LLM_PROVIDER=gemini`
+- OpenAI key for Era Voice; `/api/voice` uses GPT even when `LLM_PROVIDER=gemini`
+- Optional human review of the 32 verified cover metadata and RAG wording
 
 ## Fresh Setup
 
@@ -38,14 +39,17 @@ python -m pip install -r requirements.txt
 copy .env.example .env
 ```
 
-Set one provider in `backend/.env`:
+For the current split-provider setup, keep Gemini as the default provider and add OpenAI for Era Voice:
 
 ```env
 LLM_PROVIDER=gemini
 GEMINI_API_KEY=your_key_here
+GEMINI_MODEL=gemini-2.5-flash
+OPENAI_API_KEY=your_openai_key_here
+OPENAI_MODEL=gpt-4.1-mini
 ```
 
-or:
+Alternatively, set OpenAI as the default provider for all LLM-backed endpoints:
 
 ```env
 LLM_PROVIDER=openai
@@ -113,8 +117,8 @@ After running embedding and RAG builds:
 ```json
 {
   "status": "ok",
-  "raw_cover_count": 50,
-  "processed_cover_count": 50,
+  "raw_cover_count": 32,
+  "processed_cover_count": 32,
   "processed_data_stale": false
 }
 ```

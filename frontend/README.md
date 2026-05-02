@@ -1,6 +1,6 @@
 # Echo Chamber — Frontend
 
-Interactive web client for **Echo Chamber AI**: a 3D archive of 50 covers of
+Interactive web client for **Echo Chamber AI**: a 3D archive of 32 verified covers of
 Bob Dylan's *Knockin' on Heaven's Door*, where users explore the song's
 emotional/historical relationships and match their own farewell to a cover.
 
@@ -52,7 +52,7 @@ npm run lint     # ESLint
 
 ## User journey
 
-1. The 3D **Echo Map** loads 50 cover nodes from `GET /api/graph`.
+1. The 3D **Echo Map** loads 32 verified cover nodes from `GET /api/graph`.
 2. Click a node → right-side **DetailPanel** opens
    (`GET /api/cover/{id}`): hero band, meaning shift, emotional profile,
    sonic signature, historical pulse.
