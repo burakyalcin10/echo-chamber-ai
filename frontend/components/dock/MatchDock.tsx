@@ -36,7 +36,7 @@ export default function MatchDock({
   };
 
   return (
-    <div className="border-t border-white/10 bg-surface px-8 py-5 z-30">
+    <div className="shrink-0 border-t border-white/10 bg-surface px-8 py-4 z-30">
       <div className="w-full max-w-2xl mx-auto relative">
         {/* Floating label */}
         <div className="flex items-baseline justify-between mb-2">
@@ -103,7 +103,7 @@ export default function MatchDock({
 
         {/* Match result */}
         {matchResult && (
-          <div className="mt-4 bg-surface-container-high/90 backdrop-blur ghost-border rounded-lg p-4 shadow-2xl">
+          <div className="mt-4 max-h-36 overflow-y-auto bg-surface-container-high/90 backdrop-blur ghost-border rounded-lg p-4 shadow-2xl">
             <div className="flex items-center justify-between mb-3 gap-3">
               <span className="text-label-caps text-[10px] text-tertiary flex items-center gap-1.5 min-w-0">
                 <Radar size={12} strokeWidth={1.75} className="flex-shrink-0" />

@@ -11,6 +11,7 @@ interface CoverNodeMeshProps {
   isSelected: boolean;
   isHighlighted: boolean;
   isDimmed: boolean;
+  suppressLabel?: boolean;
   onSelect: (cover: CoverNode) => void;
   onHover: (cover: CoverNode | null) => void;
 }
@@ -20,6 +21,7 @@ export default function CoverNodeMesh({
   isSelected,
   isHighlighted,
   isDimmed,
+  suppressLabel = false,
   onSelect,
   onHover,
 }: CoverNodeMeshProps) {
@@ -110,7 +112,7 @@ export default function CoverNodeMesh({
         </mesh>
       )}
 
-      {(hovered || isSelected || isHighlighted) && (
+      {!suppressLabel && (hovered || isSelected || isHighlighted) && (
         <Html
           center
           position={[0, -(baseSize + 0.4), 0]}

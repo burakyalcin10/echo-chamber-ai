@@ -236,6 +236,7 @@ export default function HomePage() {
   const handleVoice = useCallback(async () => {
     if (!selectedCoverId) return;
     setMode("voice");
+    setVoiceResult(null);
     setVoiceLoading(true);
     try {
       const result = await postVoice({ cover_id: selectedCoverId });
@@ -267,6 +268,17 @@ export default function HomePage() {
 
   const handleModeChange = useCallback(
     (newMode: AppMode) => {
+      if (newMode === "voice") {
+        if (selectedCoverId) {
+          void handleVoice();
+          return;
+        }
+        setMode("voice");
+        setVoiceResult(null);
+        pushToast("info", "Select a cover first, then Era Voice will open its RAG monologue.");
+        return;
+      }
+
       setMode(newMode);
       if (newMode === "compare" && selectedCoverId) {
         setCompareCoverA(selectedCoverId);
@@ -280,7 +292,7 @@ export default function HomePage() {
         setVoiceResult(null);
       }
     },
-    [selectedCoverId],
+    [handleVoice, pushToast, selectedCoverId],
   );
 
   // ─── Page title ─────────────────────────────────────
@@ -295,13 +307,13 @@ export default function HomePage() {
           ? "Choose a second cover…"
           : "Compare Analysis";
       case "voice":
-        return "Era Voice";
+        return selectedCoverId ? "Era Voice" : "Select a cover for Era Voice";
       case "archive":
         return "Archive";
       default:
         return "Echo Chamber AI";
     }
-  }, [mode, compareCoverA, compareCoverB]);
+  }, [mode, compareCoverA, compareCoverB, selectedCoverId]);
 
   // ─── Dimming ───────────────────────────────────────
   const isDimmedFn = useCallback(
@@ -337,16 +349,22 @@ export default function HomePage() {
     };
   }, [matchResult]);
 
+  const overlayOpen = Boolean(
+    (mode === "voice" && (voiceResult || voiceLoading)) ||
+      compareResult ||
+      compareLoading,
+  );
+
   // ─── Render ─────────────────────────────────────────
   return (
-    <div className="flex h-screen overflow-hidden">
+    <div className="flex h-dvh min-h-0 overflow-hidden">
       <SideNav
         activeMode={mode}
         onModeChange={handleModeChange}
         backendOnline={backendOnline}
       />
 
-      <main className="ml-20 flex-grow relative flex flex-col h-screen">
+      <main className="ml-20 min-w-0 flex-grow relative flex flex-col h-dvh min-h-0 overflow-hidden">
         <TopBar
           activePage={pageTitle}
           decadeFilter={decadeFilter}
@@ -359,9 +377,9 @@ export default function HomePage() {
           totalCount={covers.length}
         />
 
-        <div className="flex-grow pt-14 relative flex">
+        <div className="min-h-0 flex-1 pt-14 relative flex">
           {/* Graph area */}
-          <div className="flex-grow relative overflow-hidden">
+          <div className="min-w-0 min-h-0 flex-1 relative overflow-hidden">
             {graphLoading ? (
               <div className="w-full h-full flex items-center justify-center bg-canvas">
                 <div className="flex flex-col items-center gap-4">
@@ -386,6 +404,7 @@ export default function HomePage() {
                 relationshipMode={relationshipMode}
                 onSelectCover={handleSelectCover}
                 isDimmedFn={isDimmedFn}
+                suppressLabels={overlayOpen}
               />
             )}
 
@@ -535,6 +554,17 @@ function GuidanceBanner({
     );
   }
 
+  if (mode === "voice" && !hasSelection) {
+    return (
+      <div className="absolute top-4 left-1/2 -translate-x-1/2 z-30 bg-surface-container-high/90 backdrop-blur ghost-border rounded px-4 py-2 flex items-center gap-3 shadow-xl">
+        <Sparkles size={14} className="text-primary" />
+        <span className="text-data-mono text-sm text-stone-300">
+          Choose a cover node to hear its era voice.
+        </span>
+      </div>
+    );
+  }
+
   if (mode === "explore" && !hasSelection) {
     return (
       <div className="absolute bottom-6 left-6 z-20 bg-surface-container/70 backdrop-blur ghost-border rounded px-3 py-2 text-data-mono text-[11px] text-stone-400 max-w-xs">
@@ -583,17 +613,23 @@ function VoiceOverlay({
   result: VoiceResponse | null;
   loading: boolean;
   onClose: () => void;
-}) {
+  }) {
   return (
-    <div className="absolute inset-0 z-40 flex items-center justify-center bg-black/80 backdrop-blur-sm p-6">
-      <div className="bg-surface-container ghost-border rounded max-w-2xl w-full p-8 relative max-h-[80vh] overflow-y-auto">
-        <button
-          onClick={onClose}
-          aria-label="Close"
-          className="absolute top-4 right-4 text-stone-500 hover:text-on-surface transition-colors"
-        >
-          <X size={18} strokeWidth={1.75} />
-        </button>
+    <div
+      className="fixed inset-0 z-[70] flex items-center justify-center bg-black p-6"
+      onClick={onClose}
+    >
+      <button
+        onClick={onClose}
+        aria-label="Close"
+        className="fixed top-5 right-5 z-[80] text-stone-400 hover:text-on-surface transition-colors"
+      >
+        <X size={24} strokeWidth={1.75} />
+      </button>
+      <div
+        className="bg-surface-container shadow-2xl ghost-border rounded max-w-2xl w-full p-8 relative max-h-[80vh] overflow-y-auto"
+        onClick={(event) => event.stopPropagation()}
+      >
 
         {loading ? (
           <div className="flex flex-col items-center gap-4 py-12">
@@ -620,15 +656,16 @@ function VoiceOverlay({
             {result.rag_sources_used.length > 0 && (
               <div className="mt-6">
                 <h4 className="text-label-caps text-[10px] text-stone-500 mb-2">
-                  RAG SOURCES
+                  ARCHIVE SIGNALS
                 </h4>
                 <div className="flex flex-wrap gap-2">
                   {result.rag_sources_used.map((src, i) => (
                     <span
                       key={i}
                       className="text-[10px] text-stone-300 bg-surface-container-low px-2 py-1 rounded ghost-border"
+                      title={src}
                     >
-                      {src}
+                      {archiveSignalLabel(src)}
                     </span>
                   ))}
                 </div>
@@ -659,17 +696,23 @@ function CompareOverlay({
   coverA?: CoverNode;
   coverB?: CoverNode;
   onClose: () => void;
-}) {
+  }) {
   return (
-    <div className="absolute inset-0 z-40 flex items-center justify-center bg-black/80 backdrop-blur-sm p-6">
-      <div className="bg-surface-container ghost-border rounded max-w-2xl w-full p-8 relative max-h-[80vh] overflow-y-auto">
-        <button
-          onClick={onClose}
-          aria-label="Close"
-          className="absolute top-4 right-4 text-stone-500 hover:text-on-surface transition-colors"
-        >
-          <X size={18} strokeWidth={1.75} />
-        </button>
+    <div
+      className="fixed inset-0 z-[70] flex items-center justify-center bg-black p-6"
+      onClick={onClose}
+    >
+      <button
+        onClick={onClose}
+        aria-label="Close"
+        className="fixed top-5 right-5 z-[80] text-stone-400 hover:text-on-surface transition-colors"
+      >
+        <X size={24} strokeWidth={1.75} />
+      </button>
+      <div
+        className="bg-surface-container shadow-2xl ghost-border rounded max-w-2xl w-full p-8 relative max-h-[80vh] overflow-y-auto"
+        onClick={(event) => event.stopPropagation()}
+      >
 
         <div className="text-label-caps text-primary mb-4 flex items-center gap-2">
           <BarChart3 size={14} strokeWidth={1.75} />
@@ -739,4 +782,15 @@ function SourceBadge({
       {source === "llm" ? `LLM ${kind}` : `Local fallback ${kind}`}
     </span>
   );
+}
+
+function archiveSignalLabel(source: string): string {
+  const labels: Record<string, string> = {
+    "1973_world_events.txt": "1973 world pressure",
+    "counterculture_and_dylan_1970s.txt": "post-60s counterculture",
+    "dylan_nobel_and_songwriting.txt": "Dylan as songwriter",
+    "pat_garrett_film_context.txt": "Pat Garrett film myth",
+    "vietnam_and_returning_soldiers.txt": "Vietnam afterimage",
+  };
+  return labels[source] ?? source.replace(/\.[^.]+$/, "").replace(/_/g, " ");
 }

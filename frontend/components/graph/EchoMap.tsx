@@ -29,6 +29,7 @@ interface EchoMapProps {
   relationshipMode: RelationshipMode;
   onSelectCover: (cover: CoverNodeType) => void;
   isDimmedFn?: (cover: CoverNodeType) => boolean;
+  suppressLabels?: boolean;
 }
 
 export default function EchoMap({
@@ -40,6 +41,7 @@ export default function EchoMap({
   relationshipMode,
   onSelectCover,
   isDimmedFn,
+  suppressLabels = false,
 }: EchoMapProps) {
   // Build edges from cover data with the relationship engine and filter by mode.
   const edges = useMemo(() => {
@@ -161,6 +163,7 @@ export default function EchoMap({
               isSelected={cover.id === selectedCoverId}
               isHighlighted={highlightedIds.has(cover.id)}
               isDimmed={isDimmedFn ? isDimmedFn(cover) : false}
+              suppressLabel={suppressLabels}
               onSelect={onSelectCover}
               onHover={() => {}}
             />

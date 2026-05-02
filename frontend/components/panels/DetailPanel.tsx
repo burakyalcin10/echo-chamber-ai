@@ -27,7 +27,7 @@ export default function DetailPanel({
   onClose,
 }: DetailPanelProps) {
   return (
-    <aside className="w-full md:w-96 flex-shrink-0 bg-surface border-l border-white/10 flex flex-col h-full overflow-y-auto z-20">
+    <aside className="w-full md:w-96 flex-shrink-0 bg-surface border-l border-white/10 flex flex-col h-full min-h-0 overflow-y-auto overscroll-contain z-20">
       {loading ? (
         <DetailSkeleton />
       ) : cover ? (
@@ -56,7 +56,7 @@ function EmptyState() {
         Select a cover to hear how the song changes shape.
       </h2>
       <p className="text-data-mono text-[11px] uppercase tracking-widest text-stone-500">
-        50 versions · One song · One door
+        32 verified versions / One song / One door
       </p>
       <p className="text-sm text-stone-400 leading-relaxed max-w-xs">
         Click any node in the Echo Map to open its archive entry — emotional
@@ -83,7 +83,7 @@ function CoverDetailBody({
     <>
       <HeroHeader cover={cover} onClose={onClose} />
 
-      <div className="p-6 flex flex-col gap-8 flex-grow">
+      <div className="p-6 flex flex-col gap-8 flex-grow min-h-0">
         {cover.meaning_shift && (
           <p className="text-body-lg text-stone-300 leading-relaxed">
             &ldquo;{cover.meaning_shift}&rdquo;
@@ -156,7 +156,7 @@ function HeroHeader({
       hsl(${hueB} 25% ${8 + charge * 6}%) 100%)`;
 
   return (
-    <div className="h-48 relative w-full overflow-hidden border-b border-white/10">
+    <div className="h-48 relative w-full flex-shrink-0 overflow-hidden border-b border-white/10">
       <div className="absolute inset-0" style={{ background: gradient }} />
       <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-surface" />
       <div
