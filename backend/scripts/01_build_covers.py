@@ -20,7 +20,7 @@ def main() -> None:
     parser.add_argument("--output", type=Path, default=None, help="Output path. Defaults to input path.")
     parser.add_argument("--replace", action="store_true", help="Allow additions to replace existing covers with same id.")
     parser.add_argument("--write", action="store_true", help="Write merged output. Default is dry-run only.")
-    parser.add_argument("--target-count", type=int, default=50, help="Target cover count for strong submission.")
+    parser.add_argument("--target-count", type=int, default=32, help="Target verified cover count for submission.")
     parser.add_argument("--min-count", type=int, default=25, help="Minimum cover count for validation.")
     args = parser.parse_args()
 

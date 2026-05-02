@@ -26,7 +26,7 @@ def test_graph_returns_covers_without_embedding_vectors():
     assert response.status_code == 200
     covers = response.json()["covers"]
     assert covers
-    assert len(covers) >= 50
+    assert len(covers) >= 32
     assert "embedding_vector" not in covers[0]
     assert {"id", "artist", "year", "position", "emotion_scores"}.issubset(covers[0])
 
@@ -84,6 +84,8 @@ def test_voice_works_without_llm_key(monkeypatch):
 
 
 def test_compare_uses_llm_when_configured(monkeypatch):
+    requested_providers = []
+
     class FakeLLM:
         def is_configured(self):
             return True
@@ -91,7 +93,11 @@ def test_compare_uses_llm_when_configured(monkeypatch):
         def generate_text(self, prompt, *, temperature):
             return "LLM comparison text"
 
-    monkeypatch.setattr(main_module, "get_llm_client", lambda: FakeLLM())
+    def fake_get_llm_client(provider=None):
+        requested_providers.append(provider)
+        return FakeLLM()
+
+    monkeypatch.setattr(main_module, "get_llm_client", fake_get_llm_client)
 
     response = client.post("/api/compare", json={"cover_id_a": "dylan_1973", "cover_id_b": "gnr_1990"})
 
@@ -99,6 +105,7 @@ def test_compare_uses_llm_when_configured(monkeypatch):
     body = response.json()
     assert body["analysis"] == "LLM comparison text"
     assert body["analysis_source"] == "llm"
+    assert requested_providers == ["openai"]
 
 
 def test_openapi_exposes_response_models():

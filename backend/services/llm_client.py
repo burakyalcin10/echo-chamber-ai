@@ -10,42 +10,42 @@ from config import get_settings
 
 
 class LLMClient:
-    def __init__(self) -> None:
+    def __init__(self, provider: str | None = None) -> None:
         self.settings = get_settings()
+        self.provider = (provider or self.settings.llm_provider).strip().lower()
 
     def is_configured(self) -> bool:
-        if self.settings.llm_provider == "gemini":
+        if self.provider == "gemini":
             return bool(self.settings.gemini_api_key)
-        if self.settings.llm_provider == "openai":
+        if self.provider == "openai":
             return bool(self.settings.openai_api_key)
         return False
 
     def ensure_configured(self) -> None:
         if self.is_configured():
             return
-        provider = self.settings.llm_provider
-        key_name = "GEMINI_API_KEY" if provider == "gemini" else "OPENAI_API_KEY"
+        key_name = "GEMINI_API_KEY" if self.provider == "gemini" else "OPENAI_API_KEY"
         raise HTTPException(
             status_code=503,
-            detail=f"LLM provider '{provider}' is not configured. Set {key_name} in backend/.env.",
+            detail=f"LLM provider '{self.provider}' is not configured. Set {key_name} in backend/.env.",
         )
 
     def generate_text(self, prompt: str, *, temperature: float = 0.7) -> str:
         self.ensure_configured()
-        if self.settings.llm_provider == "gemini":
+        if self.provider == "gemini":
             return self._gemini_text(prompt, temperature=temperature)
-        if self.settings.llm_provider == "openai":
+        if self.provider == "openai":
             return self._openai_text(prompt, temperature=temperature)
-        raise HTTPException(status_code=500, detail=f"Unsupported LLM_PROVIDER: {self.settings.llm_provider}")
+        raise HTTPException(status_code=500, detail=f"Unsupported LLM provider: {self.provider}")
 
     def generate_json(self, prompt: str, schema: dict[str, Any], *, temperature: float = 0.2) -> dict[str, Any]:
         self.ensure_configured()
-        if self.settings.llm_provider == "gemini":
+        if self.provider == "gemini":
             text = self._gemini_text(prompt, temperature=temperature, response_json_schema=schema)
-        elif self.settings.llm_provider == "openai":
+        elif self.provider == "openai":
             text = self._openai_text(prompt, temperature=temperature, json_schema=schema)
         else:
-            raise HTTPException(status_code=500, detail=f"Unsupported LLM_PROVIDER: {self.settings.llm_provider}")
+            raise HTTPException(status_code=500, detail=f"Unsupported LLM provider: {self.provider}")
 
         return _parse_json_response(text)
 
@@ -62,6 +62,9 @@ class LLMClient:
             raise HTTPException(status_code=503, detail="Install the openai package first.") from exc
 
         client = OpenAI(api_key=self.settings.openai_api_key)
+        if not hasattr(client, "responses"):
+            return self._openai_chat_text(client, prompt, temperature=temperature, json_schema=json_schema)
+
         kwargs: dict[str, Any] = {
             "model": self.settings.openai_model,
             "input": prompt,
@@ -79,6 +82,32 @@ class LLMClient:
 
         response = client.responses.create(**kwargs)
         return getattr(response, "output_text", None) or _extract_openai_text(response)
+
+    def _openai_chat_text(
+        self,
+        client: Any,
+        prompt: str,
+        *,
+        temperature: float,
+        json_schema: dict[str, Any] | None = None,
+    ) -> str:
+        kwargs: dict[str, Any] = {
+            "model": self.settings.openai_model,
+            "messages": [{"role": "user", "content": prompt}],
+            "temperature": temperature,
+        }
+        if json_schema:
+            kwargs["response_format"] = {
+                "type": "json_schema",
+                "json_schema": {
+                    "name": "echo_chamber_response",
+                    "schema": json_schema,
+                    "strict": True,
+                },
+            }
+
+        response = client.chat.completions.create(**kwargs)
+        return response.choices[0].message.content or ""
 
     def _gemini_text(
         self,
@@ -99,7 +128,10 @@ class LLMClient:
         }
         if response_json_schema:
             config_kwargs["response_mime_type"] = "application/json"
-            config_kwargs["response_json_schema"] = response_json_schema
+            config_kwargs["response_schema"] = _strip_schema_keywords(
+                response_json_schema,
+                {"additionalProperties"},
+            )
 
         response = client.models.generate_content(
             model=self.settings.gemini_model,
@@ -109,8 +141,8 @@ class LLMClient:
         return response.text or ""
 
 
-def get_llm_client() -> LLMClient:
-    return LLMClient()
+def get_llm_client(provider: str | None = None) -> LLMClient:
+    return LLMClient(provider=provider)
 
 
 def _extract_openai_text(response: Any) -> str:
@@ -121,6 +153,18 @@ def _extract_openai_text(response: Any) -> str:
             if text:
                 chunks.append(text)
     return "\n".join(chunks)
+
+
+def _strip_schema_keywords(schema: Any, keywords: set[str]) -> Any:
+    if isinstance(schema, dict):
+        return {
+            key: _strip_schema_keywords(value, keywords)
+            for key, value in schema.items()
+            if key not in keywords
+        }
+    if isinstance(schema, list):
+        return [_strip_schema_keywords(item, keywords) for item in schema]
+    return schema
 
 
 def _parse_json_response(text: str) -> dict[str, Any]:

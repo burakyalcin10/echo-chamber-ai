@@ -1,6 +1,7 @@
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from collections.abc import Callable
+import logging
 
 from config import get_settings
 from schemas.api import (
@@ -21,6 +22,7 @@ from services.rag_store import retrieve_historical_context
 
 
 settings = get_settings()
+logger = logging.getLogger("echo_chamber")
 
 app = FastAPI(title=settings.app_name)
 app.add_middleware(
@@ -84,6 +86,7 @@ Be specific, poetic, and historically grounded. Language: English.
         prompt,
         fallback=lambda: _fallback_compare_text(cover_a, cover_b),
         temperature=0.75,
+        provider="openai",
     )
 
     return {
@@ -121,6 +124,7 @@ Be poetic but grounded. Do not explain; evoke.
         prompt,
         fallback=lambda: _fallback_voice_text(cover, historical_context),
         temperature=0.8,
+        provider="openai",
     )
     return {
         "monologue": monologue,
@@ -182,17 +186,25 @@ def _shift_direction(cover_a: dict, cover_b: dict) -> str:
     return f"{strongest_a}->{strongest_b}"
 
 
-def _generate_or_fallback(prompt: str, *, fallback: Callable[[], str], temperature: float) -> tuple[str, str]:
-    llm = get_llm_client()
+def _generate_or_fallback(
+    prompt: str,
+    *,
+    fallback: Callable[[], str],
+    temperature: float,
+    provider: str | None = None,
+) -> tuple[str, str]:
+    llm = get_llm_client(provider) if provider else get_llm_client()
     if not llm.is_configured():
         return fallback(), "local_fallback"
     try:
         return llm.generate_text(prompt, temperature=temperature), "llm"
-    except HTTPException:
+    except HTTPException as exc:
+        logger.warning("LLM provider %s returned HTTPException: %s", provider or settings.llm_provider, exc.detail)
         return fallback(), "local_fallback"
-    except Exception:
+    except Exception as exc:
         # Provider quota / network / unexpected SDK errors should not 500 the
         # request — degrade to the local fallback so the app stays usable.
+        logger.warning("LLM provider %s failed: %s: %s", provider or settings.llm_provider, type(exc).__name__, exc)
         return fallback(), "local_fallback"
 
 
