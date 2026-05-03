@@ -18,6 +18,8 @@ backend/.env.local
 
 # Generated data and local indexes
 backend/data/processed/
+!backend/data/processed/
+!backend/data/processed/covers_with_embeddings.json
 *.pkl
 *.sqlite3
 *.db
