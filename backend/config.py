@@ -38,6 +38,10 @@ class Settings:
         raw = os.getenv("FRONTEND_ORIGINS", "http://localhost:5173,http://localhost:3000")
         return [origin.strip() for origin in raw.split(",") if origin.strip()]
 
+    @property
+    def frontend_origin_regex(self) -> str | None:
+        return os.getenv("FRONTEND_ORIGIN_REGEX") or None
+
 
 @lru_cache
 def get_settings() -> Settings:
