@@ -46,9 +46,12 @@ scripts_env/
 HANDOFF_BACKEND_CODEX.md
 HANDOFF_FRONTEND_OPUS.md
 PROJECT_KANBAN_BACKLOG.md
+DEMO.md
 digest.txt
 
 # Claude agent files
 .claude/
+AGENTS.md
+CLAUDE.md
 frontend/AGENTS.md
 frontend/CLAUDE.md
