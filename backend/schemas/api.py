@@ -22,8 +22,16 @@ class HealthResponse(BaseModel):
     environment: str
     llm_provider: str
     llm_configured: bool
+    gemini_configured: bool
+    openai_configured: bool
     raw_covers_exists: bool
     processed_covers_exists: bool
+    rag_index_exists: bool
+    umap_reducer_exists: bool
+    umap_bounds_exists: bool
+    semantic_match_available: bool
+    rag_retrieval_available: bool
+    umap_projection_available: bool
     raw_cover_count: int
     processed_cover_count: int
     processed_data_stale: bool

@@ -1,6 +1,7 @@
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from collections.abc import Callable
+import importlib.util
 import logging
 
 from config import get_settings
@@ -38,14 +39,29 @@ app.add_middleware(
 @app.get("/health", response_model=HealthResponse)
 async def health() -> dict:
     counts = cover_counts()
+    has_sentence_transformers = _module_available("sentence_transformers")
+    has_umap = _module_available("umap")
     return {
         "status": "ok",
         "app": settings.app_name,
         "environment": settings.app_env,
         "llm_provider": settings.llm_provider,
         "llm_configured": get_llm_client().is_configured(),
+        "gemini_configured": bool(settings.gemini_api_key),
+        "openai_configured": bool(settings.openai_api_key),
         "raw_covers_exists": settings.raw_covers_path.exists(),
         "processed_covers_exists": settings.processed_covers_path.exists(),
+        "rag_index_exists": settings.rag_index_path.exists(),
+        "umap_reducer_exists": settings.umap_reducer_path.exists(),
+        "umap_bounds_exists": settings.umap_bounds_path.exists(),
+        "semantic_match_available": has_sentence_transformers,
+        "rag_retrieval_available": settings.rag_index_path.exists() and has_sentence_transformers,
+        "umap_projection_available": (
+            settings.umap_reducer_path.exists()
+            and settings.umap_bounds_path.exists()
+            and has_sentence_transformers
+            and has_umap
+        ),
         **counts,
     }
 
@@ -201,17 +217,17 @@ def _generate_or_fallback(
     temperature: float,
     provider: str | None = None,
 ) -> tuple[str, str]:
-    llm = get_llm_client(provider) if provider else get_llm_client()
-    if not llm.is_configured():
-        return fallback(), "local_fallback"
-    try:
-        return llm.generate_text(prompt, temperature=temperature), "llm"
-    except HTTPException as exc:
-        logger.warning("LLM provider %s returned HTTPException: %s", provider or settings.llm_provider, exc.detail)
-        return fallback(), "local_fallback"
-    except Exception as exc:
-        logger.warning("LLM provider %s failed: %s: %s", provider or settings.llm_provider, type(exc).__name__, exc)
-        return fallback(), "local_fallback"
+    for candidate in _generation_provider_candidates(provider):
+        llm = get_llm_client(candidate)
+        if not llm.is_configured():
+            continue
+        try:
+            return llm.generate_text(prompt, temperature=temperature), "llm"
+        except HTTPException as exc:
+            logger.warning("LLM provider %s returned HTTPException: %s", candidate, exc.detail)
+        except Exception as exc:
+            logger.warning("LLM provider %s failed: %s: %s", candidate, type(exc).__name__, exc)
+    return fallback(), "local_fallback"
 
 def _preferred_generation_provider(preferred: str) -> str | None:
     if preferred == "openai" and settings.openai_api_key:
@@ -223,6 +239,19 @@ def _preferred_generation_provider(preferred: str) -> str | None:
     if settings.llm_provider in {"openai", "gemini"}:
         return preferred
     return None
+
+
+def _generation_provider_candidates(provider: str | None = None) -> list[str]:
+    primary = (provider or settings.llm_provider).strip().lower()
+    candidates = [primary]
+    for fallback_provider in ("gemini", "openai"):
+        if fallback_provider not in candidates:
+            candidates.append(fallback_provider)
+    return candidates
+
+
+def _module_available(module_name: str) -> bool:
+    return importlib.util.find_spec(module_name) is not None
 
 
 def _fallback_compare_text(cover_a: dict, cover_b: dict) -> str:

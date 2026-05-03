@@ -20,6 +20,17 @@ OPENAI_API_KEY=...
 `OPENAI_API_KEY` is optional. If only Gemini is configured, the API uses Gemini
 and local fallback text where needed.
 
+Confirm the backend is reading the keys by opening:
+
+```text
+https://YOUR_RENDER_BACKEND_URL/health
+```
+
+For generated AI commentary, `llm_configured` and `gemini_configured` should be
+`true`. On the free Render profile, `semantic_match_available`,
+`rag_retrieval_available`, and `umap_projection_available` can remain `false`
+because the heavyweight local ML stack is intentionally not installed.
+
 The backend URL will look like:
 
 ```text

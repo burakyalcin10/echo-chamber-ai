@@ -17,7 +17,7 @@ class Settings:
 
     llm_provider: str = os.getenv("LLM_PROVIDER", "gemini").strip().lower()
 
-    gemini_api_key: str | None = os.getenv("GEMINI_API_KEY") or None
+    gemini_api_key: str | None = os.getenv("GEMINI_API_KEY") or os.getenv("GOOGLE_API_KEY") or None
     gemini_model: str = os.getenv("GEMINI_MODEL", "gemini-2.5-flash")
 
     openai_api_key: str | None = os.getenv("OPENAI_API_KEY") or None
