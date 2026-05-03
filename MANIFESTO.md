@@ -24,11 +24,11 @@ When I began thinking about how to respond to the assignment, I had the instinct
 
 The covers were the data. And the question was what to do with that data that no human ear could do alone.
 
-A single listener can compare two or three covers in one sitting. They can feel which version makes them sad, which one makes them want to fight, which one sounds like surrender. But nobody can hold fifty covers in their head simultaneously and map the emotional terrain between them. Nobody can look at the whole galaxy at once.
+A single listener can compare two or three covers in one sitting. They can feel which version makes them sad, which one makes them want to fight, which one sounds like surrender. But nobody can hold 32 verified covers in their head simultaneously and map the emotional terrain between them. Nobody can look at the whole galaxy at once.
 
-That is what a machine can do. And that is what this medium is: not a visualization of a song, but a visualization of what fifty people did when they stood at the same door.
+That is what a machine can do. And that is what this medium is: not a visualization of a song, but a visualization of what 32 curated voices did when they stood at the same door.
 
-I chose an interactive 3D galaxy because the metaphor felt honest. Stars are individual lights. They burn for their own reasons, in their own time, at their own temperature. But from a distance, they form shapes — constellations we use to navigate. The fifty covers of this song are like that. Each one burns for its own reasons. But together they form a shape, and that shape tells us something about what human beings do when they are losing something.
+I chose an interactive 3D galaxy because the metaphor felt honest. Stars are individual lights. They burn for their own reasons, in their own time, at their own temperature. But from a distance, they form shapes — constellations we use to navigate. The 32 verified covers in this archive are like that. Each one burns for its own reasons. But together they form a shape, and that shape tells us something about what human beings do when they are losing something.
 
 The web medium meant anyone could walk into this space without downloading anything, without credentials, without expertise in music theory or history. You click on a node. You read the emotional profile. You find the cover that rhymes with your own grief. That accessibility mattered to me. The song was never meant only for people who knew what a sheriff's badge was. It was for anyone who had ever had to hand something over and walk away.
 
@@ -56,13 +56,13 @@ I have spent enough time with artificial intelligence to know that it is fashion
 
 But it was not merely a tool, either.
 
-The LLM scoring process — using Gemini to analyze each cover against six emotional dimensions: surrender, defiance, grief, hope, exhaustion, transcendence — did something I could not have done alone. I could have listened to fifty covers and formed impressions. But impressions are inconsistent. My mood on a Tuesday afternoon would have colored how I heard Eric Clapton differently from how I heard him on a Friday morning. The model is consistent in a way I am not. It hears the same way every time.
+The LLM scoring process — using Gemini to analyze the verified covers against six emotional dimensions: surrender, defiance, grief, hope, exhaustion, transcendence — did something I could not have done alone. I could have listened to 32 verified covers and formed impressions. But impressions are inconsistent. My mood on a Tuesday afternoon would have colored how I heard Eric Clapton differently from how I heard him on a Friday morning. The model is consistent in a way I am not. It hears the same way every time.
 
 That consistency is a kind of precision instrument. Like a spectroscope that reveals which elements are burning inside a star. I cannot see those elements with my eyes. The model can.
 
 But the model did not decide what the six dimensions were. I did. It did not choose to look for surrender and transcendence rather than, say, tempo and vocal range. I chose that because I had spent weeks thinking about what the song is about. The model was precise about the questions I told it to ask.
 
-The embedding space was something different. When the sentence model placed fifty covers in a high-dimensional vector space and UMAP collapsed that space into three dimensions, the resulting galaxy was not something I designed. I did not decide that Guns N' Roses would cluster near one pole while the sparse folk covers clustered near another. The model found that structure. I only built the room to display it.
+The embedding space was something different. When the sentence model placed the verified covers in a high-dimensional vector space and UMAP collapsed that space into three dimensions, the resulting galaxy was not something I designed. I did not decide that Guns N' Roses would cluster near one pole while the sparse folk covers clustered near another. The model found that structure. I only built the room to display it.
 
 In that sense, AI was a kind of mirror. It reflected back a structure that was latent in the music all along, a structure I could feel but could not see. The embedding space did not create meaning. It revealed it.
 
@@ -90,7 +90,7 @@ I am Turkish, which adds a particular texture to all of this. I grew up between 
 
 My door, right now, is the threshold between the student I have been and whoever comes after. I do not know what that person will need to know. I know that he will have to be comfortable asking the right questions and trusting machines to answer them precisely. I know that he will have to hold the reasons behind the questions himself, because machines cannot hold those yet.
 
-I do not know what is behind the door. But I know that building this galaxy — spending months with fifty strangers' grief, mapping the emotional terrain of fifty people who stood at the same threshold and each found a different word for it — has changed what the song means to me.
+I do not know what is behind the door. But I know that building this galaxy — spending months with 32 strangers' grief, mapping the emotional terrain of 32 voices who stood at the same threshold and each found a different word for it — has changed what the song means to me.
 
 That is what the best projects do. The assignment said so, and it was right.
 
@@ -101,7 +101,7 @@ That is what the best projects do. The assignment said so, and it was right.
 In accordance with the project's academic integrity requirements, the following AI tools and techniques were used:
 
 **AI Techniques:**
-- **LLM Emotion Scoring** — Google Gemini (`gemini-2.5-flash`) with structured JSON output, prompting for six emotional dimensions per cover. Falls back to pre-scored data when API quota is exceeded.
+- **LLM Emotion Scoring and Generation** — Google Gemini by default, with optional OpenAI support, prompting for six emotional dimensions per cover and generating Compare / Era Voice / Match bridge text. Falls back to local text when a provider is unavailable or quota is exceeded.
 - **Sentence Embeddings** — `all-MiniLM-L6-v2` (HuggingFace / SentenceTransformers) to embed cover metadata and user text for semantic similarity search.
 - **UMAP Dimensionality Reduction** — `umap-learn` to reduce high-dimensional embeddings to 3D galaxy coordinates, computed offline.
 - **RAG Pipeline** — LlamaIndex with ChromaDB for retrieval-augmented generation, using five historical documents about 1973, Vietnam, the counterculture, and Dylan's worldview.

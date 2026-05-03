@@ -98,17 +98,22 @@ pip install -r requirements.txt
 copy .env.example .env
 ```
 
-Set Gemini for the default generation/scoring provider and OpenAI for Era Voice in `backend/.env`:
+Set Gemini as the default generation/scoring provider in `backend/.env`:
 
 ```env
 LLM_PROVIDER=gemini
 GEMINI_API_KEY=your_key_here
 GEMINI_MODEL=gemini-2.5-flash
+```
+
+Optionally, add OpenAI as a secondary provider. Compare and Era Voice prefer OpenAI when an OpenAI key is present, but automatically use Gemini when only Gemini is configured:
+
+```env
 OPENAI_API_KEY=your_openai_key_here
 OPENAI_MODEL=gpt-4.1-mini
 ```
 
-Alternatively, set OpenAI as the default provider for all LLM-backed endpoints:
+Alternatively, set OpenAI as the default provider:
 
 ```env
 LLM_PROVIDER=openai
@@ -263,7 +268,7 @@ Endpoints:
 - `POST /api/voice`
 - `POST /api/match`
 
-LLM-backed endpoints use `LLM_PROVIDER` by default. `/api/voice` is the exception: it uses OpenAI/GPT so the RAG monologue is not blocked by Gemini quota.
+LLM-backed endpoints use the configured provider and degrade safely. Compare and Era Voice prefer OpenAI if an OpenAI key exists; otherwise they use Gemini when a Gemini key exists; if no configured provider is available, they return local fallback text.
 
 The frontend-facing contract is documented in:
 

@@ -4,7 +4,7 @@ This file provides guidance to Codex (Codex.ai/code) when working with code in t
 
 ## Project Overview
 
-**Echo Chamber AI** — an interactive artwork that visualizes 50 covers of Bob Dylan's "Knockin' on Heaven's Door" as a 3D emotional galaxy. Python FastAPI backend + Next.js/React Three.js frontend.
+**Echo Chamber AI** — an interactive artwork that visualizes 32 verified covers of Bob Dylan's "Knockin' on Heaven's Door" as a 3D emotional galaxy. Python FastAPI backend + Next.js/React Three.js frontend.
 
 ## Development Commands
 
@@ -73,7 +73,7 @@ All processed data lives in `backend/data/processed/` and is not committed to gi
 | Endpoint | Description |
 |----------|-------------|
 | `GET /health` | Status, provider config, data readiness |
-| `GET /api/graph` | All 50 covers with 3D positions and emotion scores |
+| `GET /api/graph` | All verified covers with 3D positions and emotion scores |
 | `GET /api/cover/{cover_id}` | Full cover detail with emotional analysis |
 | `POST /api/compare` | LLM comparative analysis between two covers |
 | `POST /api/voice` | RAG-backed era monologue for a cover |
@@ -159,7 +159,7 @@ SentenceTransformer embeddings → UMAP 3D → covers_with_embeddings.json
 historical_docs/  →  scripts/04_build_rag.py  →  rag_index.json
     ↓
 FastAPI (port 8000)
-    ├── GET /api/graph          → 50 cover nodes + positions
+    ├── GET /api/graph          → verified cover nodes + positions
     ├── POST /api/match         → embedding similarity search
     ├── POST /api/compare       → LLM comparative analysis
     └── POST /api/voice         → RAG-augmented era monologue
