@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Loader2, Radar, SendHorizontal, X, AlertCircle } from "lucide-react";
+import { Loader2, Radar, SendHorizontal, X, AlertCircle, Info } from "lucide-react";
 
 interface MatchDockProps {
   onSubmit: (text: string) => void;
@@ -118,7 +118,7 @@ export default function MatchDock({
 
         {/* Match result */}
         {matchResult && (
-          <div className="mt-4 max-h-36 overflow-y-auto bg-surface-container-high/90 backdrop-blur ghost-border rounded-lg p-4 shadow-2xl">
+          <div className="mt-4 max-h-52 overflow-y-auto bg-surface-container-high/90 backdrop-blur ghost-border rounded-lg p-4 shadow-2xl">
             <div className="flex items-center justify-between mb-3 gap-3">
               <span className="text-label-caps text-[10px] text-tertiary flex items-center gap-1.5 min-w-0">
                 <Radar size={12} strokeWidth={1.75} className="flex-shrink-0" />
@@ -143,6 +143,17 @@ export default function MatchDock({
             <p className="text-sm text-stone-300 italic border-l-2 border-tertiary pl-3 py-1 leading-relaxed">
               {matchResult.bridgeText}
             </p>
+            <div className="mt-3 rounded border border-white/10 bg-black/20 p-3">
+              <div className="mb-1.5 flex items-center gap-1.5 text-label-caps text-[10px] text-primary">
+                <Info size={12} strokeWidth={1.75} />
+                Why this match?
+              </div>
+              <p className="text-[12px] leading-relaxed text-stone-400">
+                {matchResult.matchMethod === "embedding"
+                  ? `Your farewell was encoded with the same sentence-embedding model as the covers, then compared by cosine similarity. The LLM only writes the bridge text; it does not choose the match.`
+                  : `The semantic index was unavailable, so the app used a keyword fallback over artist, genre, mood, and historical notes.`}
+              </p>
+            </div>
             <div className="flex items-center gap-2 mt-3 flex-wrap">
               <Badge>
                 {matchResult.matchMethod === "embedding"

@@ -15,6 +15,7 @@ import { type AppMode } from "@/lib/types";
 interface SideNavProps {
   activeMode: AppMode;
   onModeChange: (mode: AppMode) => void;
+  onSettings: () => void;
   backendOnline: boolean;
 }
 
@@ -29,6 +30,7 @@ const NAV_ITEMS: { mode: AppMode; Icon: LucideIcon; label: string }[] = [
 export default function SideNav({
   activeMode,
   onModeChange,
+  onSettings,
   backendOnline,
 }: SideNavProps) {
   return (
@@ -80,6 +82,7 @@ export default function SideNav({
       <div className="flex flex-col items-center gap-6 mb-4 w-full">
         <button
           aria-label="Settings"
+          onClick={onSettings}
           className="flex flex-col items-center text-stone-500 hover:text-stone-200 transition-colors duration-300"
         >
           <Settings size={18} strokeWidth={1.5} />

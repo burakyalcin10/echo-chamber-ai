@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, useCallback, useMemo } from "react";
+import { useEffect, useState, useCallback, useMemo, type ReactNode } from "react";
 import dynamic from "next/dynamic";
 import {
   X,
@@ -12,6 +12,11 @@ import {
   Loader2,
   Archive,
   Music2,
+  Settings,
+  Database,
+  BrainCircuit,
+  FileText,
+  CheckCircle2,
 } from "lucide-react";
 import type {
   CoverNode,
@@ -19,6 +24,7 @@ import type {
   MatchResponse,
   CompareResponse,
   VoiceResponse,
+  HealthResponse,
   AppMode,
 } from "@/lib/types";
 import {
@@ -86,6 +92,9 @@ export default function HomePage() {
   const [voiceResult, setVoiceResult] = useState<VoiceResponse | null>(null);
   const [voiceLoading, setVoiceLoading] = useState(false);
 
+  // System trace
+  const [systemTraceOpen, setSystemTraceOpen] = useState(false);
+
   // Toasts
   const [toasts, setToasts] = useState<Toast[]>([]);
   const pushToast = useCallback((kind: Toast["kind"], text: string) => {
@@ -97,6 +106,7 @@ export default function HomePage() {
   }, []);
 
   // Backend status
+  const [health, setHealth] = useState<HealthResponse | null>(null);
   const [backendOnline, setBackendOnline] = useState(true);
   const [graphLoading, setGraphLoading] = useState(true);
   const [graphError, setGraphError] = useState<string | null>(null);
@@ -105,9 +115,11 @@ export default function HomePage() {
   useEffect(() => {
     async function init() {
       try {
-        await getHealth();
+        const healthData = await getHealth();
+        setHealth(healthData);
         setBackendOnline(true);
       } catch {
+        setHealth(null);
         setBackendOnline(false);
       }
 
@@ -355,6 +367,7 @@ export default function HomePage() {
     (mode === "voice" && (voiceResult || voiceLoading)) ||
       compareResult ||
       compareLoading ||
+      systemTraceOpen ||
       mode === "archive",
   );
 
@@ -364,6 +377,7 @@ export default function HomePage() {
       <SideNav
         activeMode={mode}
         onModeChange={handleModeChange}
+        onSettings={() => setSystemTraceOpen(true)}
         backendOnline={backendOnline}
       />
 
@@ -471,6 +485,17 @@ export default function HomePage() {
               setCompareCoverA(null);
               setCompareCoverB(null);
             }}
+          />
+        )}
+
+        {systemTraceOpen && (
+          <SystemTraceOverlay
+            health={health}
+            covers={covers}
+            lastMatch={matchResult}
+            lastVoice={voiceResult}
+            backendOnline={backendOnline}
+            onClose={() => setSystemTraceOpen(false)}
           />
         )}
 
@@ -692,6 +717,8 @@ function VoiceOverlay({
   loading: boolean;
   onClose: () => void;
   }) {
+  const [expandedSource, setExpandedSource] = useState<string | null>(null);
+
   return (
     <div
       className="fixed inset-0 z-[70] flex items-center justify-center bg-black p-6"
@@ -738,15 +765,30 @@ function VoiceOverlay({
                 </h4>
                 <div className="flex flex-wrap gap-2">
                   {result.rag_sources_used.map((src, i) => (
-                    <span
+                    <button
                       key={i}
-                      className="text-[10px] text-stone-300 bg-surface-container-low px-2 py-1 rounded ghost-border"
+                      onClick={() =>
+                        setExpandedSource((current) =>
+                          current === src ? null : src,
+                        )
+                      }
+                      className="text-[10px] text-stone-300 bg-surface-container-low px-2 py-1 rounded ghost-border hover:border-primary/50 hover:text-primary transition-colors"
                       title={src}
                     >
                       {archiveSignalLabel(src)}
-                    </span>
+                    </button>
                   ))}
                 </div>
+                {expandedSource && (
+                  <div className="mt-3 rounded border border-primary/20 bg-black/20 p-3">
+                    <div className="text-label-caps text-[9px] text-primary mb-1">
+                      {archiveSignalLabel(expandedSource)}
+                    </div>
+                    <p className="text-[12px] leading-relaxed text-stone-400">
+                      {archiveSignalSummary(expandedSource)}
+                    </p>
+                  </div>
+                )}
               </div>
             )}
 
@@ -761,6 +803,133 @@ function VoiceOverlay({
 }
 
 /* ─── Compare overlay ─────────────────────────────── */
+
+function SystemTraceOverlay({
+  health,
+  covers,
+  lastMatch,
+  lastVoice,
+  backendOnline,
+  onClose,
+}: {
+  health: HealthResponse | null;
+  covers: CoverNode[];
+  lastMatch: MatchResponse | null;
+  lastVoice: VoiceResponse | null;
+  backendOnline: boolean;
+  onClose: () => void;
+}) {
+  const videoCount = covers.filter((cover) => cover.youtube_video_id).length;
+  const officialVideoCount = covers.filter((cover) =>
+    cover.music_source_kind?.includes("official"),
+  ).length;
+
+  return (
+    <div
+      className="fixed inset-0 z-[70] flex items-center justify-center bg-black p-6"
+      onClick={onClose}
+    >
+      <button
+        onClick={onClose}
+        aria-label="Close system trace"
+        className="fixed top-5 right-5 z-[80] text-stone-400 hover:text-on-surface transition-colors"
+      >
+        <X size={24} strokeWidth={1.75} />
+      </button>
+      <div
+        className="bg-surface-container shadow-2xl ghost-border rounded max-w-3xl w-full p-7 relative max-h-[82vh] overflow-y-auto"
+        onClick={(event) => event.stopPropagation()}
+      >
+        <div className="text-label-caps text-primary mb-2 flex items-center gap-2">
+          <Settings size={14} strokeWidth={1.75} />
+          SYSTEM TRACE
+        </div>
+        <h3 className="text-h2 text-on-surface mb-2">Echo Chamber Engine</h3>
+        <p className="text-sm text-stone-400 leading-relaxed mb-6 max-w-2xl">
+          This panel exposes the machinery behind the artwork: generation,
+          retrieval, semantic matching, and the archive layer feeding the map.
+        </p>
+
+        <div className="grid gap-3 md:grid-cols-2">
+          <TraceRow
+            icon={<CheckCircle2 size={15} strokeWidth={1.75} />}
+            label="Backend"
+            value={backendOnline ? "Connected" : "Offline"}
+            ok={backendOnline}
+          />
+          <TraceRow
+            icon={<BrainCircuit size={15} strokeWidth={1.75} />}
+            label="LLM generation"
+            value={
+              health?.llm_configured
+                ? `${health.llm_provider.toUpperCase()} configured`
+                : "Local fallback"
+            }
+            ok={Boolean(health?.llm_configured)}
+          />
+          <TraceRow
+            icon={<Database size={15} strokeWidth={1.75} />}
+            label="Embedding + UMAP"
+            value={
+              health?.processed_covers_exists
+                ? `${health.processed_cover_count} semantic nodes`
+                : "Raw cover positions"
+            }
+            ok={Boolean(health?.processed_covers_exists)}
+          />
+          <TraceRow
+            icon={<FileText size={15} strokeWidth={1.75} />}
+            label="RAG archive"
+            value={
+              lastVoice?.rag_sources_used.length
+                ? `${lastVoice.rag_sources_used.length} sources used last`
+                : "Ready for Era Voice"
+            }
+            ok={Boolean(health?.processed_covers_exists)}
+          />
+          <TraceRow
+            icon={<Music2 size={15} strokeWidth={1.75} />}
+            label="Playback archive"
+            value={`${videoCount}/${covers.length} videos, ${officialVideoCount} official`}
+            ok={videoCount > 0}
+          />
+          <TraceRow
+            icon={<ArrowLeftRight size={15} strokeWidth={1.75} />}
+            label="Last match"
+            value={
+              lastMatch
+                ? `${lastMatch.match_method.replace("_", " ")} · ${Math.round(
+                    lastMatch.similarity_score * 100,
+                  )}%`
+                : "No user signal yet"
+            }
+            ok={Boolean(lastMatch)}
+          />
+        </div>
+
+        <div className="mt-6 border-t border-white/10 pt-5">
+          <h4 className="text-label-caps text-[10px] text-stone-500 mb-3">
+            AI TECHNIQUES IN USE
+          </h4>
+          <div className="grid gap-3 md:grid-cols-3">
+            <TechniqueNote
+              title="LLM"
+              text="Gemini/OpenAI writes compare analysis, bridge text, and Era Voice monologues."
+            />
+            <TechniqueNote
+              title="Embeddings"
+              text="SentenceTransformer turns covers and user text into vectors for semantic matching."
+            />
+            <TechniqueNote
+              title="RAG"
+              text="Historical archive chunks are retrieved before the AI speaks as an era."
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
 
 function CompareOverlay({
   result,
@@ -862,6 +1031,41 @@ function SourceBadge({
   );
 }
 
+function TraceRow({
+  icon,
+  label,
+  value,
+  ok,
+}: {
+  icon: ReactNode;
+  label: string;
+  value: string;
+  ok: boolean;
+}) {
+  return (
+    <div className="flex items-center gap-3 rounded border border-white/10 bg-black/20 p-3">
+      <div className={ok ? "text-primary" : "text-stone-500"}>{icon}</div>
+      <div className="min-w-0">
+        <div className="text-label-caps text-[9px] text-stone-500">
+          {label}
+        </div>
+        <div className="truncate text-sm text-stone-300">{value}</div>
+      </div>
+    </div>
+  );
+}
+
+function TechniqueNote({ title, text }: { title: string; text: string }) {
+  return (
+    <div className="rounded border border-white/10 bg-black/20 p-3">
+      <div className="text-label-caps text-[10px] text-primary mb-1">
+        {title}
+      </div>
+      <p className="text-[12px] leading-relaxed text-stone-400">{text}</p>
+    </div>
+  );
+}
+
 function archiveSignalLabel(source: string): string {
   const labels: Record<string, string> = {
     "1973_world_events.txt": "1973 world pressure",
@@ -871,4 +1075,20 @@ function archiveSignalLabel(source: string): string {
     "vietnam_and_returning_soldiers.txt": "Vietnam afterimage",
   };
   return labels[source] ?? source.replace(/\.[^.]+$/, "").replace(/_/g, " ");
+}
+
+function archiveSignalSummary(source: string): string {
+  const summaries: Record<string, string> = {
+    "1973_world_events.txt":
+      "Places the song inside the Vietnam withdrawal, Watergate pressure, economic anxiety, and the exhausted public mood of 1973.",
+    "counterculture_and_dylan_1970s.txt":
+      "Frames Dylan after the sixties: not as a simple protest voice, but as a mythic witness to counterculture fatigue and reinvention.",
+    "dylan_nobel_and_songwriting.txt":
+      "Treats covers as living inheritance: the same lyric changes when a different body, era, genre, and audience carry it.",
+    "pat_garrett_film_context.txt":
+      "Returns the song to its Western origin, where badge, gun, mother, and door belong to a dying sheriff's threshold.",
+    "vietnam_and_returning_soldiers.txt":
+      "Adds the afterimage of war: soldiers returning, moral injury, public grief, and the desire to put the guns down.",
+  };
+  return summaries[source] ?? "A retrieved archive fragment used to ground the AI monologue in historical texture.";
 }
