@@ -421,8 +421,6 @@ export default function HomePage() {
       />
 
       <main className="ml-20 min-w-0 flex-grow relative flex flex-col h-dvh min-h-0 overflow-hidden">
-        <BackgroundSoundtrack disabled={musicPlayerOpen} />
-
         {!exhibitionOpen && (
           <TopBar
             activePage={pageTitle}
@@ -432,6 +430,12 @@ export default function HomePage() {
             onSearchChange={setSearch}
             relationshipMode={relationshipMode}
             onRelationshipModeChange={setRelationshipMode}
+            soundtrackControl={
+              <BackgroundSoundtrack
+                disabled={musicPlayerOpen}
+                className="hidden sm:block"
+              />
+            }
             onExhibition={() => {
               setMode("explore");
               setSystemTraceOpen(false);
@@ -517,6 +521,12 @@ export default function HomePage() {
                 cover={exhibitionCover}
                 index={exhibitionIndex}
                 total={exhibitionSequence.length}
+                soundtrackControl={
+                  <BackgroundSoundtrack
+                    disabled={musicPlayerOpen}
+                    className="pointer-events-auto absolute right-16 top-5 hidden sm:block"
+                  />
+                }
                 onClose={() => setExhibitionOpen(false)}
               />
             )}
@@ -1011,11 +1021,13 @@ function ExhibitionHud({
   cover,
   index,
   total,
+  soundtrackControl,
   onClose,
 }: {
   cover: CoverNode;
   index: number;
   total: number;
+  soundtrackControl?: ReactNode;
   onClose: () => void;
 }) {
   const strongestEmotion = dominantEmotion(cover);
@@ -1023,6 +1035,7 @@ function ExhibitionHud({
     <div className="pointer-events-none absolute inset-0 z-30 overflow-hidden">
       <div className="exhibition-scan absolute inset-0" />
       <div className="absolute inset-x-0 bottom-0 h-48 bg-gradient-to-t from-black/85 via-black/35 to-transparent" />
+      {soundtrackControl}
       <button
         onClick={onClose}
         aria-label="Close exhibition mode"

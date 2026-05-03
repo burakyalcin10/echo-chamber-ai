@@ -8,6 +8,7 @@ import {
   type EdgeKind,
 } from "@/lib/relationships";
 import BrandMark from "./BrandMark";
+import type { ReactNode } from "react";
 
 interface TopBarProps {
   activePage: string;
@@ -18,6 +19,7 @@ interface TopBarProps {
   relationshipMode: RelationshipMode;
   onRelationshipModeChange: (mode: RelationshipMode) => void;
   onExhibition: () => void;
+  soundtrackControl?: ReactNode;
   visibleCount: number;
   totalCount: number;
 }
@@ -38,6 +40,7 @@ export default function TopBar({
   relationshipMode,
   onRelationshipModeChange,
   onExhibition,
+  soundtrackControl,
   visibleCount,
   totalCount,
 }: TopBarProps) {
@@ -78,6 +81,8 @@ export default function TopBar({
             </button>
           )}
         </div>
+
+        {soundtrackControl}
       </div>
 
       {/* Right: decades + relationship mode + filter count */}

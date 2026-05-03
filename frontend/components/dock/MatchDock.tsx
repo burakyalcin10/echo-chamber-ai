@@ -102,7 +102,7 @@ export default function MatchDock({
             />
             <div className="mt-3 flex items-center justify-between gap-3 border-t border-white/10 pt-3">
               <span className="text-data-mono text-[10px] uppercase tracking-widest text-stone-500">
-                Ctrl Enter
+                Ctrl + Enter
               </span>
               <button
                 onClick={handleSubmit}

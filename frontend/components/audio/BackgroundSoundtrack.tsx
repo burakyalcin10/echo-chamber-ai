@@ -8,12 +8,27 @@ const SOUNDTRACK_VOLUME = 0.28;
 
 type PlaybackState = "missing" | "paused" | "playing" | "blocked";
 
+let soundtrackAudio: HTMLAudioElement | null = null;
+
+function getSoundtrackAudio() {
+  if (typeof Audio === "undefined") return null;
+  if (!soundtrackAudio) {
+    soundtrackAudio = new Audio(SOUNDTRACK_SRC);
+    soundtrackAudio.preload = "auto";
+    soundtrackAudio.loop = true;
+    soundtrackAudio.volume = SOUNDTRACK_VOLUME;
+  }
+  return soundtrackAudio;
+}
+
 interface BackgroundSoundtrackProps {
   disabled?: boolean;
+  className?: string;
 }
 
 export default function BackgroundSoundtrack({
   disabled = false,
+  className = "",
 }: BackgroundSoundtrackProps) {
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const [available, setAvailable] = useState(false);
@@ -21,7 +36,8 @@ export default function BackgroundSoundtrack({
     useState<PlaybackState>("missing");
 
   const attemptPlay = useCallback(() => {
-    const audio = audioRef.current;
+    const audio = audioRef.current ?? getSoundtrackAudio();
+    audioRef.current = audio;
     if (!audio || disabled) return;
 
     void audio.play().catch(() => {
@@ -56,6 +72,42 @@ export default function BackgroundSoundtrack({
   }, [available]);
 
   useEffect(() => {
+    if (!available) return;
+    const audio = getSoundtrackAudio();
+    audioRef.current = audio;
+    if (!audio) return;
+
+    const handleCanPlay = () => {
+      setPlaybackState((state) => (state === "missing" ? "paused" : state));
+    };
+    const handlePlaying = () => setPlaybackState("playing");
+    const handlePause = () => setPlaybackState("paused");
+    const handleError = () => setAvailable(false);
+
+    audio.addEventListener("canplay", handleCanPlay);
+    audio.addEventListener("playing", handlePlaying);
+    audio.addEventListener("pause", handlePause);
+    audio.addEventListener("error", handleError);
+
+    const syncTimer = window.setTimeout(() => {
+      if (audio.readyState >= HTMLMediaElement.HAVE_FUTURE_DATA) {
+        handleCanPlay();
+      }
+      if (!audio.paused) {
+        setPlaybackState("playing");
+      }
+    }, 0);
+
+    return () => {
+      window.clearTimeout(syncTimer);
+      audio.removeEventListener("canplay", handleCanPlay);
+      audio.removeEventListener("playing", handlePlaying);
+      audio.removeEventListener("pause", handlePause);
+      audio.removeEventListener("error", handleError);
+    };
+  }, [available]);
+
+  useEffect(() => {
     const audio = audioRef.current;
     if (!audio || disabled) return;
 
@@ -80,7 +132,8 @@ export default function BackgroundSoundtrack({
   }, [disabled]);
 
   const togglePlayback = () => {
-    const audio = audioRef.current;
+    const audio = audioRef.current ?? getSoundtrackAudio();
+    audioRef.current = audio;
     if (!audio) return;
 
     if (audio.paused) {
@@ -96,27 +149,16 @@ export default function BackgroundSoundtrack({
   const isBlocked = playbackState === "blocked";
 
   return (
-    <div className="fixed left-24 top-20 z-[55]">
-      <audio
-        ref={audioRef}
-        src={SOUNDTRACK_SRC}
-        preload="auto"
-        onCanPlay={() => {
-          if (playbackState === "missing") setPlaybackState("paused");
-        }}
-        onPlaying={() => setPlaybackState("playing")}
-        onPause={() => setPlaybackState("paused")}
-        onError={() => setAvailable(false)}
-      />
+    <div className={className}>
       <button
         type="button"
         onClick={togglePlayback}
         aria-label={isPlaying ? "Pause soundtrack" : "Play soundtrack"}
         title={isPlaying ? "Pause soundtrack" : "Play soundtrack"}
-        className={`flex items-center gap-2 rounded border px-3 py-2 shadow-2xl backdrop-blur transition-colors ${
+        className={`flex h-8 items-center gap-1.5 rounded border px-2.5 text-data-mono text-[10px] uppercase tracking-widest backdrop-blur transition-colors ${
           isBlocked
             ? "border-primary/40 bg-primary/15 text-primary hover:bg-primary/25"
-            : "border-white/15 bg-black/65 text-stone-300 hover:border-primary/40 hover:text-primary"
+            : "border-white/15 bg-surface-container-low/60 text-stone-300 hover:border-primary/40 hover:text-primary"
         }`}
       >
         {isPlaying ? (
