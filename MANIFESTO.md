@@ -1,6 +1,7 @@
 # Echo Chamber: An Artist's Manifesto
 
-**Burak Yalçın**  
+**Burak Yalçın**  - **20220808069**
+**Alperen Ulukaya** - **20220808006**      
 CSE 358 Introduction to Artificial Intelligence  
 Spring 2025–2026
 

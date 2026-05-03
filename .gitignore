@@ -41,3 +41,14 @@ Thumbs.db
 node_modules/
 package-lock.json
 scripts_env/
+
+# Internal handoff / codegen / planning docs
+HANDOFF_BACKEND_CODEX.md
+HANDOFF_FRONTEND_OPUS.md
+PROJECT_KANBAN_BACKLOG.md
+digest.txt
+
+# Claude agent files
+.claude/
+frontend/AGENTS.md
+frontend/CLAUDE.md
