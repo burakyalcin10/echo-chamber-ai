@@ -110,6 +110,7 @@ export default function CoverNodeMesh({
         <Html
           center
           position={[0, 0, baseSize * 0.15]}
+          zIndexRange={[10, 0]}
           style={{ pointerEvents: "none", userSelect: "none" }}
         >
           <div
@@ -158,6 +159,7 @@ export default function CoverNodeMesh({
         <Html
           center
           position={[0, baseSize + 0.6, 0]}
+          zIndexRange={[10, 0]}
           style={{ pointerEvents: "none", userSelect: "none" }}
         >
           <div
@@ -185,6 +187,7 @@ export default function CoverNodeMesh({
         <Html
           center
           position={[0, -(baseSize + 0.4), 0]}
+          zIndexRange={[10, 0]}
           style={{ pointerEvents: "none", userSelect: "none" }}
         >
           <div className="flex flex-col items-center whitespace-nowrap">
