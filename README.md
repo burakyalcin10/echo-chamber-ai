@@ -31,6 +31,44 @@ removed after grading if the live deployment no longer needs to stay warm.
 Note: the artwork can be reviewed from the live Vercel deployment above, or run
 locally with the setup instructions below.
 
+## Screenshots
+
+**Galaxy overview** — 32 verified covers mapped as nodes in 3D emotional space, connected by four kinds of relationships (emotional proximity, historical era, genre affinity, influence chains).
+
+![Galaxy overview](docs/screenshots/01_galaxy.png)
+
+**Exhibition mode** — Auto-rotating slideshow cycles through all 32 covers every 2.6 seconds. A bottom HUD shows the current cover's artist, year, genre, and dominant emotion; a counter tracks position in the sequence (02 / 32 shown). The Dylan soundtrack plays softly in the background.
+
+![Exhibition mode](docs/screenshots/exhibition.png)
+
+**Emotional edges** — Relationship mode set to Emotional only; affinity clusters become visible as the other edge kinds are hidden.
+
+![Emotional edges](docs/screenshots/03_emotional_edges.png)
+
+**Cover detail panel** — Selecting a node reveals the cover's emotional profile across six dimensions, AI-generated meaning-shift quote, sonic signature bar chart, and historical pulse. Action buttons (Listen, Compare, Era Voice) are at the bottom.
+
+![Cover detail panel](docs/screenshots/02_cover_detail.png)
+
+**Listen — archive source player** — Clicking Listen opens an in-app YouTube embed for the selected cover. The modal is titled with the archive source label so the viewer always knows which recording is playing.
+
+![Listen player](docs/screenshots/listen.png)
+
+**Match mode** — The left-side MatchDock accepts a personal farewell text. The embedding model finds the nearest cover in the galaxy and the LLM generates a bridge text explaining the match.
+
+![Match mode](docs/screenshots/04_match_mode.png)
+
+**Compare mode** — Select two covers to trigger an LLM comparative analysis. The overlay reports the emotional shift direction, era pair, and a narrative paragraph.
+
+![Compare mode](docs/screenshots/05_compare_mode.png)
+
+**Era Voice** — The RAG pipeline retrieves historical document chunks relevant to the cover's era, then the LLM writes a first-person monologue as if the era itself is speaking. Archive signals (retrieved source tags) are shown below the monologue.
+
+![Era Voice](docs/screenshots/06_era_voice.png)
+
+**Archive view** — Sortable index of all 32 covers, filterable by the active search and decade selection.
+
+![Archive view](docs/screenshots/07_archive.png)
+
 ## Submission Checklist
 
 The assignment asks for three mandatory deliverables:
@@ -484,44 +522,6 @@ Minimum documents:
 - `pat_garrett_film_context.txt`
 - `counterculture_and_dylan_1970s.txt`
 - `dylan_nobel_and_songwriting.txt`
-
-## Screenshots
-
-**Galaxy overview** — 32 verified covers mapped as nodes in 3D emotional space, connected by four kinds of relationships (emotional proximity, historical era, genre affinity, influence chains).
-
-![Galaxy overview](docs/screenshots/01_galaxy.png)
-
-**Exhibition mode** — Auto-rotating slideshow cycles through all 32 covers every 2.6 seconds. A bottom HUD shows the current cover's artist, year, genre, and dominant emotion; a counter tracks position in the sequence (02 / 32 shown). The Dylan soundtrack plays softly in the background.
-
-![Exhibition mode](docs/screenshots/exhibition.png)
-
-**Emotional edges** — Relationship mode set to Emotional only; affinity clusters become visible as the other edge kinds are hidden.
-
-![Emotional edges](docs/screenshots/03_emotional_edges.png)
-
-**Cover detail panel** — Selecting a node reveals the cover's emotional profile across six dimensions, AI-generated meaning-shift quote, sonic signature bar chart, and historical pulse. Action buttons (Listen, Compare, Era Voice) are at the bottom.
-
-![Cover detail panel](docs/screenshots/02_cover_detail.png)
-
-**Listen — archive source player** — Clicking Listen opens an in-app YouTube embed for the selected cover. The modal is titled with the archive source label so the viewer always knows which recording is playing.
-
-![Listen player](docs/screenshots/listen.png)
-
-**Match mode** — The left-side MatchDock accepts a personal farewell text. The embedding model finds the nearest cover in the galaxy and the LLM generates a bridge text explaining the match.
-
-![Match mode](docs/screenshots/04_match_mode.png)
-
-**Compare mode** — Select two covers to trigger an LLM comparative analysis. The overlay reports the emotional shift direction, era pair, and a narrative paragraph.
-
-![Compare mode](docs/screenshots/05_compare_mode.png)
-
-**Era Voice** — The RAG pipeline retrieves historical document chunks relevant to the cover's era, then the LLM writes a first-person monologue as if the era itself is speaking. Archive signals (retrieved source tags) are shown below the monologue.
-
-![Era Voice](docs/screenshots/06_era_voice.png)
-
-**Archive view** — Sortable index of all 32 covers, filterable by the active search and decade selection.
-
-![Archive view](docs/screenshots/07_archive.png)
 
 ## Repository Name
 
