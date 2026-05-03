@@ -14,6 +14,10 @@ services:
         value: production
       - key: LLM_PROVIDER
         value: gemini
+      - key: LLM_TIMEOUT_SECONDS
+        value: 12
+      - key: EMBEDDING_TIMEOUT_SECONDS
+        value: 6
       - key: GEMINI_API_KEY
         sync: false
       - key: OPENAI_API_KEY

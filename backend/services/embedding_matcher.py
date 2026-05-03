@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from concurrent.futures import ThreadPoolExecutor, TimeoutError
+from functools import lru_cache
 import json
 import pickle
 from typing import Any
@@ -9,13 +11,20 @@ import numpy as np
 from config import get_settings
 
 
+_EXECUTOR = ThreadPoolExecutor(max_workers=4)
+
+
 def match_user_text(user_text: str, covers: list[dict[str, Any]]) -> dict[str, Any]:
     if not covers:
         raise RuntimeError("No covers available for matching.")
 
     if all("embedding_vector" in cover for cover in covers):
         try:
-            return _embedding_match(user_text, covers)
+            settings = get_settings()
+            future = _EXECUTOR.submit(_embedding_match, user_text, covers)
+            return future.result(timeout=settings.embedding_timeout_seconds)
+        except TimeoutError:
+            pass
         except Exception:
             # Keep the interactive demo usable even if the local embedding stack is unavailable.
             pass
@@ -36,7 +45,7 @@ def _embedding_match(user_text: str, covers: list[dict[str, Any]]) -> dict[str, 
         raise RuntimeError("Install sentence-transformers to use semantic matching.") from exc
 
     settings = get_settings()
-    model = SentenceTransformer(settings.embedding_model)
+    model = _get_embedding_model(settings.embedding_model)
     user_vector = np.asarray(model.encode([user_text])[0], dtype=np.float32)
     cover_vectors = np.asarray([cover["embedding_vector"] for cover in covers], dtype=np.float32)
 
@@ -52,6 +61,13 @@ def _embedding_match(user_text: str, covers: list[dict[str, Any]]) -> dict[str, 
         "user_position": user_position,
         "match_method": "embedding",
     }
+
+
+@lru_cache(maxsize=1)
+def _get_embedding_model(model_name: str) -> Any:
+    from sentence_transformers import SentenceTransformer
+
+    return SentenceTransformer(model_name)
 
 
 def _cosine_similarity(vector: np.ndarray, matrix: np.ndarray) -> np.ndarray:

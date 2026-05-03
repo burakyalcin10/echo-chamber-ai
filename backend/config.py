@@ -23,6 +23,8 @@ class Settings:
     openai_api_key: str | None = os.getenv("OPENAI_API_KEY") or None
     openai_model: str = os.getenv("OPENAI_MODEL", "gpt-4.1-mini")
     embedding_model: str = os.getenv("EMBEDDING_MODEL", "all-MiniLM-L6-v2")
+    llm_timeout_seconds: float = float(os.getenv("LLM_TIMEOUT_SECONDS", "18"))
+    embedding_timeout_seconds: float = float(os.getenv("EMBEDDING_TIMEOUT_SECONDS", "8"))
 
     data_dir: Path = BASE_DIR / "data"
     raw_covers_path: Path = BASE_DIR / "data" / "covers.json"
