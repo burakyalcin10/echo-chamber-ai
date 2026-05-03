@@ -27,9 +27,20 @@ https://YOUR_RENDER_BACKEND_URL/health
 ```
 
 For generated AI commentary, `llm_configured` and `gemini_configured` should be
-`true`. On the free Render profile, `semantic_match_available`,
-`rag_retrieval_available`, and `umap_projection_available` can remain `false`
-because the heavyweight local ML stack is intentionally not installed.
+`true`.
+
+The deploy profile also installs the local ML stack used by the interactive
+match flow. After a fresh Render deploy, these should be `true` as well:
+
+```json
+"semantic_match_available": true,
+"rag_retrieval_available": true,
+"umap_projection_available": true
+```
+
+Render free instances can take longer to build and cold-start because
+`sentence-transformers`, `torch`, and `umap-learn` are heavier than the base API
+dependencies.
 
 The backend URL will look like:
 
