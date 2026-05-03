@@ -47,6 +47,7 @@ import SideNav from "@/components/layout/SideNav";
 import TopBar from "@/components/layout/TopBar";
 import DetailPanel from "@/components/panels/DetailPanel";
 import MatchDock from "@/components/dock/MatchDock";
+import BackgroundSoundtrack from "@/components/audio/BackgroundSoundtrack";
 
 const EchoMap = dynamic(() => import("@/components/graph/EchoMap"), {
   ssr: false,
@@ -315,6 +316,7 @@ export default function HomePage() {
   const handleCloseMatch = useCallback(() => {
     setMatchResult(null);
     setMatchError(null);
+    setMode("explore");
   }, []);
 
   const handleModeChange = useCallback(
@@ -419,6 +421,8 @@ export default function HomePage() {
       />
 
       <main className="ml-20 min-w-0 flex-grow relative flex flex-col h-dvh min-h-0 overflow-hidden">
+        <BackgroundSoundtrack disabled={musicPlayerOpen} />
+
         {!exhibitionOpen && (
           <TopBar
             activePage={pageTitle}
@@ -571,8 +575,10 @@ export default function HomePage() {
           />
         )}
 
-        {/* Bottom match dock */}
-        {!musicPlayerOpen && !exhibitionOpen && (
+        {/* Match signal panel */}
+        {!musicPlayerOpen &&
+          !exhibitionOpen &&
+          (mode === "match" || matchResult || matchLoading || matchError) && (
           <MatchDock
             onSubmit={handleMatchSubmit}
             loading={matchLoading}
