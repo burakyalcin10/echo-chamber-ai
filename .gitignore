@@ -18,13 +18,9 @@ backend/.env
 backend/.env.local
 
 # Generated data and local indexes
-backend/data/processed/
-!backend/data/processed/
+backend/data/processed/*
 !backend/data/processed/covers_with_embeddings.json
-!backend/data/processed/rag_index.json
-!backend/data/processed/umap_bounds.json
 *.pkl
-!backend/data/processed/umap_reducer.pkl
 *.sqlite3
 *.db
 

@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-from concurrent.futures import ThreadPoolExecutor, TimeoutError
 import json
 import re
 from typing import Any
@@ -8,9 +7,6 @@ from typing import Any
 from fastapi import HTTPException
 
 from config import get_settings
-
-
-_EXECUTOR = ThreadPoolExecutor(max_workers=8)
 
 
 class LLMClient:
@@ -36,35 +32,22 @@ class LLMClient:
 
     def generate_text(self, prompt: str, *, temperature: float = 0.7) -> str:
         self.ensure_configured()
-        return _with_timeout(
-            lambda: self._generate_text(prompt, temperature=temperature),
-            timeout_seconds=self.settings.llm_timeout_seconds,
-            provider=self.provider,
-        )
-
-    def generate_json(self, prompt: str, schema: dict[str, Any], *, temperature: float = 0.2) -> dict[str, Any]:
-        self.ensure_configured()
-        text = _with_timeout(
-            lambda: self._generate_json_text(prompt, schema=schema, temperature=temperature),
-            timeout_seconds=self.settings.llm_timeout_seconds,
-            provider=self.provider,
-        )
-
-        return _parse_json_response(text)
-
-    def _generate_text(self, prompt: str, *, temperature: float) -> str:
         if self.provider == "gemini":
             return self._gemini_text(prompt, temperature=temperature)
         if self.provider == "openai":
             return self._openai_text(prompt, temperature=temperature)
         raise HTTPException(status_code=500, detail=f"Unsupported LLM provider: {self.provider}")
 
-    def _generate_json_text(self, prompt: str, schema: dict[str, Any], *, temperature: float) -> str:
+    def generate_json(self, prompt: str, schema: dict[str, Any], *, temperature: float = 0.2) -> dict[str, Any]:
+        self.ensure_configured()
         if self.provider == "gemini":
-            return self._gemini_text(prompt, temperature=temperature, response_json_schema=schema)
-        if self.provider == "openai":
-            return self._openai_text(prompt, temperature=temperature, json_schema=schema)
-        raise HTTPException(status_code=500, detail=f"Unsupported LLM provider: {self.provider}")
+            text = self._gemini_text(prompt, temperature=temperature, response_json_schema=schema)
+        elif self.provider == "openai":
+            text = self._openai_text(prompt, temperature=temperature, json_schema=schema)
+        else:
+            raise HTTPException(status_code=500, detail=f"Unsupported LLM provider: {self.provider}")
+
+        return _parse_json_response(text)
 
     def _openai_text(
         self,
@@ -160,17 +143,6 @@ class LLMClient:
 
 def get_llm_client(provider: str | None = None) -> LLMClient:
     return LLMClient(provider=provider)
-
-
-def _with_timeout(call: Any, *, timeout_seconds: float, provider: str) -> str:
-    future = _EXECUTOR.submit(call)
-    try:
-        return future.result(timeout=timeout_seconds)
-    except TimeoutError as exc:
-        raise HTTPException(
-            status_code=504,
-            detail=f"LLM provider '{provider}' timed out after {timeout_seconds:g}s.",
-        ) from exc
 
 
 def _extract_openai_text(response: Any) -> str:
