@@ -1,6 +1,6 @@
 "use client";
 
-import { Search, X, SlidersHorizontal } from "lucide-react";
+import { PlayCircle, Search, X, SlidersHorizontal } from "lucide-react";
 import { DECADES, type Decade } from "@/lib/constants";
 import {
   type RelationshipMode,
@@ -16,6 +16,7 @@ interface TopBarProps {
   onSearchChange: (value: string) => void;
   relationshipMode: RelationshipMode;
   onRelationshipModeChange: (mode: RelationshipMode) => void;
+  onExhibition: () => void;
   visibleCount: number;
   totalCount: number;
 }
@@ -35,6 +36,7 @@ export default function TopBar({
   onSearchChange,
   relationshipMode,
   onRelationshipModeChange,
+  onExhibition,
   visibleCount,
   totalCount,
 }: TopBarProps) {
@@ -76,6 +78,14 @@ export default function TopBar({
 
       {/* Right: decades + relationship mode + filter count */}
       <div className="flex items-center gap-4 flex-wrap justify-end">
+        <button
+          onClick={onExhibition}
+          className="hidden md:flex items-center gap-1.5 rounded border border-primary/30 bg-primary/10 px-2.5 py-1 text-data-mono text-[10px] uppercase tracking-widest text-primary hover:bg-primary/20 transition-colors"
+        >
+          <PlayCircle size={13} strokeWidth={1.75} />
+          Exhibition
+        </button>
+
         {/* Decade filter */}
         <nav
           className="hidden lg:flex items-center gap-3"

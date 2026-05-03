@@ -1,6 +1,12 @@
 "use client";
 
-import { useEffect, useState, useCallback, useMemo, type ReactNode } from "react";
+import {
+  useEffect,
+  useState,
+  useCallback,
+  useMemo,
+  type ReactNode,
+} from "react";
 import dynamic from "next/dynamic";
 import {
   X,
@@ -17,6 +23,7 @@ import {
   BrainCircuit,
   FileText,
   CheckCircle2,
+  PlayCircle,
 } from "lucide-react";
 import type {
   CoverNode,
@@ -95,6 +102,8 @@ export default function HomePage() {
 
   // System trace
   const [systemTraceOpen, setSystemTraceOpen] = useState(false);
+  const [exhibitionOpen, setExhibitionOpen] = useState(false);
+  const [exhibitionIndex, setExhibitionIndex] = useState(0);
 
   // Toasts
   const [toasts, setToasts] = useState<Toast[]>([]);
@@ -156,6 +165,29 @@ export default function HomePage() {
     });
   }, [covers, decadeFilter, search]);
 
+  const exhibitionSequence = useMemo(() => {
+    if (!covers.length) return [];
+    const original = covers.find((cover) => cover.is_original);
+    const rest = covers
+      .filter((cover) => !cover.is_original)
+      .sort((a, b) => a.year - b.year || a.artist.localeCompare(b.artist));
+    return original ? [original, ...rest] : rest;
+  }, [covers]);
+
+  useEffect(() => {
+    if (!exhibitionOpen || exhibitionSequence.length === 0) return;
+    setExhibitionIndex(0);
+    const timer = window.setInterval(() => {
+      setExhibitionIndex((index) => (index + 1) % exhibitionSequence.length);
+    }, 2600);
+    return () => window.clearInterval(timer);
+  }, [exhibitionOpen, exhibitionSequence.length]);
+
+  const exhibitionCover =
+    exhibitionSequence.length > 0
+      ? exhibitionSequence[exhibitionIndex % exhibitionSequence.length]
+      : null;
+
   // Highlight set for search-matched IDs (when searching, all filtered = matched)
   const searchHighlightedIds = useMemo(() => {
     if (!search.trim()) return new Set<string>();
@@ -163,10 +195,13 @@ export default function HomePage() {
   }, [search, filteredCovers]);
 
   const highlightedIds = useMemo(() => {
+    if (exhibitionOpen && exhibitionCover) {
+      return new Set(["dylan_1973", exhibitionCover.id]);
+    }
     const set = new Set(searchHighlightedIds);
     if (matchResult) set.add(matchResult.matched_cover.id);
     return set;
-  }, [searchHighlightedIds, matchResult]);
+  }, [searchHighlightedIds, matchResult, exhibitionOpen, exhibitionCover]);
 
   // ─── Cover selection ────────────────────────────────
   const loadCoverDetail = useCallback(
@@ -385,19 +420,28 @@ export default function HomePage() {
       />
 
       <main className="ml-20 min-w-0 flex-grow relative flex flex-col h-dvh min-h-0 overflow-hidden">
-        <TopBar
-          activePage={pageTitle}
-          decadeFilter={decadeFilter}
-          onDecadeChange={setDecadeFilter}
-          search={search}
-          onSearchChange={setSearch}
-          relationshipMode={relationshipMode}
-          onRelationshipModeChange={setRelationshipMode}
-          visibleCount={filteredCovers.length}
-          totalCount={covers.length}
-        />
+        {!exhibitionOpen && (
+          <TopBar
+            activePage={pageTitle}
+            decadeFilter={decadeFilter}
+            onDecadeChange={setDecadeFilter}
+            search={search}
+            onSearchChange={setSearch}
+            relationshipMode={relationshipMode}
+            onRelationshipModeChange={setRelationshipMode}
+            onExhibition={() => {
+              setMode("explore");
+              setSystemTraceOpen(false);
+              setCompareResult(null);
+              setVoiceResult(null);
+              setExhibitionOpen(true);
+            }}
+            visibleCount={filteredCovers.length}
+            totalCount={covers.length}
+          />
+        )}
 
-        <div className="min-h-0 flex-1 pt-14 relative flex">
+        <div className={`min-h-0 flex-1 relative flex ${exhibitionOpen ? "pt-0" : "pt-14"}`}>
           {/* Graph area */}
           <div className="min-w-0 min-h-0 flex-1 relative overflow-hidden">
             {graphLoading ? (
@@ -416,20 +460,32 @@ export default function HomePage() {
               <BackendOffline onRetry={() => window.location.reload()} />
             ) : (
               <EchoMap
-                covers={filteredCovers}
+                covers={exhibitionOpen ? covers : filteredCovers}
                 highlightedIds={highlightedIds}
-                selectedCoverId={selectedCoverId}
+                selectedCoverId={
+                  exhibitionOpen ? exhibitionCover?.id ?? null : selectedCoverId
+                }
                 compareCoverIds={[compareCoverA, compareCoverB]}
                 matchResult={matchGraphData}
-                relationshipMode={relationshipMode}
+                relationshipMode={exhibitionOpen ? "all" : relationshipMode}
                 onSelectCover={handleSelectCover}
-                isDimmedFn={isDimmedFn}
+                isDimmedFn={
+                  exhibitionOpen
+                    ? (cover) =>
+                        Boolean(
+                          exhibitionCover &&
+                            cover.id !== exhibitionCover.id &&
+                            cover.id !== "dylan_1973",
+                        )
+                    : isDimmedFn
+                }
                 suppressLabels={overlayOpen}
+                exhibitionMode={exhibitionOpen}
               />
             )}
 
             {/* Guidance banners */}
-            {!graphLoading && !graphError && backendOnline && (
+            {!exhibitionOpen && !graphLoading && !graphError && backendOnline && (
               <GuidanceBanner
                 mode={mode}
                 hasSelection={!!selectedCoverId}
@@ -451,18 +507,29 @@ export default function HomePage() {
             {mode === "archive" && !graphLoading && !graphError && backendOnline && (
               <ArchivePanel covers={filteredCovers} onSelectCover={handleSelectCover} />
             )}
+
+            {exhibitionOpen && exhibitionCover && (
+              <ExhibitionHud
+                cover={exhibitionCover}
+                index={exhibitionIndex}
+                total={exhibitionSequence.length}
+                onClose={() => setExhibitionOpen(false)}
+              />
+            )}
           </div>
 
           {/* Detail panel */}
-          <DetailPanel
-            cover={coverDetail}
-            loading={detailLoading}
-            onCompare={handleCompare}
-            onVoice={handleVoice}
-            onClose={handleCloseDetail}
-            playerOpen={musicPlayerOpen}
-            onPlayerOpenChange={setMusicPlayerOpen}
-          />
+          {!exhibitionOpen && (
+            <DetailPanel
+              cover={coverDetail}
+              loading={detailLoading}
+              onCompare={handleCompare}
+              onVoice={handleVoice}
+              onClose={handleCloseDetail}
+              playerOpen={musicPlayerOpen}
+              onPlayerOpenChange={setMusicPlayerOpen}
+            />
+          )}
         </div>
 
         {/* Voice overlay */}
@@ -505,7 +572,7 @@ export default function HomePage() {
         )}
 
         {/* Bottom match dock */}
-        {!musicPlayerOpen && (
+        {!musicPlayerOpen && !exhibitionOpen && (
           <MatchDock
             onSubmit={handleMatchSubmit}
             loading={matchLoading}
@@ -934,6 +1001,50 @@ function SystemTraceOverlay({
   );
 }
 
+function ExhibitionHud({
+  cover,
+  index,
+  total,
+  onClose,
+}: {
+  cover: CoverNode;
+  index: number;
+  total: number;
+  onClose: () => void;
+}) {
+  const strongestEmotion = dominantEmotion(cover);
+  return (
+    <div className="pointer-events-none absolute inset-0 z-30 overflow-hidden">
+      <div className="exhibition-scan absolute inset-0" />
+      <div className="absolute inset-x-0 bottom-0 h-48 bg-gradient-to-t from-black/85 via-black/35 to-transparent" />
+      <button
+        onClick={onClose}
+        aria-label="Close exhibition mode"
+        className="pointer-events-auto absolute right-5 top-5 flex h-9 w-9 items-center justify-center rounded border border-white/15 bg-black/50 text-stone-300 backdrop-blur hover:border-primary/50 hover:text-primary transition-colors"
+      >
+        <X size={18} strokeWidth={1.75} />
+      </button>
+      <div className="absolute bottom-8 left-8 max-w-xl">
+        <div className="mb-2 flex items-center gap-2 text-label-caps text-primary">
+          <PlayCircle size={14} strokeWidth={1.75} />
+          Exhibition Pulse {String((index % total) + 1).padStart(2, "0")} / {String(total).padStart(2, "0")}
+        </div>
+        <h2 className="font-serif text-4xl leading-tight text-on-surface md:text-6xl">
+          {cover.artist}
+        </h2>
+        <div className="mt-2 flex flex-wrap items-center gap-2 text-data-mono text-[11px] uppercase tracking-widest text-stone-300">
+          <span>{cover.year}</span>
+          {cover.genre && <span>{cover.genre}</span>}
+          <span>{cover.is_original ? "Origin" : "Cover"}</span>
+          <span className="text-primary">{strongestEmotion}</span>
+        </div>
+      </div>
+      <div className="absolute bottom-10 right-8 hidden max-w-xs text-right text-sm leading-relaxed text-stone-300 md:block">
+        The map keeps rotating; each recording becomes the temporary center of the door.
+      </div>
+    </div>
+  );
+}
 function CompareOverlay({
   result,
   loading,

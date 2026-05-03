@@ -214,3 +214,25 @@ body {
 .animate-pulse-glow {
   animation: pulse-glow 2s ease-in-out infinite;
 }
+
+/* Exhibition mode */
+.exhibition-scan {
+  pointer-events: none;
+  background:
+    radial-gradient(circle at 50% 50%, rgba(233, 193, 118, 0.16), transparent 18%, transparent 100%),
+    linear-gradient(115deg, transparent 0%, rgba(181, 202, 212, 0.06) 46%, rgba(233, 193, 118, 0.18) 50%, rgba(181, 202, 212, 0.06) 54%, transparent 100%);
+  mix-blend-mode: screen;
+  animation: exhibition-scan-drift 4.8s ease-in-out infinite;
+}
+
+@keyframes exhibition-scan-drift {
+  0%,
+  100% {
+    opacity: 0.26;
+    transform: translateX(-12%) rotate(0deg);
+  }
+  50% {
+    opacity: 0.72;
+    transform: translateX(12%) rotate(1deg);
+  }
+}
