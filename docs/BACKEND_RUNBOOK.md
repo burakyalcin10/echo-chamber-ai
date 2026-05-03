@@ -23,8 +23,8 @@ Working locally:
 
 Still requiring external input for final AI quality:
 
-- Gemini key for cover scoring/compare/match when `LLM_PROVIDER=gemini`
-- OpenAI key for Era Voice; `/api/voice` uses GPT even when `LLM_PROVIDER=gemini`
+- Gemini key for cover scoring, compare, match bridge text, and Era Voice when `LLM_PROVIDER=gemini`
+- Optional OpenAI key if you want Compare and Era Voice to prefer OpenAI when available
 - Optional human review of the 32 verified cover metadata and RAG wording
 
 ## Fresh Setup
@@ -39,17 +39,22 @@ python -m pip install -r requirements.txt
 copy .env.example .env
 ```
 
-For the current split-provider setup, keep Gemini as the default provider and add OpenAI for Era Voice:
+For the current setup, Gemini alone is enough:
 
 ```env
 LLM_PROVIDER=gemini
 GEMINI_API_KEY=your_key_here
 GEMINI_MODEL=gemini-2.5-flash
+```
+
+Optionally add OpenAI as a secondary provider. Compare and Era Voice prefer OpenAI when this key exists; otherwise they use Gemini:
+
+```env
 OPENAI_API_KEY=your_openai_key_here
 OPENAI_MODEL=gpt-4.1-mini
 ```
 
-Alternatively, set OpenAI as the default provider for all LLM-backed endpoints:
+Alternatively, set OpenAI as the default provider:
 
 ```env
 LLM_PROVIDER=openai

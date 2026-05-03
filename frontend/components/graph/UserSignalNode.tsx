@@ -41,6 +41,7 @@ export default function UserSignalNode({ position }: UserSignalNodeProps) {
       <Html
         center
         position={[0, -0.55, 0]}
+        zIndexRange={[10, 0]}
         style={{ pointerEvents: "none", userSelect: "none" }}
       >
         <span className="text-label-caps text-[10px] text-tertiary whitespace-nowrap">

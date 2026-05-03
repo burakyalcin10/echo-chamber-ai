@@ -101,7 +101,7 @@ Focus:
 
 Why we need it:
 
-This helps us justify the whole "50 years of covers as emotional galaxy" concept in the manifesto and RAG outputs.
+This helps us justify the "five decades of covers as an emotional galaxy" concept in the manifesto and RAG outputs.
 
 ## Strong Optional Files
 

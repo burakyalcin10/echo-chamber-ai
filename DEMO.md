@@ -22,7 +22,7 @@ Pre-load the page and let the galaxy settle before the audience arrives.
 **What to do:** Let the galaxy idle. Drag to rotate slowly.
 
 **What to say:**
-> "This is Echo Chamber. Every node you see is a different artist's cover of Bob Dylan's 'Knockin' on Heaven's Door' — fifty versions, spanning fifty-one years, from 1973 to 2024. The position of each node isn't random. It reflects where that cover sits emotionally: how much surrender it carries, how much grief, how much defiance."
+> "This is Echo Chamber. Every node you see is a verified cover of Bob Dylan's 'Knockin' on Heaven's Door' — 32 versions spanning from 1973 to 2024. The position of each node isn't random. It reflects where that cover sits emotionally: how much surrender it carries, how much grief, how much defiance."
 
 Point to the relationship legend (top-right).
 
@@ -95,7 +95,7 @@ Press Enter. **Wait for the result.**
 > "The same sentence embedding model that built the galaxy now reads what you wrote and finds the cover whose emotional fingerprint is closest to yours."
 
 **After the result appears:**
-> "That cover is your cover. Not because the algorithm decided — because the emotional space you described maps closest to the emotional space that artist stood in when they recorded their version. The galaxy is a map of how fifty people knocked on the same door. This is where you would stand among them."
+> "That cover is your cover. Not because the algorithm decided — because the emotional space you described maps closest to the emotional space that artist stood in when they recorded their version. The galaxy is a map of how 32 curated voices knocked on the same door. This is where you would stand among them."
 
 ---
 
@@ -104,14 +104,14 @@ Press Enter. **Wait for the result.**
 **Q: Are the emotion scores subjective?**
 > "Yes, and intentionally so. The LLM is given a specific prompt asking it to score emotional dimensions as a musicologist would — with context about the era, the genre, the production choices. The scores are consistent for a given model, but a different model or prompt would produce different results. That variability is part of the artwork's argument: emotional interpretation is never neutral."
 
-**Q: Why 50 covers specifically?**
-> "Fifty felt like the threshold between a playlist and a dataset — enough to reveal meaningful structure, small enough that every cover was curated deliberately. Each one was chosen because it said something different about what 'knocking on heaven's door' means in its decade."
+**Q: Why 32 covers specifically?**
+> "Thirty-two is the current verified archive: enough to reveal meaningful structure across decades, small enough that every cover can still be curated deliberately. Each one was chosen because it says something different about what 'knocking on heaven's door' means in its decade."
 
 **Q: What if the API key runs out during the demo?**
 > "Every LLM-backed endpoint has a local fallback. The artwork degrades gracefully — the galaxy, the emotional profiles, and the match remain fully functional. Only the LLM-generated text switches to pre-written local content. The demo continues."
 
 **Q: What does this have to do with AI?**
-> "Three techniques: an LLM that reads emotion into music, a sentence embedding model that turns language into geometry, and a RAG system that retrieves real history. None of them alone could produce this. Together, they let us see structure in fifty years of human grief that no single listener could hold in their head."
+> "Three techniques: an LLM that reads emotion into music, a sentence embedding model that turns language into geometry, and a RAG system that retrieves real history. None of them alone could produce this. Together, they let us see structure across five decades of human grief that no single listener could hold in their head."
 
 ---
 

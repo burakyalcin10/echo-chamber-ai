@@ -30,6 +30,7 @@ interface EchoMapProps {
   onSelectCover: (cover: CoverNodeType) => void;
   isDimmedFn?: (cover: CoverNodeType) => boolean;
   suppressLabels?: boolean;
+  exhibitionMode?: boolean;
 }
 
 export default function EchoMap({
@@ -42,6 +43,7 @@ export default function EchoMap({
   onSelectCover,
   isDimmedFn,
   suppressLabels = false,
+  exhibitionMode = false,
 }: EchoMapProps) {
   // Build edges from cover data with the relationship engine and filter by mode.
   const edges = useMemo(() => {
@@ -92,11 +94,11 @@ export default function EchoMap({
           <Stars
             radius={60}
             depth={60}
-            count={1500}
-            factor={2}
+            count={exhibitionMode ? 2600 : 1500}
+            factor={exhibitionMode ? 2.6 : 2}
             saturation={0}
             fade
-            speed={0.3}
+            speed={exhibitionMode ? 0.85 : 0.3}
           />
 
           {/* Relationship edges */}
@@ -188,13 +190,14 @@ export default function EchoMap({
             minDistance={8}
             maxDistance={40}
             autoRotate
-            autoRotateSpeed={0.15}
+            autoRotateSpeed={exhibitionMode ? 0.72 : 0.15}
             makeDefault
           />
         </Suspense>
       </Canvas>
 
       {/* Relationship legend */}
+      {!exhibitionMode && (
       <div className="absolute top-6 right-6 z-20 bg-surface-container/80 backdrop-blur ghost-border p-4 rounded min-w-[170px]">
         <h4 className="text-label-caps text-[10px] text-stone-500 mb-3 border-b border-white/10 pb-1">
           {relationshipMode === "all"
@@ -227,6 +230,7 @@ export default function EchoMap({
           })}
         </div>
       </div>
+      )}
     </div>
   );
 }

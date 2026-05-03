@@ -1,6 +1,12 @@
 "use client";
 
-import { useEffect, useState, useCallback, useMemo } from "react";
+import {
+  useEffect,
+  useState,
+  useCallback,
+  useMemo,
+  type ReactNode,
+} from "react";
 import dynamic from "next/dynamic";
 import {
   X,
@@ -10,6 +16,14 @@ import {
   BarChart3,
   AlertCircle,
   Loader2,
+  Archive,
+  Music2,
+  Settings,
+  Database,
+  BrainCircuit,
+  FileText,
+  CheckCircle2,
+  PlayCircle,
 } from "lucide-react";
 import type {
   CoverNode,
@@ -17,6 +31,7 @@ import type {
   MatchResponse,
   CompareResponse,
   VoiceResponse,
+  HealthResponse,
   AppMode,
 } from "@/lib/types";
 import {
@@ -60,6 +75,7 @@ export default function HomePage() {
   const [selectedCoverId, setSelectedCoverId] = useState<string | null>(null);
   const [coverDetail, setCoverDetail] = useState<CoverDetail | null>(null);
   const [detailLoading, setDetailLoading] = useState(false);
+  const [musicPlayerOpen, setMusicPlayerOpen] = useState(false);
 
   const [decadeFilter, setDecadeFilter] = useState<string | null>(null);
   const [search, setSearch] = useState("");
@@ -84,6 +100,11 @@ export default function HomePage() {
   const [voiceResult, setVoiceResult] = useState<VoiceResponse | null>(null);
   const [voiceLoading, setVoiceLoading] = useState(false);
 
+  // System trace
+  const [systemTraceOpen, setSystemTraceOpen] = useState(false);
+  const [exhibitionOpen, setExhibitionOpen] = useState(false);
+  const [exhibitionIndex, setExhibitionIndex] = useState(0);
+
   // Toasts
   const [toasts, setToasts] = useState<Toast[]>([]);
   const pushToast = useCallback((kind: Toast["kind"], text: string) => {
@@ -95,6 +116,7 @@ export default function HomePage() {
   }, []);
 
   // Backend status
+  const [health, setHealth] = useState<HealthResponse | null>(null);
   const [backendOnline, setBackendOnline] = useState(true);
   const [graphLoading, setGraphLoading] = useState(true);
   const [graphError, setGraphError] = useState<string | null>(null);
@@ -103,9 +125,11 @@ export default function HomePage() {
   useEffect(() => {
     async function init() {
       try {
-        await getHealth();
+        const healthData = await getHealth();
+        setHealth(healthData);
         setBackendOnline(true);
       } catch {
+        setHealth(null);
         setBackendOnline(false);
       }
 
@@ -141,6 +165,29 @@ export default function HomePage() {
     });
   }, [covers, decadeFilter, search]);
 
+  const exhibitionSequence = useMemo(() => {
+    if (!covers.length) return [];
+    const original = covers.find((cover) => cover.is_original);
+    const rest = covers
+      .filter((cover) => !cover.is_original)
+      .sort((a, b) => a.year - b.year || a.artist.localeCompare(b.artist));
+    return original ? [original, ...rest] : rest;
+  }, [covers]);
+
+  useEffect(() => {
+    if (!exhibitionOpen || exhibitionSequence.length === 0) return;
+    setExhibitionIndex(0);
+    const timer = window.setInterval(() => {
+      setExhibitionIndex((index) => (index + 1) % exhibitionSequence.length);
+    }, 2600);
+    return () => window.clearInterval(timer);
+  }, [exhibitionOpen, exhibitionSequence.length]);
+
+  const exhibitionCover =
+    exhibitionSequence.length > 0
+      ? exhibitionSequence[exhibitionIndex % exhibitionSequence.length]
+      : null;
+
   // Highlight set for search-matched IDs (when searching, all filtered = matched)
   const searchHighlightedIds = useMemo(() => {
     if (!search.trim()) return new Set<string>();
@@ -148,14 +195,18 @@ export default function HomePage() {
   }, [search, filteredCovers]);
 
   const highlightedIds = useMemo(() => {
+    if (exhibitionOpen && exhibitionCover) {
+      return new Set(["dylan_1973", exhibitionCover.id]);
+    }
     const set = new Set(searchHighlightedIds);
     if (matchResult) set.add(matchResult.matched_cover.id);
     return set;
-  }, [searchHighlightedIds, matchResult]);
+  }, [searchHighlightedIds, matchResult, exhibitionOpen, exhibitionCover]);
 
   // ─── Cover selection ────────────────────────────────
   const loadCoverDetail = useCallback(
     async (coverId: string) => {
+      setMusicPlayerOpen(false);
       setSelectedCoverId(coverId);
       setCoverDetail(null);
       setDetailLoading(true);
@@ -259,6 +310,7 @@ export default function HomePage() {
     setCompareCoverB(null);
     setCompareResult(null);
     setVoiceResult(null);
+    setMusicPlayerOpen(false);
   }, []);
 
   const handleCloseMatch = useCallback(() => {
@@ -352,7 +404,9 @@ export default function HomePage() {
   const overlayOpen = Boolean(
     (mode === "voice" && (voiceResult || voiceLoading)) ||
       compareResult ||
-      compareLoading,
+      compareLoading ||
+      systemTraceOpen ||
+      mode === "archive",
   );
 
   // ─── Render ─────────────────────────────────────────
@@ -361,23 +415,33 @@ export default function HomePage() {
       <SideNav
         activeMode={mode}
         onModeChange={handleModeChange}
+        onSettings={() => setSystemTraceOpen(true)}
         backendOnline={backendOnline}
       />
 
       <main className="ml-20 min-w-0 flex-grow relative flex flex-col h-dvh min-h-0 overflow-hidden">
-        <TopBar
-          activePage={pageTitle}
-          decadeFilter={decadeFilter}
-          onDecadeChange={setDecadeFilter}
-          search={search}
-          onSearchChange={setSearch}
-          relationshipMode={relationshipMode}
-          onRelationshipModeChange={setRelationshipMode}
-          visibleCount={filteredCovers.length}
-          totalCount={covers.length}
-        />
+        {!exhibitionOpen && (
+          <TopBar
+            activePage={pageTitle}
+            decadeFilter={decadeFilter}
+            onDecadeChange={setDecadeFilter}
+            search={search}
+            onSearchChange={setSearch}
+            relationshipMode={relationshipMode}
+            onRelationshipModeChange={setRelationshipMode}
+            onExhibition={() => {
+              setMode("explore");
+              setSystemTraceOpen(false);
+              setCompareResult(null);
+              setVoiceResult(null);
+              setExhibitionOpen(true);
+            }}
+            visibleCount={filteredCovers.length}
+            totalCount={covers.length}
+          />
+        )}
 
-        <div className="min-h-0 flex-1 pt-14 relative flex">
+        <div className={`min-h-0 flex-1 relative flex ${exhibitionOpen ? "pt-0" : "pt-14"}`}>
           {/* Graph area */}
           <div className="min-w-0 min-h-0 flex-1 relative overflow-hidden">
             {graphLoading ? (
@@ -396,20 +460,32 @@ export default function HomePage() {
               <BackendOffline onRetry={() => window.location.reload()} />
             ) : (
               <EchoMap
-                covers={filteredCovers}
+                covers={exhibitionOpen ? covers : filteredCovers}
                 highlightedIds={highlightedIds}
-                selectedCoverId={selectedCoverId}
+                selectedCoverId={
+                  exhibitionOpen ? exhibitionCover?.id ?? null : selectedCoverId
+                }
                 compareCoverIds={[compareCoverA, compareCoverB]}
                 matchResult={matchGraphData}
-                relationshipMode={relationshipMode}
+                relationshipMode={exhibitionOpen ? "all" : relationshipMode}
                 onSelectCover={handleSelectCover}
-                isDimmedFn={isDimmedFn}
+                isDimmedFn={
+                  exhibitionOpen
+                    ? (cover) =>
+                        Boolean(
+                          exhibitionCover &&
+                            cover.id !== exhibitionCover.id &&
+                            cover.id !== "dylan_1973",
+                        )
+                    : isDimmedFn
+                }
                 suppressLabels={overlayOpen}
+                exhibitionMode={exhibitionOpen}
               />
             )}
 
             {/* Guidance banners */}
-            {!graphLoading && !graphError && backendOnline && (
+            {!exhibitionOpen && !graphLoading && !graphError && backendOnline && (
               <GuidanceBanner
                 mode={mode}
                 hasSelection={!!selectedCoverId}
@@ -427,16 +503,33 @@ export default function HomePage() {
                 }}
               />
             )}
+
+            {mode === "archive" && !graphLoading && !graphError && backendOnline && (
+              <ArchivePanel covers={filteredCovers} onSelectCover={handleSelectCover} />
+            )}
+
+            {exhibitionOpen && exhibitionCover && (
+              <ExhibitionHud
+                cover={exhibitionCover}
+                index={exhibitionIndex}
+                total={exhibitionSequence.length}
+                onClose={() => setExhibitionOpen(false)}
+              />
+            )}
           </div>
 
           {/* Detail panel */}
-          <DetailPanel
-            cover={coverDetail}
-            loading={detailLoading}
-            onCompare={handleCompare}
-            onVoice={handleVoice}
-            onClose={handleCloseDetail}
-          />
+          {!exhibitionOpen && (
+            <DetailPanel
+              cover={coverDetail}
+              loading={detailLoading}
+              onCompare={handleCompare}
+              onVoice={handleVoice}
+              onClose={handleCloseDetail}
+              playerOpen={musicPlayerOpen}
+              onPlayerOpenChange={setMusicPlayerOpen}
+            />
+          )}
         </div>
 
         {/* Voice overlay */}
@@ -467,15 +560,28 @@ export default function HomePage() {
           />
         )}
 
+        {systemTraceOpen && (
+          <SystemTraceOverlay
+            health={health}
+            covers={covers}
+            lastMatch={matchResult}
+            lastVoice={voiceResult}
+            backendOnline={backendOnline}
+            onClose={() => setSystemTraceOpen(false)}
+          />
+        )}
+
         {/* Bottom match dock */}
-        <MatchDock
-          onSubmit={handleMatchSubmit}
-          loading={matchLoading}
-          error={matchError}
-          matchResult={matchDockResult}
-          onClose={handleCloseMatch}
-          onDismissError={() => setMatchError(null)}
-        />
+        {!musicPlayerOpen && !exhibitionOpen && (
+          <MatchDock
+            onSubmit={handleMatchSubmit}
+            loading={matchLoading}
+            error={matchError}
+            matchResult={matchDockResult}
+            onClose={handleCloseMatch}
+            onDismissError={() => setMatchError(null)}
+          />
+        )}
 
         {/* Toasts */}
         {toasts.length > 0 && (
@@ -524,6 +630,77 @@ export default function HomePage() {
 }
 
 /* ─── Guidance banner ─────────────────────────────── */
+
+function ArchivePanel({
+  covers,
+  onSelectCover,
+}: {
+  covers: CoverNode[];
+  onSelectCover: (cover: CoverNode) => void;
+}) {
+  const sorted = [...covers].sort(
+    (a, b) => a.year - b.year || a.artist.localeCompare(b.artist),
+  );
+
+  return (
+    <div className="absolute inset-0 z-30 overflow-y-auto bg-black/85 backdrop-blur-sm">
+      <div className="mx-auto w-full max-w-5xl px-6 py-8">
+        <div className="mb-6 flex items-end justify-between gap-4 border-b border-white/10 pb-4">
+          <div>
+            <div className="flex items-center gap-2 text-label-caps text-primary">
+              <Archive size={15} strokeWidth={1.75} />
+              Archive
+            </div>
+            <h2 className="mt-2 font-serif text-3xl text-on-surface">
+              Cover index
+            </h2>
+          </div>
+          <span className="text-data-mono text-[11px] uppercase tracking-widest text-stone-500">
+            {sorted.length} visible records
+          </span>
+        </div>
+
+        <div className="grid gap-2">
+          {sorted.map((cover) => (
+            <button
+              key={cover.id}
+              onClick={() => onSelectCover(cover)}
+              className="grid grid-cols-[4.5rem_1fr_auto] items-center gap-4 border border-white/10 bg-surface-container-low/70 px-4 py-3 text-left transition-colors hover:border-primary/40 hover:bg-surface-container-high"
+            >
+              <span className="text-data-mono text-sm text-primary">
+                {cover.year}
+              </span>
+              <span className="min-w-0">
+                <span className="block truncate font-serif text-lg text-on-surface">
+                  {cover.artist}
+                </span>
+                <span className="mt-1 block truncate text-data-mono text-[10px] uppercase tracking-widest text-stone-500">
+                  {cover.genre || "uncategorized"} / {dominantEmotion(cover)}
+                </span>
+              </span>
+              <span className="flex items-center gap-3 text-data-mono text-[10px] uppercase tracking-widest text-stone-500">
+                {cover.youtube_video_id && (
+                  <span className="flex items-center gap-1 text-primary">
+                    <Music2 size={12} strokeWidth={1.75} />
+                    Player
+                  </span>
+                )}
+                {cover.is_original ? "Origin" : "Cover"}
+              </span>
+            </button>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function dominantEmotion(cover: CoverNode): string {
+  const [key] = Object.entries(cover.emotion_scores).sort(
+    (a, b) => b[1] - a[1],
+  )[0] ?? ["unknown", 0];
+  return key;
+}
 
 function GuidanceBanner({
   mode,
@@ -614,10 +791,11 @@ function VoiceOverlay({
   loading: boolean;
   onClose: () => void;
   }) {
+  const [expandedSource, setExpandedSource] = useState<string | null>(null);
+
   return (
     <div
       className="fixed inset-0 z-[70] flex items-center justify-center bg-black p-6"
-      onClick={onClose}
     >
       <button
         onClick={onClose}
@@ -628,7 +806,6 @@ function VoiceOverlay({
       </button>
       <div
         className="bg-surface-container shadow-2xl ghost-border rounded max-w-2xl w-full p-8 relative max-h-[80vh] overflow-y-auto"
-        onClick={(event) => event.stopPropagation()}
       >
 
         {loading ? (
@@ -660,15 +837,30 @@ function VoiceOverlay({
                 </h4>
                 <div className="flex flex-wrap gap-2">
                   {result.rag_sources_used.map((src, i) => (
-                    <span
+                    <button
                       key={i}
-                      className="text-[10px] text-stone-300 bg-surface-container-low px-2 py-1 rounded ghost-border"
+                      onClick={() =>
+                        setExpandedSource((current) =>
+                          current === src ? null : src,
+                        )
+                      }
+                      className="text-[10px] text-stone-300 bg-surface-container-low px-2 py-1 rounded ghost-border hover:border-primary/50 hover:text-primary transition-colors"
                       title={src}
                     >
                       {archiveSignalLabel(src)}
-                    </span>
+                    </button>
                   ))}
                 </div>
+                {expandedSource && (
+                  <div className="mt-3 rounded border border-primary/20 bg-black/20 p-3">
+                    <div className="text-label-caps text-[9px] text-primary mb-1">
+                      {archiveSignalLabel(expandedSource)}
+                    </div>
+                    <p className="text-[12px] leading-relaxed text-stone-400">
+                      {archiveSignalSummary(expandedSource)}
+                    </p>
+                  </div>
+                )}
               </div>
             )}
 
@@ -684,6 +876,175 @@ function VoiceOverlay({
 
 /* ─── Compare overlay ─────────────────────────────── */
 
+function SystemTraceOverlay({
+  health,
+  covers,
+  lastMatch,
+  lastVoice,
+  backendOnline,
+  onClose,
+}: {
+  health: HealthResponse | null;
+  covers: CoverNode[];
+  lastMatch: MatchResponse | null;
+  lastVoice: VoiceResponse | null;
+  backendOnline: boolean;
+  onClose: () => void;
+}) {
+  const videoCount = covers.filter((cover) => cover.youtube_video_id).length;
+  const officialVideoCount = covers.filter((cover) =>
+    cover.music_source_kind?.includes("official"),
+  ).length;
+
+  return (
+    <div
+      className="fixed inset-0 z-[70] flex items-center justify-center bg-black p-6"
+    >
+      <button
+        onClick={onClose}
+        aria-label="Close system trace"
+        className="fixed top-5 right-5 z-[80] text-stone-400 hover:text-on-surface transition-colors"
+      >
+        <X size={24} strokeWidth={1.75} />
+      </button>
+      <div
+        className="bg-surface-container shadow-2xl ghost-border rounded max-w-3xl w-full p-7 relative max-h-[82vh] overflow-y-auto"
+      >
+        <div className="text-label-caps text-primary mb-2 flex items-center gap-2">
+          <Settings size={14} strokeWidth={1.75} />
+          SYSTEM TRACE
+        </div>
+        <h3 className="text-h2 text-on-surface mb-2">Echo Chamber Engine</h3>
+        <p className="text-sm text-stone-400 leading-relaxed mb-6 max-w-2xl">
+          This panel exposes the machinery behind the artwork: generation,
+          retrieval, semantic matching, and the archive layer feeding the map.
+        </p>
+
+        <div className="grid gap-3 md:grid-cols-2">
+          <TraceRow
+            icon={<CheckCircle2 size={15} strokeWidth={1.75} />}
+            label="Backend"
+            value={backendOnline ? "Connected" : "Offline"}
+            ok={backendOnline}
+          />
+          <TraceRow
+            icon={<BrainCircuit size={15} strokeWidth={1.75} />}
+            label="LLM generation"
+            value={
+              health?.llm_configured
+                ? `${health.llm_provider.toUpperCase()} configured`
+                : "Local fallback"
+            }
+            ok={Boolean(health?.llm_configured)}
+          />
+          <TraceRow
+            icon={<Database size={15} strokeWidth={1.75} />}
+            label="Embedding + UMAP"
+            value={
+              health?.processed_covers_exists
+                ? `${health.processed_cover_count} semantic nodes`
+                : "Raw cover positions"
+            }
+            ok={Boolean(health?.processed_covers_exists)}
+          />
+          <TraceRow
+            icon={<FileText size={15} strokeWidth={1.75} />}
+            label="RAG archive"
+            value={
+              lastVoice?.rag_sources_used.length
+                ? `${lastVoice.rag_sources_used.length} sources used last`
+                : "Ready for Era Voice"
+            }
+            ok={Boolean(health?.processed_covers_exists)}
+          />
+          <TraceRow
+            icon={<Music2 size={15} strokeWidth={1.75} />}
+            label="Playback archive"
+            value={`${videoCount}/${covers.length} videos, ${officialVideoCount} official`}
+            ok={videoCount > 0}
+          />
+          <TraceRow
+            icon={<ArrowLeftRight size={15} strokeWidth={1.75} />}
+            label="Last match"
+            value={
+              lastMatch
+                ? `${lastMatch.match_method.replace("_", " ")} · ${Math.round(
+                    lastMatch.similarity_score * 100,
+                  )}%`
+                : "No user signal yet"
+            }
+            ok={Boolean(lastMatch)}
+          />
+        </div>
+
+        <div className="mt-6 border-t border-white/10 pt-5">
+          <h4 className="text-label-caps text-[10px] text-stone-500 mb-3">
+            AI TECHNIQUES IN USE
+          </h4>
+          <div className="grid gap-3 md:grid-cols-3">
+            <TechniqueNote
+              title="LLM"
+              text="Gemini/OpenAI writes compare analysis, bridge text, and Era Voice monologues."
+            />
+            <TechniqueNote
+              title="Embeddings"
+              text="SentenceTransformer turns covers and user text into vectors for semantic matching."
+            />
+            <TechniqueNote
+              title="RAG"
+              text="Historical archive chunks are retrieved before the AI speaks as an era."
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function ExhibitionHud({
+  cover,
+  index,
+  total,
+  onClose,
+}: {
+  cover: CoverNode;
+  index: number;
+  total: number;
+  onClose: () => void;
+}) {
+  const strongestEmotion = dominantEmotion(cover);
+  return (
+    <div className="pointer-events-none absolute inset-0 z-30 overflow-hidden">
+      <div className="exhibition-scan absolute inset-0" />
+      <div className="absolute inset-x-0 bottom-0 h-48 bg-gradient-to-t from-black/85 via-black/35 to-transparent" />
+      <button
+        onClick={onClose}
+        aria-label="Close exhibition mode"
+        className="pointer-events-auto absolute right-5 top-5 flex h-9 w-9 items-center justify-center rounded border border-white/15 bg-black/50 text-stone-300 backdrop-blur hover:border-primary/50 hover:text-primary transition-colors"
+      >
+        <X size={18} strokeWidth={1.75} />
+      </button>
+      <div className="absolute bottom-8 left-8 max-w-xl">
+        <div className="mb-2 flex items-center gap-2 text-label-caps text-primary">
+          <PlayCircle size={14} strokeWidth={1.75} />
+          Exhibition Pulse {String((index % total) + 1).padStart(2, "0")} / {String(total).padStart(2, "0")}
+        </div>
+        <h2 className="font-serif text-4xl leading-tight text-on-surface md:text-6xl">
+          {cover.artist}
+        </h2>
+        <div className="mt-2 flex flex-wrap items-center gap-2 text-data-mono text-[11px] uppercase tracking-widest text-stone-300">
+          <span>{cover.year}</span>
+          {cover.genre && <span>{cover.genre}</span>}
+          <span>{cover.is_original ? "Origin" : "Cover"}</span>
+          <span className="text-primary">{strongestEmotion}</span>
+        </div>
+      </div>
+      <div className="absolute bottom-10 right-8 hidden max-w-xs text-right text-sm leading-relaxed text-stone-300 md:block">
+        The map keeps rotating; each recording becomes the temporary center of the door.
+      </div>
+    </div>
+  );
+}
 function CompareOverlay({
   result,
   loading,
@@ -700,7 +1061,6 @@ function CompareOverlay({
   return (
     <div
       className="fixed inset-0 z-[70] flex items-center justify-center bg-black p-6"
-      onClick={onClose}
     >
       <button
         onClick={onClose}
@@ -711,7 +1071,6 @@ function CompareOverlay({
       </button>
       <div
         className="bg-surface-container shadow-2xl ghost-border rounded max-w-2xl w-full p-8 relative max-h-[80vh] overflow-y-auto"
-        onClick={(event) => event.stopPropagation()}
       >
 
         <div className="text-label-caps text-primary mb-4 flex items-center gap-2">
@@ -784,6 +1143,41 @@ function SourceBadge({
   );
 }
 
+function TraceRow({
+  icon,
+  label,
+  value,
+  ok,
+}: {
+  icon: ReactNode;
+  label: string;
+  value: string;
+  ok: boolean;
+}) {
+  return (
+    <div className="flex items-center gap-3 rounded border border-white/10 bg-black/20 p-3">
+      <div className={ok ? "text-primary" : "text-stone-500"}>{icon}</div>
+      <div className="min-w-0">
+        <div className="text-label-caps text-[9px] text-stone-500">
+          {label}
+        </div>
+        <div className="truncate text-sm text-stone-300">{value}</div>
+      </div>
+    </div>
+  );
+}
+
+function TechniqueNote({ title, text }: { title: string; text: string }) {
+  return (
+    <div className="rounded border border-white/10 bg-black/20 p-3">
+      <div className="text-label-caps text-[10px] text-primary mb-1">
+        {title}
+      </div>
+      <p className="text-[12px] leading-relaxed text-stone-400">{text}</p>
+    </div>
+  );
+}
+
 function archiveSignalLabel(source: string): string {
   const labels: Record<string, string> = {
     "1973_world_events.txt": "1973 world pressure",
@@ -793,4 +1187,20 @@ function archiveSignalLabel(source: string): string {
     "vietnam_and_returning_soldiers.txt": "Vietnam afterimage",
   };
   return labels[source] ?? source.replace(/\.[^.]+$/, "").replace(/_/g, " ");
+}
+
+function archiveSignalSummary(source: string): string {
+  const summaries: Record<string, string> = {
+    "1973_world_events.txt":
+      "Places the song inside the Vietnam withdrawal, Watergate pressure, economic anxiety, and the exhausted public mood of 1973.",
+    "counterculture_and_dylan_1970s.txt":
+      "Frames Dylan after the sixties: not as a simple protest voice, but as a mythic witness to counterculture fatigue and reinvention.",
+    "dylan_nobel_and_songwriting.txt":
+      "Treats covers as living inheritance: the same lyric changes when a different body, era, genre, and audience carry it.",
+    "pat_garrett_film_context.txt":
+      "Returns the song to its Western origin, where badge, gun, mother, and door belong to a dying sheriff's threshold.",
+    "vietnam_and_returning_soldiers.txt":
+      "Adds the afterimage of war: soldiers returning, moral injury, public grief, and the desire to put the guns down.",
+  };
+  return summaries[source] ?? "A retrieved archive fragment used to ground the AI monologue in historical texture.";
 }
