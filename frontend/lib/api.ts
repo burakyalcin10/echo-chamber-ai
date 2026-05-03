@@ -11,7 +11,7 @@ import type {
 } from "./types";
 
 const API_BASE = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
-const TIMEOUT_MS = 12_000;
+const TIMEOUT_MS = 60_000;
 
 // ─── Fetch wrapper ──────────────────────────────────
 

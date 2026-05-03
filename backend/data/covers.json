@@ -148,13 +148,19 @@
       "meaning_shift": "This version transforms the song from a dying lawman's lament into a deeply personal blues-rock anthem of weary recovery and spiritual seeking after profound personal struggle.",
       "historical_pulse": "The recording emerged during a period of national introspection and disillusionment in America, following the end of the Vietnam War and the Watergate scandal."
     },
-    "artist_image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Eric%20Clapton%20-%20Royal%20Albert%20Hall%20-%20Wednesday%2024th%20May%202017%20EricClaptonRAH240517-30%20%2834987232355%29%20%28cropped%29.jpg?width=512"
+    "artist_image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Eric%20Clapton%20-%20Royal%20Albert%20Hall%20-%20Wednesday%2024th%20May%202017%20EricClaptonRAH240517-30%20%2834987232355%29%20%28cropped%29.jpg?width=512",
+    "youtube_video_id": "9jPi0Ag-AZw",
+    "music_source_label": "Eric Clapton official artist channel",
+    "music_source_kind": "official"
   },
   {
     "id": "jerry_garcia_band_1976",
     "artist": "Jerry Garcia Band",
     "year": 1976,
     "album": "GarciaLive Volume 21: February 13th, 1976 Keystone Berkeley",
+    "youtube_video_id": "g-40Nex4Mds",
+    "music_source_label": "YouTube Topic / official audio",
+    "music_source_kind": "official_audio",
     "is_original": false,
     "context_notes": "Garcia's extended live versions stretch the song into improvisational after-hours space, where farewell becomes less a lyric than a slow communal trance. Performed 170+ times from 1976 to 1994.",
     "genre": "jam rock",
@@ -222,13 +228,19 @@
       "meaning_shift": "This instrumental version reinterprets the song by transforming its lyrical plea into a profound, wordless expression of farewell and dignified release, conveyed through the soulful warmth of the organ.",
       "historical_pulse": "The recording emerged during a late 1970s era characterized by a shift towards introspective musicality and the evolving landscape of soul and R&B, moving beyond the overt protest anthems of previous decades."
     },
-    "artist_image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Booker%20T.%20Jones%202009.jpg?width=512"
+    "artist_image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Booker%20T.%20Jones%202009.jpg?width=512",
+    "youtube_video_id": "T_Z9YpHRAvY",
+    "music_source_label": "Booker T. Jones archive upload",
+    "music_source_kind": "community"
   },
   {
     "id": "television_1978",
     "artist": "Television",
     "year": 1978,
     "album": "The Blow-Up (live recording)",
+    "youtube_video_id": "P22NffDQyKM",
+    "music_source_label": "Live 1978 community audio",
+    "music_source_kind": "community_audio",
     "is_original": false,
     "context_notes": "Television's late-1970s live cover pulls the song into downtown guitar abstraction, making the door feel urban, nervous, and electrically unresolved.",
     "genre": "art punk",
@@ -296,7 +308,10 @@
       "meaning_shift": "This version transforms the song from a solitary plea for divine intervention into a communal anthem of shared farewell and collective endurance.",
       "historical_pulse": "The recording resonates with the pressures of economic change and the assertion of working-class identity in early 1980s Australia."
     },
-    "artist_image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Cold%20Chisel%20November%2017%202011.jpg?width=512"
+    "artist_image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Cold%20Chisel%20November%2017%202011.jpg?width=512",
+    "youtube_video_id": "Xn1C_nfXatI",
+    "music_source_label": "Cold Chisel official artist channel",
+    "music_source_kind": "official"
   },
   {
     "id": "eric_burdon_1982",
@@ -340,6 +355,9 @@
     "artist": "The Sisters of Mercy",
     "year": 1984,
     "album": "Live (Doctor Jeep single / Stuttgart bootleg)",
+    "youtube_video_id": "kdQv0sOIOsc",
+    "music_source_label": "Royal Albert Hall 1985 fan concert video",
+    "music_source_kind": "community_video",
     "is_original": false,
     "context_notes": "A gothic post-punk live context recasts the song's threshold imagery as nocturnal fatalism, ritual noise, and theatrical darkness in early-1980s Britain.",
     "genre": "gothic rock",
@@ -377,6 +395,9 @@
     "artist": "Heaven",
     "year": 1985,
     "album": "Knockin' on Heaven's Door (single)",
+    "youtube_video_id": "0sbWqMVwZmA",
+    "music_source_label": "Music video upload",
+    "music_source_kind": "community_video",
     "is_original": false,
     "context_notes": "The Australian hard rock band Heaven turns the song toward mid-1980s metal drama, where the quiet badge becomes amplified pressure and arena-sized release.",
     "genre": "hard rock",
@@ -414,6 +435,9 @@
     "artist": "Grateful Dead",
     "year": 1987,
     "album": "Dylan & The Dead",
+    "youtube_video_id": "Ob3DubiAC4c",
+    "music_source_label": "Live soundboard community upload",
+    "music_source_kind": "community_audio",
     "is_original": false,
     "context_notes": "In the late-1980s Dead orbit, the song becomes a traveling communal chant, less about one dying lawman than a crowd rehearsing surrender together. Captured on the official Dylan & The Dead live album.",
     "genre": "jam rock",
@@ -481,13 +505,19 @@
       "meaning_shift": "This version transforms the song from a personal, intimate plea for release into a communal, cathartic ritual of shared grief and spiritual yearning, amplified by the stadium setting.",
       "historical_pulse": "The recording resonates with the late Cold War anxieties, the AIDS epidemic, and a societal yearning for spiritual connection amidst growing disillusionment with materialism."
     },
-    "artist_image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/U2%20on%20Joshua%20Tree%20Tour%202017%20Brussels%208-1-17.jpg?width=512"
+    "artist_image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/U2%20on%20Joshua%20Tree%20Tour%202017%20Brussels%208-1-17.jpg?width=512",
+    "youtube_video_id": "QVax1sJefao",
+    "music_source_label": "U2 live TV archive",
+    "music_source_kind": "community"
   },
   {
     "id": "randy_crawford_1989",
     "artist": "Randy Crawford",
     "year": 1989,
     "album": "Rich and Poor",
+    "youtube_video_id": "lsy29gG2g6s",
+    "music_source_label": "Community video",
+    "music_source_kind": "community_video",
     "is_original": false,
     "context_notes": "A soul-jazz interpretation featuring Eric Clapton and David Sanborn, shifting the song toward private ache and vocal intimacy at the close of the 1980s.",
     "genre": "soul jazz",
@@ -595,13 +625,19 @@
       "meaning_shift": "This version reinterprets the song from a somber farewell into an absurdist celebration of cultural fusion and the playful dismantling of Cold War-era divisions.",
       "historical_pulse": "The recording resonates with the immediate post-Cold War era, marked by the dissolution of the Soviet Union and the search for new cultural and political identities."
     },
-    "artist_image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Leningrad%20Cowboys%20in%20Berlin%202nd%20of%20September%202011.jpg?width=512"
+    "artist_image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Leningrad%20Cowboys%20in%20Berlin%202nd%20of%20September%202011.jpg?width=512",
+    "youtube_video_id": "oKrSQlPNBxE",
+    "music_source_label": "Leningrad Cowboys Helsinki live archive",
+    "music_source_kind": "community"
   },
   {
     "id": "jeff_buckley_1994",
     "artist": "Jeff Buckley",
     "year": 1994,
     "album": "Live at Sin-é",
+    "youtube_video_id": "G46_ZC37X-E",
+    "music_source_label": "Live community audio",
+    "music_source_kind": "community_audio",
     "is_original": false,
     "context_notes": "Buckley's intimate café performances reframe the song as fragile devotional vulnerability in the alternative era, closer to prayer than anthem.",
     "genre": "alternative folk",
@@ -679,6 +715,9 @@
     "artist": "Beau Jocque",
     "year": 1996,
     "album": "Gonna Take You Downtown",
+    "youtube_video_id": "-O6cl0lfHTo",
+    "music_source_label": "YouTube Topic / official audio",
+    "music_source_kind": "official_audio",
     "is_original": false,
     "context_notes": "Beau Jocque's zydeco context pulls the song into dance, accordion drive, and Gulf Coast resilience, making farewell move through the body rather than stillness.",
     "genre": "zydeco",
@@ -753,6 +792,9 @@
     "artist": "Jon Bon Jovi",
     "year": 1997,
     "album": "Unplugged in Brazil (live)",
+    "youtube_video_id": "-EyOq4sref4",
+    "music_source_label": "Mexico 1997 community video",
+    "music_source_kind": "community_video",
     "is_original": false,
     "context_notes": "Jon Bon Jovi's solo acoustic performance on his Destination Anywhere tour makes the song a mass singalong of vulnerability, with arena rock softening into acoustic public confession.",
     "genre": "acoustic arena rock",
@@ -790,13 +832,19 @@
     "era_tension": 0.62,
     "political_charge": 0.58,
     "spiritual_weight": 0.9,
-    "artist_image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Ladysmith-Black-Mambazo.jpg?width=512"
+    "artist_image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Ladysmith-Black-Mambazo.jpg?width=512",
+    "youtube_video_id": "Q6XoBDlfusw",
+    "music_source_label": "Ladysmith Black Mambazo official video",
+    "music_source_kind": "official"
   },
   {
     "id": "roger_waters_2002",
     "artist": "Roger Waters",
     "year": 2002,
     "album": "Flickering Flame – The Solo Years Volume I",
+    "youtube_video_id": "4NQhWcJ_MR0",
+    "music_source_label": "Community audio",
+    "music_source_kind": "community_audio",
     "is_original": false,
     "context_notes": "Waters brings the song into a veteran anti-war frame on his solo compilation, linking Dylan's fatal badge to the machinery of empire and military memory in a post-9/11 world.",
     "genre": "progressive rock",
@@ -834,7 +882,10 @@
     "era_tension": 0.58,
     "political_charge": 0.46,
     "spiritual_weight": 0.44,
-    "artist_image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Wyclef%20Jean%20at%20SXSW%20London%202025.jpg?width=512"
+    "artist_image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Wyclef%20Jean%20at%20SXSW%20London%202025.jpg?width=512",
+    "youtube_video_id": "F7ac_XYbszQ",
+    "music_source_label": "Wyclef Jean official artist channel",
+    "music_source_kind": "official"
   },
   {
     "id": "warren_zevon_2003",
@@ -856,7 +907,10 @@
     "era_tension": 0.7,
     "political_charge": 0.18,
     "spiritual_weight": 0.86,
-    "artist_image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/JayCubby%27s%20copy%20of%20late%201970s%20Warren%20Zevon%20gloss%208x10%20press%20photo.jpg?width=512"
+    "artist_image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/JayCubby%27s%20copy%20of%20late%201970s%20Warren%20Zevon%20gloss%208x10%20press%20photo.jpg?width=512",
+    "youtube_video_id": "zA5hT5qL1m8",
+    "music_source_label": "Warren Zevon label-provided audio",
+    "music_source_kind": "official"
   },
   {
     "id": "avril_lavigne_2004",
@@ -888,6 +942,9 @@
     "artist": "Antony and the Johnsons",
     "year": 2007,
     "album": "I'm Not There (soundtrack)",
+    "youtube_video_id": "f_VJiIakU_g",
+    "music_source_label": "YouTube Topic / official audio",
+    "music_source_kind": "official_audio",
     "is_original": false,
     "context_notes": "A chamber-pop lament recorded for Todd Haynes' Dylan biopic soundtrack that turns the song inward, emphasizing bodily fragility, queer mourning, and trembling spiritual exposure.",
     "genre": "chamber pop",
@@ -932,6 +989,9 @@
     "artist": "Zé Ramalho",
     "year": 2008,
     "album": "Zé Ramalho Canta Bob Dylan – Tá Tudo Mudando",
+    "youtube_video_id": "6IzDa0OZtJs",
+    "music_source_label": "YouTube Topic / official audio",
+    "music_source_kind": "official_audio",
     "is_original": false,
     "context_notes": "Zé Ramalho's album of Dylan adaptations translates the song as 'Batendo Na Porta Do Céu' through northeastern Brazilian mysticism, folk-rock grit, and a different geography of fate. Nominated for 2009 Latin Grammy.",
     "genre": "brazilian folk rock",
@@ -954,6 +1014,9 @@
     "artist": "Lana Del Rey",
     "year": 2013,
     "album": "Live (Paradise Tour)",
+    "youtube_video_id": "5TCYDdNSSj4",
+    "music_source_label": "Paradise Tour community video",
+    "music_source_kind": "community_video",
     "is_original": false,
     "context_notes": "In a cinematic internet-pop frame during her Paradise Tour, the song becomes a slow-motion Americana ghost, haunted by glamour, decay, and stylized fatalism.",
     "genre": "dream pop",
@@ -976,6 +1039,9 @@
     "artist": "Guns N' Roses",
     "year": 2020,
     "album": "Not in This Lifetime Tour (live / official visualizer)",
+    "youtube_video_id": "R88B1U8R5jg",
+    "music_source_label": "Not In This Lifetime community video",
+    "music_source_kind": "community_video",
     "is_original": false,
     "context_notes": "The band's later reunion-tour performances carry the older hard-rock defiance into a pandemic-era sense of suspended time and collective exhaustion. An official live visualizer was released on YouTube.",
     "genre": "hard rock",
@@ -1013,6 +1079,9 @@
     "era_tension": 0.44,
     "political_charge": 0.18,
     "spiritual_weight": 0.58,
-    "artist_image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Zucchero%2003.JPG?width=512"
+    "artist_image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Zucchero%2003.JPG?width=512",
+    "youtube_video_id": "8y6TKcSmhZM",
+    "music_source_label": "Zucchero official artist channel",
+    "music_source_kind": "official"
   }
 ]

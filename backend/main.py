@@ -86,7 +86,7 @@ Be specific, poetic, and historically grounded. Language: English.
         prompt,
         fallback=lambda: _fallback_compare_text(cover_a, cover_b),
         temperature=0.75,
-        provider="openai",
+        provider=_preferred_generation_provider("openai"),
     )
 
     return {
@@ -124,7 +124,7 @@ Be poetic but grounded. Do not explain; evoke.
         prompt,
         fallback=lambda: _fallback_voice_text(cover, historical_context),
         temperature=0.8,
-        provider="openai",
+        provider=_preferred_generation_provider("openai"),
     )
     return {
         "monologue": monologue,
@@ -209,10 +209,19 @@ def _generate_or_fallback(
         logger.warning("LLM provider %s returned HTTPException: %s", provider or settings.llm_provider, exc.detail)
         return fallback(), "local_fallback"
     except Exception as exc:
-        # Provider quota / network / unexpected SDK errors should not 500 the
-        # request — degrade to the local fallback so the app stays usable.
         logger.warning("LLM provider %s failed: %s: %s", provider or settings.llm_provider, type(exc).__name__, exc)
         return fallback(), "local_fallback"
+
+def _preferred_generation_provider(preferred: str) -> str | None:
+    if preferred == "openai" and settings.openai_api_key:
+        return "openai"
+    if preferred == "gemini" and settings.gemini_api_key:
+        return "gemini"
+    if settings.gemini_api_key:
+        return "gemini"
+    if settings.llm_provider in {"openai", "gemini"}:
+        return preferred
+    return None
 
 
 def _fallback_compare_text(cover_a: dict, cover_b: dict) -> str:
@@ -230,7 +239,6 @@ def _fallback_compare_text(cover_a: dict, cover_b: dict) -> str:
         f"The later version answers with its own weather: {pulse_b} "
         "This local analysis keeps the comparison panel usable until a Gemini or OpenAI key is configured."
     )
-
 
 def _fallback_voice_text(cover: dict, historical_context: str) -> str:
     meaning = _ensure_sentence(cover["meaning_shift"].lower())
