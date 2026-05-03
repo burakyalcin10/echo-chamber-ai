@@ -68,6 +68,7 @@ export default function HomePage() {
   const [selectedCoverId, setSelectedCoverId] = useState<string | null>(null);
   const [coverDetail, setCoverDetail] = useState<CoverDetail | null>(null);
   const [detailLoading, setDetailLoading] = useState(false);
+  const [musicPlayerOpen, setMusicPlayerOpen] = useState(false);
 
   const [decadeFilter, setDecadeFilter] = useState<string | null>(null);
   const [search, setSearch] = useState("");
@@ -170,6 +171,7 @@ export default function HomePage() {
   // ─── Cover selection ────────────────────────────────
   const loadCoverDetail = useCallback(
     async (coverId: string) => {
+      setMusicPlayerOpen(false);
       setSelectedCoverId(coverId);
       setCoverDetail(null);
       setDetailLoading(true);
@@ -273,6 +275,7 @@ export default function HomePage() {
     setCompareCoverB(null);
     setCompareResult(null);
     setVoiceResult(null);
+    setMusicPlayerOpen(false);
   }, []);
 
   const handleCloseMatch = useCallback(() => {
@@ -457,6 +460,8 @@ export default function HomePage() {
             onCompare={handleCompare}
             onVoice={handleVoice}
             onClose={handleCloseDetail}
+            playerOpen={musicPlayerOpen}
+            onPlayerOpenChange={setMusicPlayerOpen}
           />
         </div>
 
@@ -500,14 +505,16 @@ export default function HomePage() {
         )}
 
         {/* Bottom match dock */}
-        <MatchDock
-          onSubmit={handleMatchSubmit}
-          loading={matchLoading}
-          error={matchError}
-          matchResult={matchDockResult}
-          onClose={handleCloseMatch}
-          onDismissError={() => setMatchError(null)}
-        />
+        {!musicPlayerOpen && (
+          <MatchDock
+            onSubmit={handleMatchSubmit}
+            loading={matchLoading}
+            error={matchError}
+            matchResult={matchDockResult}
+            onClose={handleCloseMatch}
+            onDismissError={() => setMatchError(null)}
+          />
+        )}
 
         {/* Toasts */}
         {toasts.length > 0 && (
@@ -722,7 +729,6 @@ function VoiceOverlay({
   return (
     <div
       className="fixed inset-0 z-[70] flex items-center justify-center bg-black p-6"
-      onClick={onClose}
     >
       <button
         onClick={onClose}
@@ -733,7 +739,6 @@ function VoiceOverlay({
       </button>
       <div
         className="bg-surface-container shadow-2xl ghost-border rounded max-w-2xl w-full p-8 relative max-h-[80vh] overflow-y-auto"
-        onClick={(event) => event.stopPropagation()}
       >
 
         {loading ? (
@@ -827,7 +832,6 @@ function SystemTraceOverlay({
   return (
     <div
       className="fixed inset-0 z-[70] flex items-center justify-center bg-black p-6"
-      onClick={onClose}
     >
       <button
         onClick={onClose}
@@ -838,7 +842,6 @@ function SystemTraceOverlay({
       </button>
       <div
         className="bg-surface-container shadow-2xl ghost-border rounded max-w-3xl w-full p-7 relative max-h-[82vh] overflow-y-auto"
-        onClick={(event) => event.stopPropagation()}
       >
         <div className="text-label-caps text-primary mb-2 flex items-center gap-2">
           <Settings size={14} strokeWidth={1.75} />
@@ -947,7 +950,6 @@ function CompareOverlay({
   return (
     <div
       className="fixed inset-0 z-[70] flex items-center justify-center bg-black p-6"
-      onClick={onClose}
     >
       <button
         onClick={onClose}
@@ -958,7 +960,6 @@ function CompareOverlay({
       </button>
       <div
         className="bg-surface-container shadow-2xl ghost-border rounded max-w-2xl w-full p-8 relative max-h-[80vh] overflow-y-auto"
-        onClick={(event) => event.stopPropagation()}
       >
 
         <div className="text-label-caps text-primary mb-4 flex items-center gap-2">
