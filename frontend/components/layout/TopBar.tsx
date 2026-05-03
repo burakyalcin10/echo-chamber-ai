@@ -7,6 +7,7 @@ import {
   EDGE_KIND_LABEL,
   type EdgeKind,
 } from "@/lib/relationships";
+import BrandMark from "./BrandMark";
 
 interface TopBarProps {
   activePage: string;
@@ -44,8 +45,11 @@ export default function TopBar({
     <header className="fixed top-0 right-0 w-[calc(100%-5rem)] h-14 border-b border-white/10 bg-black/80 backdrop-blur-md flex justify-between items-center px-6 z-40 gap-4">
       {/* Left: page title + search */}
       <div className="flex items-center gap-4 min-w-0 flex-shrink">
-        <div className="font-serif text-sm tracking-tight text-on-surface whitespace-nowrap">
-          {activePage}
+        <div className="flex items-center gap-2 min-w-0">
+          <BrandMark size="sm" className="hidden sm:inline-flex" />
+          <div className="font-serif text-sm tracking-tight text-on-surface whitespace-nowrap">
+            {activePage}
+          </div>
         </div>
 
         <div className="hidden md:flex items-center ghost-border rounded px-3 h-8 bg-surface-container-low/60 focus-within:border-primary/60 transition-colors">

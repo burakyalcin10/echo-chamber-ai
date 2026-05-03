@@ -11,6 +11,7 @@ import {
 import type { CoverDetail } from "@/lib/types";
 import { EMOTION_LABELS, EMOTION_COLORS } from "@/lib/constants";
 import EmotionMeter from "./EmotionMeter";
+import BrandMark from "@/components/layout/BrandMark";
 
 interface DetailPanelProps {
   cover: CoverDetail | null;
@@ -50,8 +51,13 @@ export default function DetailPanel({
 function EmptyState() {
   return (
     <div className="flex-1 flex flex-col items-center justify-center px-8 py-12 text-center gap-4 text-on-surface-variant">
-      <div className="w-12 h-12 rounded-full border border-white/15 flex items-center justify-center">
-        <Compass size={20} strokeWidth={1.5} className="text-primary" />
+      <div className="relative">
+        <BrandMark size="lg" />
+        <Compass
+          size={18}
+          strokeWidth={1.5}
+          className="absolute -right-2 -bottom-2 text-primary drop-shadow-[0_0_8px_rgba(233,193,118,0.45)]"
+        />
       </div>
       <h2 className="font-serif text-xl text-on-surface leading-tight">
         Select a cover to hear how the song changes shape.
