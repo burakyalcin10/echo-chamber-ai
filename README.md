@@ -4,13 +4,49 @@ Interactive AI artwork for the CSE 358 "KNOCK - Design Your Door" assignment.
 
 Echo Chamber maps covers of Bob Dylan's "Knockin' on Heaven's Door" as a 3D emotional galaxy. The backend processes cover metadata, generates musicological interpretations with Gemini or OpenAI, prepares embedding/UMAP coordinates, and exposes the API used by the frontend experience.
 
+## Live Deployment
+
+| Service | URL |
+|---------|-----|
+| **Live artwork** | <https://echo-chamber-ai-phi.vercel.app> |
+| **Backend API** | <https://echo-chamber-ai-api.onrender.com> |
+| **Backend health** | <https://echo-chamber-ai-api.onrender.com/health> |
+
+The frontend is deployed on Vercel from `frontend/`. The backend is deployed on
+Render from `render.yaml` using the free web-service tier.
+
+Render free services sleep after 15 minutes without inbound traffic, so this
+repository includes `.github/workflows/keep-render-awake.yml`, which pings the
+backend health endpoint every 10 minutes during the submission period. It can be
+removed after grading if the live deployment no longer needs to stay warm.
+
 ## Deliverables
 
 | Item | Location |
 |------|----------|
-| **Artwork** | This repository — run backend + frontend (see setup below) |
+| **Artwork** | Live Vercel link above, or run backend + frontend locally |
 | **Artist's Manifesto** | [`MANIFESTO.md`](MANIFESTO.md) |
-| **Code Repository** | This repo — see Architecture below |
+| **Code Repository** | This repo; see Architecture, Setup, AI Techniques, and Screenshots below |
+
+Note: the artwork can be reviewed from the live Vercel deployment above, or run
+locally with the setup instructions below.
+
+## Submission Checklist
+
+The assignment asks for three mandatory deliverables:
+
+- **Functioning digital artwork:** Echo Chamber AI is available at the live
+  Vercel URL and can also be run locally from this repository.
+- **Artist's Manifesto:** `MANIFESTO.md` is the reflective 1,500-3,000 word
+  manifesto covering medium choice, Dylan/song resonance, AI's role, and the
+  personal meaning of "knocking on heaven's door."
+- **Code repository with README:** this GitHub repository contains the source
+  code, architecture overview, setup instructions, API/dependency notes, AI
+  technique explanation, screenshots, and deployment notes.
+
+The README also makes the AI usage transparent: Gemini/OpenAI are used for LLM
+generation, SentenceTransformer + UMAP for semantic spatial mapping, and a local
+RAG index for historically grounded era voice generation.
 
 ## Project Structure
 
@@ -20,6 +56,10 @@ Echo Chamber maps covers of Bob Dylan's "Knockin' on Heaven's Door" as a 3D emot
 - `backend/data/historical_docs/` — RAG source documents (1973 era)
 - `docs/` — API contract, backend runbook, data sources
 - `MANIFESTO.md` — Artist's statement (1,750 words)
+
+Deploy note: `backend/data/processed/` contains the committed graph, RAG, and
+UMAP artifacts needed by Render. Local cache files such as `score_cache.json`
+remain ignored.
 
 ## Architecture
 
@@ -242,7 +282,16 @@ python scripts/03_embed_and_umap.py --dry-run
 python scripts/04_build_rag.py --dry-run
 ```
 
-Generated files under `backend/data/processed/` are local artifacts and are not committed.
+Most generated files under `backend/data/processed/` are local artifacts. The
+deploy-critical artifacts are committed so Render can run the full semantic
+experience without rebuilding the pipeline:
+
+- `covers_with_embeddings.json`
+- `rag_index.json`
+- `umap_bounds.json`
+- `umap_reducer.pkl`
+
+Local cache files such as `score_cache.json` are intentionally not committed.
 
 GitHub Actions runs the lightweight backend CI workflow on pushes and pull requests using:
 
@@ -251,12 +300,27 @@ GitHub Actions runs the lightweight backend CI workflow on pushes and pull reque
 backend/requirements-ci.txt
 ```
 
+During the submission period, GitHub Actions also runs:
+
+```text
+.github/workflows/keep-render-awake.yml
+```
+
+This scheduled workflow pings the Render `/health` endpoint every 10 minutes to
+reduce cold-start delays for reviewers opening the live artwork.
+
 ## API Overview
 
 Base URL:
 
 ```text
 http://localhost:8000
+```
+
+Production API:
+
+```text
+https://echo-chamber-ai-api.onrender.com
 ```
 
 Endpoints:
