@@ -176,7 +176,6 @@ export default function HomePage() {
 
   useEffect(() => {
     if (!exhibitionOpen || exhibitionSequence.length === 0) return;
-    setExhibitionIndex(0);
     const timer = window.setInterval(() => {
       setExhibitionIndex((index) => (index + 1) % exhibitionSequence.length);
     }, 2600);
@@ -434,6 +433,7 @@ export default function HomePage() {
               setSystemTraceOpen(false);
               setCompareResult(null);
               setVoiceResult(null);
+              setExhibitionIndex(0);
               setExhibitionOpen(true);
             }}
             visibleCount={filteredCovers.length}
