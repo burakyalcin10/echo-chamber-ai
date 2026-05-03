@@ -11,6 +11,7 @@ import {
   type LucideIcon,
 } from "lucide-react";
 import { type AppMode } from "@/lib/types";
+import BrandMark from "./BrandMark";
 
 interface SideNavProps {
   activeMode: AppMode;
@@ -36,9 +37,10 @@ export default function SideNav({
   return (
     <nav className="fixed left-0 top-0 h-full w-20 border-r border-white/15 bg-black flex flex-col items-center py-8 z-50">
       {/* Brand */}
-      <div className="font-serif italic text-primary text-lg border-b border-white/10 pb-4 mb-4 text-center w-full">
-        <span className="block px-2">Echo</span>
-        <span className="block px-2">Chamber</span>
+      <div className="font-serif italic text-primary text-[13px] border-b border-white/10 pb-4 mb-4 text-center w-full flex flex-col items-center gap-2">
+        <BrandMark size="md" />
+        <span className="block leading-tight">Echo</span>
+        <span className="block leading-tight">Chamber</span>
       </div>
 
       {/* Nav items */}
